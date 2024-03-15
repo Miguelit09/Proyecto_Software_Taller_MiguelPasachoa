@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static "styles_form.css" %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <title>Ingreso</title>
+</head>
+<body>
+    <main>
+        <section>
+            <div>
+                <h1 class="titulo">
+                    <span class="titulo__texto letra_amarilla">LUBRICENTRO</span>
+                    <span class="titulo__texto letra_blanca">MORRORICO</span>
+                </h1>
+            </div>
+            <div>
+                <article class="card">
+                    <figure>
+                        <img src="" alt="logo" class="card__image">
+                    </figure>
+                    <form action="">
+                        <div>
+                            <i class="bi bi-person-circle"></i>
+                            <input type="text" id="nombre_usuario" name="nombre_usuario" required placeholder="Nombre de usuario">
+                        </div>
+                        <div>
+                            <i class="bi bi-lock-fill"></i>
+                            <input type="password" id="contraseña", name="contraseña" required placeholder="Contraseña">
+                        </div>
+                        <button type="submit" class="letra_roja">Ingresar</button>
+                        <p class="letra_roja"><a href="#">Olvidé la contraseña</a></p>
+                    </form>
+
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
