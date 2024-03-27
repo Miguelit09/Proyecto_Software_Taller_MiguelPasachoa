@@ -1,0 +1,36 @@
+{% extends "layouts/interfaz_principal.html" %}
+{% load static %}
+
+{% block title %}
+<title>Inicio</title>
+{% endblock title %}
+
+{% block opciones %}
+<div class="contenedor menu_opciones">
+    <a href="" class="menu_opciones__opcion letra_negra">
+        <figure class="menu_opciones__tarjeta">
+            <img src="{% static "images/logo_cliente.png" %}" alt="clientes" class="menu_opciones__logo_cliente">
+            <figcaption>
+                <h2>Clientes</h2>
+            </figcaption>
+        </figure>
+    </a>
+    <a href="" class="menu_opciones__opcion letra_negra">
+        <figure class="menu_opciones__tarjeta">
+            <img src="{% static "images/logo_inventario.png" %}" alt="inventario" class="menu_opciones__logo_inventario">
+            <figcaption>
+                <h2>Inventario</h2>
+            </figcaption>
+        </figure>
+    </a>
+    <a href="" class="menu_opciones__opcion letra_negra">
+        <figure class="menu_opciones__tarjeta">
+            <img src="{% static "images/logo_cliente.png" %}" alt="servicios" class="menu_opciones__logo_cliente">
+            <figcaption>
+                <h2>Servicios</h2>
+            </figcaption>
+        </figure>
+    </a>
+</div>
+<p class="letra_roja parrafo">Selecciona la tarjeta de la sección a la que deseas dirigirte</p>
+{% endblock opciones %}

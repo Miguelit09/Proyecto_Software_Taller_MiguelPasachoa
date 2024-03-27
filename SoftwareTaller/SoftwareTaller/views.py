@@ -1,8 +1,8 @@
-from django.http import HttpResponse
-from django.shortcuts import render
 
-def inicio(response):
-    return HttpResponse("Inicio")
+from django.shortcuts import render
 
 def ingreso(request):
     return render(request, 'ingreso.html', {})
+
+def menu_opciones(request):
+    return render (request, 'menu_opciones.html', {})
