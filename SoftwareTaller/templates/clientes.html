@@ -1,28 +1,30 @@
 {% extends "layouts/base.html" %}
-
+{% load static %}
 {% block title %}
 <title>Clientes</title>
 {% endblock title %}
 
 {% block nombre_seccion %}
-<p>Clientes</p>
+<p class="header__titulo letra_blanca">Menú Clientes</p>
 {% endblock nombre_seccion %}
 
 {% block boton_volver %}
 <li>
-    <a href="">Volver</a>
+    <a href="" class="header__boton letra_negra">Volver</a>
 </li>
 {% endblock boton_volver %}
 
 {% block boton_registrar %}
 <li>
-    <a href="">Registrar</a>
+    <a href="" class="header__boton">
+        <img src="{% static "images/logo_mas.png" %}" alt="registrar" class="header__logo_boton">
+    </a>
 </li>
 {% endblock boton_registrar %}
 
 {% block boton_cerrar_sesion %}
 <li>
-    <a href="">Cerrar_sesion</a>
+    <a href="" class="header__boton">Cerrar Sesion</a>
 </li>
 {% endblock boton_cerrar_sesion %}
 

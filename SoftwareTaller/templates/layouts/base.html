@@ -14,18 +14,22 @@
 </head>
 <body>
     <header>
-        {% block nombre_seccion %}{% endblock nombre_seccion %}
-        <nav>
-            <ul>
-        {% block boton_volver %}{% endblock boton_volver %}
-        {% block boton_registrar %}{% endblock boton_registrar %}
-        {% block boton_cerrar_sesion %}{% endblock boton_cerrar_sesion %}
-            </ul>
-        </nav>
-
+        <div class="contenedor header">
+            <div class="header__bloque_logo_y_seccion">
+                {% include "layouts/partials/logo.html" %}
+                {% block nombre_seccion %}{% endblock nombre_seccion %}
+            </div>
+            <nav>
+                <ul class="header__menu">
+            {% block boton_volver %}{% endblock boton_volver %}
+            {% block boton_registrar %}{% endblock boton_registrar %}
+            {% block boton_cerrar_sesion %}{% endblock boton_cerrar_sesion %}
+                </ul>
+            </nav>
+        </div>
     </header>
     <main>
-        <section class="seccion_principal">
+        <section class="contenedor seccion_principal">
             {% include "layouts/partials/titulo.html" %}
             {% block ingreso %}{% endblock ingreso %}
             {% block opciones %}{% endblock opciones %}
