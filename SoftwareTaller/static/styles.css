@@ -38,10 +38,10 @@ body {
 }
 
 .titulo__texto_pequeño {
-    font-size: 48px;
+    font-size: 44px;
 }
 .titulo__texto_grande {
-    font-size: 78px;
+    font-size: 72px;
 }
 
 .letra_amarilla {
@@ -79,7 +79,7 @@ body {
     font-size: 24px;
 }
 
-.seccion_sin_encabezado {
+.seccion_principal {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -169,17 +169,17 @@ body {
     border-radius: 8px;
     text-decoration: none;
     font-size: 16px;
-    min-width: 380px;
-    width: 380px;
+    min-width: 388px;
+    width: 388px;
 }
 
 .menu_opciones__opcion:hover {
     transform: scale(1.1);
-    background-color: rgb(206, 205, 205);
+    background-color: rgb(240, 255, 145);
 }
 
 .menu_opciones__opcion:active {
-    background-color: var(--gris);
+    background-color: var(--amarillo);
 }
 
 .menu_opciones__tarjeta {
@@ -193,5 +193,9 @@ body {
 }
 
 .menu_opciones__logo_inventario {
-    width: 160px;
+    width: 180px;
+}
+
+.menu_opciones__logo_inventario {
+    width: 200px;
 }

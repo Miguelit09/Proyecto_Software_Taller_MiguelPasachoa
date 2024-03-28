@@ -1,13 +1,25 @@
-{% extends "layouts/interfaz_principal.html" %}
+{% extends "layouts/base.html" %}
 {% load static %}
 
 {% block title %}
 <title>Inicio</title>
 {% endblock title %}
 
+{% block nombre_seccion %}
+<p>Inicio</p>
+{% endblock nombre_seccion %}
+
+
+{% block boton_cerrar_sesion %}
+<li>
+    <a href="">Cerrar Sesion</a>
+</li>
+{% endblock boton_cerrar_sesion %}
+
+
 {% block opciones %}
 <div class="contenedor menu_opciones">
-    <a href="" class="menu_opciones__opcion letra_negra">
+    <a href="{% url 'clientes' %}" class="menu_opciones__opcion letra_negra">
         <figure class="menu_opciones__tarjeta">
             <img src="{% static "images/logo_cliente.png" %}" alt="clientes" class="menu_opciones__logo_cliente">
             <figcaption>
@@ -25,7 +37,7 @@
     </a>
     <a href="" class="menu_opciones__opcion letra_negra">
         <figure class="menu_opciones__tarjeta">
-            <img src="{% static "images/logo_cliente.png" %}" alt="servicios" class="menu_opciones__logo_cliente">
+            <img src="{% static "images/logo_servicios.png" %}" alt="servicios" class="menu_opciones__logo_inventario">
             <figcaption>
                 <h2>Servicios</h2>
             </figcaption>
