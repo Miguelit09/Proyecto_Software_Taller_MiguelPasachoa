@@ -11,9 +11,7 @@
 
 
 {% block boton_cerrar_sesion %}
-<li>
-    <a href="" class="boton letra_negra">Cerrar Sesion</a>
-</li>
+    {% include "layouts/partials/boton_cerrar_sesion.html" %}
 {% endblock boton_cerrar_sesion %}
 
 
@@ -27,7 +25,7 @@
             </figcaption>
         </figure>
     </a>
-    <a href="" class="menu_opciones__opcion letra_negra">
+    <a href="{% url "inventario" %}" class="menu_opciones__opcion letra_negra">
         <figure class="menu_opciones__tarjeta">
             <img src="{% static "images/logo_inventario.png" %}" alt="inventario" class="menu_opciones__logo_inventario">
             <figcaption>
@@ -35,7 +33,7 @@
             </figcaption>
         </figure>
     </a>
-    <a href="" class="menu_opciones__opcion letra_negra">
+    <a href="{% url "servicios" %}" class="menu_opciones__opcion letra_negra">
         <figure class="menu_opciones__tarjeta">
             <img src="{% static "images/logo_servicios.png" %}" alt="servicios" class="menu_opciones__logo_inventario">
             <figcaption>

@@ -100,29 +100,55 @@ body {
 .header__menu {
     list-style: none;
     display: flex;
+    align-items: center;
     gap: 1rem;
     margin-right: 36px;
 }
 
 .header__boton {
-    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    font-size: 28px;
     padding: 8px 24px;
     border: 2px solid var(--negro);
     border-radius: 8px;
     text-decoration: none;
 }
 
+
 .header__boton:hover {
     cursor: pointer;
+    border: 2px solid var(--negro);
+}
+
+.header__volver:hover {
+    background-color: rgb(247, 247, 134);
+}
+
+.header__volver:active {
+    background-color: var(--amarillo);
+}
+
+.header__registrar:hover {
+    background-color: rgb(173, 253, 166);
+}
+
+.header__registrar:active {
+    background-color: rgb(160, 255, 18);
+}
+
+.header__cerrar_sesion:hover {
     background-color: rgb(206, 205, 205);
 }
 
-.header__boton:active {
+.header__cerrar_sesion:active {
     background-color: rgb(150, 150, 150);
 }
 
 .header__logo_boton {
-    width: 24px;
+    width: 28px;
 }
 
 .seccion_principal {
