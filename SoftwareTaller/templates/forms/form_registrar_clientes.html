@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="contenedor">
+    <article class="card card_registrar">
+        <figure>
+            <img src="{% static "images/logo_cliente.png" %}" alt="logo" class="card__image_registrar">
+        </figure>
+        <div>
+            <form action="{% url "registrar_cliente" %}" method="post" class="card__form_registrar">
+                {% csrf_token %}
+                <div class="card__form-div">
+                    <label for="nombre_cliente">Nombre</label></i>
+                    <input type="text" id="nombre_cliente" name="nombre_cliente" required class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="documento_identidad">Número de documento</label>
+                    <input type="text" maxlength="20" id="documento_identidad" name="documento_identidad" class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="correo_electronico">Correo Electrónico</label>
+                    <input type="email" maxlength="100" id="correo_electronico" name="correo_electronico" class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" maxlength="15" id="telefono", name="telefono" class="card__input_form heigth_input_24">
+                </div>
+                <button type="submit" class="boton boton_guardar_registro letra_roja">Registrar</button>
+            </form>
+        </div>
+    </article>
+</div>

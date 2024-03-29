@@ -9,12 +9,16 @@
 {% endblock nombre_seccion %}
 
 {% block boton_volver %}
-{% include "layouts/partials/boton_volver.html" %}
+<li>
+    <a href="{% url "menu_opciones" %}" class="header__boton header__volver">
+        <img src="{% static "images/logo_volver.png" %}" alt="volver" class="header__logo_boton">
+    </a>
+</li>
 {% endblock boton_volver %}
 
 {% block boton_registrar %}
 <li>
-    <a href="" class="header__boton header__registrar">
+    <a href="{% url "formulario_registrar_clientes" %}" class="header__boton header__registrar">
         <img src="{% static "images/logo_mas.png" %}" alt="registrar" class="header__logo_boton">
     </a>
 </li>
@@ -24,3 +28,29 @@
     {% include "layouts/partials/boton_cerrar_sesion.html" %}
 {% endblock boton_cerrar_sesion %}
 
+{% block cuerpo_seccion %}
+<div class="contenedor tabla_registros">
+    <table class="tabla_registros__tabla">
+        <tr class="celdas_encabezado">
+            <th class="celda tabla_registros__celda_id">ID</th>
+            <th class="celda tabla_registros__celda_nombre">Nombre</th>
+            <th class="celda tabla_registros__celda_numero_di">Número DI</th>
+            <th class="celda tabla_registros__celda_correo">Correo</th>
+            <th class="celda tabla_registros__celda_telefono">Teléfono</th>
+            <th class="celda tabla_registros__celda_editar">Editar</th>
+            <th class="celda tabla_registros__celda_eliminar">Eliminar</th>
+        </tr>
+        {% for cliente in clientes %}
+        <tr class="celdas_datos">
+            <td class="celda tabla_registros__celda_id">{{ cliente.id }}</td>
+            <td class="celda tabla_registros__celda_nombre">{{ cliente.nombre_cliente }}</td>
+            <td class="celda tabla_registros__celda_numero_di">{{ cliente.documento_identidad }}</td>
+            <td class="celda tabla_registros__celda_correo">{{ cliente.correo_electronico }}</td>
+            <td class="celda tabla_registros__celda_telefono">{{ cliente.telefono }}</td>
+            <td class="celda"><a href="" class="tabla_registros__boton"><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton"></a></td>
+            <td class="celda"><a href="" class="tabla_registros__boton"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton"></a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock cuerpo_seccion %}

@@ -11,7 +11,7 @@
     2px -2px 0 white,
     -2px 2px 0 white,
     2px 2px 0 white; /* Sombras de texto para simular un borde */
-    --header-heigth: 72px;
+    --header-heigth: 100px;
 }
 
 * {
@@ -39,10 +39,10 @@ body {
 }
 
 .titulo__texto_pequeño {
-    font-size: 44px;
+    font-size: 36px;
 }
 .titulo__texto_grande {
-    font-size: 72px;
+    font-size: 60px;
 }
 
 
@@ -97,12 +97,18 @@ body {
     gap: 4rem;
 }
 
+.header__titulo {
+    width: 248px;
+}
+
 .header__menu {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: flex-end;
     margin-right: 36px;
+    gap: 1rem;
+    width: 348px;
 }
 
 .header__boton {
@@ -155,7 +161,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: calc(100vh - var(--header-heigth))
+    height: calc(100vh - var(--header-heigth));
 }
 
 /* estilos ingreso */
@@ -172,11 +178,18 @@ body {
     padding: 24px;
 }
 
-.card__form {
+.card__form_ingreso {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    font-size: 16px;
+}
+
+
+
+.card__image {
+    width: 80px;
 }
 
 .bi {
@@ -185,13 +198,18 @@ body {
 }
 
 .card__input_form {
-    font-size: 32px;
     border-radius: 8px;
     border: 2px solid var(--negro);
     padding: 8px;
     color: var(--rojo);
     background-color: var(--blanco);
 }
+
+.heigth_input_32 {
+    font-size: 32px;
+}
+
+
 
 .boton {
     width: 40%;
@@ -271,4 +289,84 @@ body {
 
 .menu_opciones__logo_inventario {
     width: 200px;
+}
+
+/* estilos forms de registrar */
+
+
+.card_registrar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.card__image_registrar {
+    width: 200px;
+}
+
+.card__form_registrar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+    font-size: 16px;
+}
+
+.card__form-div {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.heigth_input_16 {
+    font-size: 16px;
+}
+
+.boton_guardar_registro {
+    width: 100%;
+}
+
+/* estilos tabla de datos */
+
+.tabla_registros__tabla {
+    table-layout: fixed;
+}
+
+.celdas_encabezado {
+    font-size: 32px;
+}
+
+.tabla_registros__celda_id, .tabla_registros__celda_editar, .tabla_registros__celda_eliminar {
+    width: 120px;
+}
+
+.tabla_registros__celda_nombre, .tabla_registros__celda_correo {
+    max-width: 240px;
+}
+
+.tabla_registros__celda_numero_di, .tabla_registros__celda_telefono {
+    width: 172px;
+}
+
+.celda {
+    white-space: nowrap;
+    overflow-x: auto;
+    border: 1px solid var(--blanco);
+    padding: 12px;
+
+}
+
+.celdas_datos {
+    text-align: center;
+    font-size: 20px;
+}
+
+.tabla_registros__boton {
+
+}
+
+.tabla_registros__logo_boton {
+    margin-top: 4px;
+    height: 24px;
 }

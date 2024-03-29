@@ -7,28 +7,14 @@
 {% block header %}
 {% endblock header %}
 
-{% block ingreso %}
-    <div class="contenedor ingreso">
-        <article class="card">
-            <figure>
-                <img src="" alt="logo" class="card__image">
-            </figure>
-            <div>
-                <form action= {% url "menu_opciones" %} class="card__form">
-                    <div class="card__form-div">
-                        <label for="nombre_usuario"><i class="bi bi-person-circle"></label></i>
-                        <input type="text" id="nombre_usuario" name="nombre_usuario" required placeholder="Nombre de usuario" class="card__input_form">
-                    </div>
-                    <div class="card__form-div">
-                        <label for="contraseña"><i class="bi bi-lock-fill"></i></label>
-                        <input type="password" id="contraseña", name="contraseña" required placeholder="Contraseña" class="card__input_form">
-                    </div>
-                    <button type="submit" class="boton letra_roja">Ingresar</button>
-                    <p><a href="#" class="card__form_olvido">Olvidé la contraseña</a></p>
-                </form>
-            </div>
-        </article>
-    </div>
-{% endblock ingreso %}
+{% block titulo_en_encabezado %}{% endblock titulo_en_encabezado %}
+
+{% block titulo_en_cuerpo %}
+{% include "layouts/partials/titulo.html" %}
+{% endblock titulo_en_cuerpo %}
+
+{% block cuerpo_seccion %}
+    {% include "forms/form_ingreso.html" %}
+{% endblock cuerpo_seccion %}
 
 

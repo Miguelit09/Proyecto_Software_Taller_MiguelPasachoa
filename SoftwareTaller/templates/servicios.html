@@ -9,7 +9,11 @@
 {% endblock nombre_seccion %}
 
 {% block boton_volver %}
-{% include "layouts/partials/boton_volver.html" %}
+<li>
+    <a href="{% url "menu_opciones" %}" class="header__boton header__volver">
+        <img src="{% static "images/logo_volver.png" %}" alt="volver" class="header__logo_boton">
+    </a>
+</li>
 {% endblock boton_volver %}
 
 {% block boton_registrar %}

@@ -9,13 +9,18 @@
 <p class="header__titulo letra_blanca">Menú de Inicio</p>
 {% endblock nombre_seccion %}
 
+{% block titulo_en_encabezado %}{% endblock titulo_en_encabezado %}
 
 {% block boton_cerrar_sesion %}
     {% include "layouts/partials/boton_cerrar_sesion.html" %}
 {% endblock boton_cerrar_sesion %}
 
 
-{% block opciones %}
+{% block titulo_en_cuerpo %}
+{% include "layouts/partials/titulo.html" %}
+{% endblock titulo_en_cuerpo %}
+
+{% block cuerpo_seccion %}
 <div class="contenedor menu_opciones">
     <a href="{% url 'clientes' %}" class="menu_opciones__opcion letra_negra">
         <figure class="menu_opciones__tarjeta">
@@ -43,4 +48,4 @@
     </a>
 </div>
 <p class="letra_roja parrafo">Selecciona la tarjeta de la sección a la que deseas dirigirte</p>
-{% endblock opciones %}
+{% endblock cuerpo_seccion %}

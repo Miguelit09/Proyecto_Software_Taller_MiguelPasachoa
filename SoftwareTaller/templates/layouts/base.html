@@ -20,6 +20,9 @@
                 {% include "layouts/partials/logo.html" %}
                 {% block nombre_seccion %}{% endblock nombre_seccion %}
             </div>
+                {% block titulo_en_encabezado %}
+                {% include "layouts/partials/titulo.html" %}
+                {% endblock titulo_en_encabezado %}
             <nav>
                 <ul class="header__menu">
             {% block boton_volver %}{% endblock boton_volver %}
@@ -32,9 +35,8 @@
     {% endblock header %}
     <main>
         <section class="contenedor seccion_principal">
-            {% include "layouts/partials/titulo.html" %}
-            {% block ingreso %}{% endblock ingreso %}
-            {% block opciones %}{% endblock opciones %}
+            {% block titulo_en_cuerpo %}
+            {% endblock titulo_en_cuerpo %}
             {% block cuerpo_seccion %}{% endblock cuerpo_seccion %}
         </section>
     </main>

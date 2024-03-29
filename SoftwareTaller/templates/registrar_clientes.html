@@ -1,30 +1,27 @@
 {% extends "layouts/base.html" %}
+
 {% load static %}
+
 {% block title %}
-<title>Inventario</title>
+<title>Registrar Clientes</title>
 {% endblock title %}
 
 {% block nombre_seccion %}
-<p class="header__titulo letra_blanca">Menú Inventario</p>
+<p class="header__titulo letra_blanca">Clientes -> Registrar</p>
 {% endblock nombre_seccion %}
 
 {% block boton_volver %}
 <li>
-    <a href="{% url "menu_opciones" %}" class="header__boton header__volver">
+    <a href="{% url "clientes" %}" class="header__boton header__volver">
         <img src="{% static "images/logo_volver.png" %}" alt="volver" class="header__logo_boton">
     </a>
 </li>
 {% endblock boton_volver %}
 
-{% block boton_registrar %}
-<li>
-    <a href="" class="header__boton header__registrar">
-        <img src="{% static "images/logo_mas.png" %}" alt="registrar" class="header__logo_boton">
-    </a>
-</li>
-{% endblock boton_registrar %}
-
 {% block boton_cerrar_sesion %}
     {% include "layouts/partials/boton_cerrar_sesion.html" %}
 {% endblock boton_cerrar_sesion %}
 
+{% block cuerpo_seccion %}
+    {% include "forms/form_registrar_clientes.html" %}
+{% endblock cuerpo_seccion %}

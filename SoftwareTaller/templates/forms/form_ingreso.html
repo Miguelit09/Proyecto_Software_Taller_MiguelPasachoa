@@ -1,0 +1,21 @@
+<div class="contenedor ingreso">
+    <article class="card">
+        <figure>
+            <img src="" alt="logo" class="card__image">
+        </figure>
+        <div>
+            <form action= {% url "menu_opciones" %} class="card__form_ingreso">
+                <div>
+                    <label for="nombre_usuario"><i class="bi bi-person-circle"></label></i>
+                    <input type="text" id="nombre_usuario" name="nombre_usuario" required placeholder="Nombre de usuario" class="card__input_form heigth_input_32">
+                </div>
+                <div>
+                    <label for="contraseña"><i class="bi bi-lock-fill"></i></label>
+                    <input type="password" id="contraseña", name="contraseña" required placeholder="Contraseña" class="card__input_form heigth_input_32">
+                </div>
+                <button type="submit" class="boton letra_roja">Ingresar</button>
+                <p><a href="#" class="card__form_olvido">Olvidé la contraseña</a></p>
+            </form>
+        </div>
+    </article>
+</div>
