@@ -22,3 +22,9 @@ def registrar_cliente(request):
     Cliente.objects.create(nombre_cliente=nombre_cliente, documento_identidad=documento_identidad, correo_electronico=correo_electronico, telefono=telefono)
 
     return formulario_registrar_clientes(request)
+
+def eliminar_cliente(request, id):
+    cliente = Cliente.objects.get(id=id)
+
+    cliente.delete()
+    return clientes(request)

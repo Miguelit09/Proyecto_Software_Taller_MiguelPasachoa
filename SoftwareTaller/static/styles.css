@@ -150,7 +150,7 @@ body {
 }
 
 .header__cerrar_sesion:active {
-    background-color: rgb(150, 150, 150);
+    background-color: var(--gris);
 }
 
 .header__logo_boton {
@@ -331,13 +331,14 @@ body {
 
 .tabla_registros__tabla {
     table-layout: fixed;
+    margin-top: 36px;
 }
 
 .celdas_encabezado {
     font-size: 32px;
 }
 
-.tabla_registros__celda_id, .tabla_registros__celda_editar, .tabla_registros__celda_eliminar {
+.tabla_registros__celda_id {
     width: 120px;
 }
 
@@ -347,6 +348,10 @@ body {
 
 .tabla_registros__celda_numero_di, .tabla_registros__celda_telefono {
     width: 172px;
+}
+
+.tabla_registros__celda_editar, .tabla_registros__celda_eliminar {
+    width: 48px;
 }
 
 .celda {
@@ -363,10 +368,69 @@ body {
 }
 
 .tabla_registros__boton {
-
+    display: inline-block;
+    margin-top: 4px;
 }
 
+
 .tabla_registros__logo_boton {
-    margin-top: 4px;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     height: 24px;
+    border-radius: 8px;
+}
+
+.tabla_registros__eliminar {
+    border-radius: 16px;
+}
+
+
+.tabla_registros__editar:hover {
+    transform: scale(1.2);
+    background-color: rgb(240, 255, 145);;
+}
+
+.tabla_registros__editar:active {
+    background-color: var(--amarillo);
+}
+
+.tabla_registros__eliminar:hover {
+    transform: scale(1.2);
+    background-color: rgb(253, 135, 135);
+}
+
+.tabla_registros__eliminar:active {
+    background-color: var(--rojo);
+}
+
+/* ESTILOS DE VENTANAS EMERGENTES */
+
+.modal {
+    display: none; /* Ocultar la ventana emergente por defecto */
+    position: fixed; /* Posición fija en la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%; /* Tamaño completo de la ventana */
+    height: 100%;
+    background-color: rgba(0,0,0,0.5); /* Fondo semitransparente */
+    z-index: 1; /* Superponer sobre otros elementos */
+}
+
+.modal-content {
+    background-color: #fff; /* Color de fondo de la ventana emergente */
+    margin: 15% auto; /* Centrar verticalmente y ajustar los márgenes */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Ancho de la ventana emergente */
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
 }

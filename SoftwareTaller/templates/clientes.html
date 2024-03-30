@@ -1,5 +1,10 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+
+{% block script %}
+<script src="{% static 'eliminar_registro.js' %}" defer></script>
+{% endblock script %}
+
 {% block title %}
 <title>Clientes</title>
 {% endblock title %}
@@ -29,6 +34,7 @@
 {% endblock boton_cerrar_sesion %}
 
 {% block cuerpo_seccion %}
+{% include "layouts/modals/confirmar_eliminar.html" %}
 <div class="contenedor tabla_registros">
     <table class="tabla_registros__tabla">
         <tr class="celdas_encabezado">
@@ -37,8 +43,6 @@
             <th class="celda tabla_registros__celda_numero_di">Número DI</th>
             <th class="celda tabla_registros__celda_correo">Correo</th>
             <th class="celda tabla_registros__celda_telefono">Teléfono</th>
-            <th class="celda tabla_registros__celda_editar">Editar</th>
-            <th class="celda tabla_registros__celda_eliminar">Eliminar</th>
         </tr>
         {% for cliente in clientes %}
         <tr class="celdas_datos">
@@ -47,10 +51,11 @@
             <td class="celda tabla_registros__celda_numero_di">{{ cliente.documento_identidad }}</td>
             <td class="celda tabla_registros__celda_correo">{{ cliente.correo_electronico }}</td>
             <td class="celda tabla_registros__celda_telefono">{{ cliente.telefono }}</td>
-            <td class="celda"><a href="" class="tabla_registros__boton"><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton"></a></td>
-            <td class="celda"><a href="" class="tabla_registros__boton"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton"></a></td>
+            <td class="celda tabla_registros__celda_editar"><a href="/editar_cliente/{{ cliente.id }}" class="tabla_registros__boton" ><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>
+            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-urlBase= "eliminar_cliente/" data-id= "{{ cliente.id }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
         </tr>
         {% endfor %}
     </table>
 </div>
 {% endblock cuerpo_seccion %}
+
