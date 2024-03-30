@@ -3,11 +3,11 @@
 {% load static %}
 
 {% block title %}
-<title>Registrar Clientes</title>
+<title>Editar Clientes</title>
 {% endblock title %}
 
 {% block nombre_seccion %}
-<p class="header__titulo letra_blanca">Clientes -> Registrar</p>
+<p class="header__titulo letra_blanca">Clientes -> Editar</p>
 {% endblock nombre_seccion %}
 
 {% block boton_volver %}
@@ -23,8 +23,5 @@
 {% endblock boton_cerrar_sesion %}
 
 {% block cuerpo_seccion %}
-{% if registrado %}
-    {% include "layouts/modals/mensaje_registrado.html" %}
-{% endif %}
-{% include "forms/form_registrar_clientes.html" %}
+{% include "forms/form_editar_clientes.html" %}
 {% endblock cuerpo_seccion %}

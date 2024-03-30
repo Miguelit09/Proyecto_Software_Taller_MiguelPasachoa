@@ -35,6 +35,12 @@
 
 {% block cuerpo_seccion %}
 {% include "layouts/modals/confirmar_eliminar.html" %}
+{% if eliminado %}
+    {% include "layouts/modals/mensaje_eliminacion.html" %}
+{% endif %}
+{% if actualizado %}
+    {% include "layouts/modals/mensaje_actualizado.html" %}
+{% endif %}
 <div class="contenedor tabla_registros">
     <table class="tabla_registros__tabla">
         <tr class="celdas_encabezado">
@@ -51,8 +57,8 @@
             <td class="celda tabla_registros__celda_numero_di">{{ cliente.documento_identidad }}</td>
             <td class="celda tabla_registros__celda_correo">{{ cliente.correo_electronico }}</td>
             <td class="celda tabla_registros__celda_telefono">{{ cliente.telefono }}</td>
-            <td class="celda tabla_registros__celda_editar"><a href="/editar_cliente/{{ cliente.id }}" class="tabla_registros__boton" ><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>
-            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-urlBase= "eliminar_cliente/" data-id= "{{ cliente.id }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
+            <td class="celda tabla_registros__celda_editar"><a href="formulario_editar_clientes/{{ cliente.id }}" class="tabla_registros__boton" ><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>
+            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-url= "eliminar_cliente/{{ cliente.id }}" data-mensaje= "cliente {{ cliente.nombre_cliente }} con ID {{ cliente.id }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
         </tr>
         {% endfor %}
     </table>
