@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="contenedor">
+    <article class="card card_buscar">
+        <figure>
+            <img src="{% static "images/logo_buscar.png" %}" alt="logo_buscar" class="card__image_buscar">
+        </figure>
+        <div>
+            <form action="" method="get" class="card__form_buscar">
+                <div class="card__form-div">
+                    <label for="input_campo">Buscar en el campo:</label></i>
+                    <select name="input_campo" id="input_campo" class="card__input_form heigth_input_16">
+                        <option value="nombre_cliente">Nombre</option>
+                        <option value="documento_identidad">Número DI</option>
+                        <option value="correo_electronico">Correo</option>
+                        <option value="telefono">Teléfono</option>
+                    </select>
+                </div>
+                <div class="card__form-div">
+                    <label for="input_buscar">Buscar:</label>
+                    <input type="text" id="input_buscar" name="input_buscar" class="card__input_form heigth_input_16">
+                </div>
+                <button type="submit" class="boton boton_guardar_registro letra_roja">Buscar</button>
+            </form>
+        </div>
+    </article>
+</div>

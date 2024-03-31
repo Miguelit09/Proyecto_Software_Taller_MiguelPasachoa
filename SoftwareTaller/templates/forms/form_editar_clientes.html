@@ -9,24 +9,42 @@
             <form action="" class="card__form_editar">
                 <div class="card__form-div">
                     <label for="nombre_cliente">Nombre</label></i>
-                    <input type="text" id="nombre_cliente" name="nombre_cliente" value="{{ cliente.nombre_cliente }}" disabled class="card__input_form heigth_input_16">
+                    <input type="text" id="nombre_cliente" name="nombre_cliente" value="{{ cliente.nombre_cliente }}" disabled class="card__input_form card_input_form_disabled heigth_input_16">
                 </div>
                 <div class="card__form-div">
                     <label for="documento_identidad">Número de documento</label>
-                    <input type="text" maxlength="20" id="documento_identidad" name="documento_identidad" value="{{ cliente.documento_identidad }}" disabled class="card__input_form heigth_input_16">
+                    <input type="text" maxlength="20" id="documento_identidad" name="documento_identidad" value="{{ cliente.documento_identidad }}" disabled class="card__input_form card_input_form_disabled heigth_input_16">
                 </div>
                 <div class="card__form-div">
                     <label for="correo_electronico">Correo Electrónico</label>
-                    <input type="email" maxlength="100" id="correo_electronico" name="correo_electronico" value="{{ cliente.correo_electronico }}" disabled class="card__input_form heigth_input_16">
+                    <input type="email" maxlength="100" id="correo_electronico" name="correo_electronico" value="{{ cliente.correo_electronico }}" disabled class="card__input_form card_input_form_disabled heigth_input_16">
                 </div>
                 <div class="card__form-div">
                     <label for="telefono">Teléfono</label>
-                    <input type="tel" maxlength="15" id="telefono", name="telefono" value="{{ cliente.telefono }}" disabled class="card__input_form heigth_input_16">
+                    <input type="tel" maxlength="15" id="telefono", name="telefono" value="{{ cliente.telefono }}" disabled class="card__input_form card_input_form_disabled heigth_input_16">
                 </div>
                 <div class="card__form-div">
                     <a href="{% url "clientes" %}" class="boton card_form__boton_cancelar letra_roja">Cancelar</a>
                 </div>
             </form>
+        </div>
+        <div class="card__contenedor_flechas">
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
         </div>
         <div>
             <form action="{% url "editar_cliente" %}" method="post" class="card__form_editar">

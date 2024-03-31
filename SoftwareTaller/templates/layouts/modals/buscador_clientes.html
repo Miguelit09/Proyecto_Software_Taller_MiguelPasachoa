@@ -1,0 +1,12 @@
+{% load static %}
+
+<script src="{% static 'buscador_clientes.js' %}" defer></script>
+
+<div id="buscador_clientes" class="modal">
+    <div class="modal-content">
+        <div class="div-close">
+            <span id="close" class="close">&times;</span>
+        </div>
+        {% include "forms/form_buscar_clientes.html" %}
+    </div>
+</div>

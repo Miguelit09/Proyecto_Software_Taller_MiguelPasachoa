@@ -29,6 +29,15 @@
 </li>
 {% endblock boton_registrar %}
 
+{% block boton_buscar %}
+<li>
+    <a href="#" id="boton_buscar" class="header__boton header__buscar">
+        <img src="{% static "images/logo_buscar.png" %}" alt="buscar" class="header__logo_boton">
+    </a>
+</li>
+{% include "layouts/modals/buscador_clientes.html" %}
+{% endblock boton_buscar %}
+
 {% block boton_cerrar_sesion %}
     {% include "layouts/partials/boton_cerrar_sesion.html" %}
 {% endblock boton_cerrar_sesion %}
@@ -41,6 +50,8 @@
 {% if actualizado %}
     {% include "layouts/modals/mensaje_actualizado.html" %}
 {% endif %}
+
+
 <div class="contenedor tabla_registros">
     <table class="tabla_registros__tabla">
         <tr class="celdas_encabezado">

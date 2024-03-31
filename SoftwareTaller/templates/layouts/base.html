@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <script src="{% static 'main.js' %}" defer></script>
     {% block script %}{% endblock script %}
     {% block title %}{% endblock title %}
 </head>
@@ -28,6 +29,7 @@
                 <ul class="header__menu">
             {% block boton_volver %}{% endblock boton_volver %}
             {% block boton_registrar %}{% endblock boton_registrar %}
+            {% block boton_buscar %}{% endblock boton_buscar %}
             {% block boton_cerrar_sesion %}{% endblock boton_cerrar_sesion %}
                 </ul>
             </nav>

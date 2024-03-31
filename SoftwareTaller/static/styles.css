@@ -6,12 +6,13 @@
     --negro: rgb(7, 6, 6);
     --rojo-gris: linear-gradient(to bottom, rgb(245, 26, 26), rgb(243, 63, 63), rgb(170, 161, 161), rgb(231, 231, 231));
     --max-width: 1400px;
-    --sombra-blanca:
+    --sombra-blanca: rgb(150, 150, 150)
     -2px -2px 0 white,  
     2px -2px 0 white,
     -2px 2px 0 white,
     2px 2px 0 white; /* Sombras de texto para simular un borde */
     --header-heigth: 100px;
+    --input-disabled: rgb(231, 231, 231, 0.7);
 }
 
 * {
@@ -129,11 +130,11 @@ body {
     border: 2px solid var(--negro);
 }
 
-.header__volver:hover {
+.header__volver:hover, .header__buscar:hover {
     background-color: rgb(247, 247, 134);
 }
 
-.header__volver:active {
+.header__volver:active, .header__buscar:active {
     background-color: var(--amarillo);
 }
 
@@ -192,7 +193,7 @@ body {
     width: 80px;
 }
 
-.bi {
+.bi-lock-fill, .bi-person-circle {
     font-size: 32px;
     margin: auto 12px;
 }
@@ -517,13 +518,34 @@ body {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    width: 800px;
+    width: 900px;
 }
 
 .card__form_editar {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+.card_input_form_disabled {
+    background-color: var(--input-disabled);
+    color: var(--gris);
+}
+
+.card__contenedor_flechas {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: -60px;
+}
+
+.card__flechas {
+    display: flex;
+}
+
+.bi-caret-right-fill {
+    font-size: 56px;
+    color: var(--amarillo);
 }
 
 .card_form__boton_cancelar {
