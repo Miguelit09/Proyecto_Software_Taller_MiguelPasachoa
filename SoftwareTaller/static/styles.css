@@ -317,6 +317,7 @@ body {
 .card__form-div {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
 }
 
 
@@ -535,7 +536,7 @@ body {
 .card__contenedor_flechas {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
     margin-top: -60px;
 }
 
@@ -558,3 +559,39 @@ body {
 .input_id_cliente {
     display: none;
 }
+
+/* Estilos modal buscador */
+
+.card_buscar {
+    margin-top: 0;
+    justify-content: center;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.card__form_buscar{
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+}
+
+.div-close-buscador {
+    width: 95%;
+}
+
+.heigth_input_18 {
+    font-size: 18px;
+}
+
+.boton_buscar {
+    font-size: 20px;
+}
+
+.modal__buscador {
+    margin: 0;
+    width: 700px;
+    margin: 5% auto;
+    padding: 0;
+}
+

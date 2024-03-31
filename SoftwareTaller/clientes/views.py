@@ -4,8 +4,9 @@ from .models import Cliente
 # Create your views here.
 
 # MENÚ CLIENTES
-def clientes(request, eliminado=False, actualizado=False):
-    clientes = Cliente.objects.all()
+def clientes(request, clientes=None, eliminado=False, actualizado=False):
+    if clientes is None:
+        clientes = Cliente.objects.all()
     return render(request, 'clientes.html', {
         "clientes": clientes,
         "eliminado": eliminado,
@@ -34,6 +35,17 @@ def registrar_cliente(request):
 ## Vista del formulario con el alert de registro exitoso
 def formulario_registrar_clientes_registrado(request):
     return formulario_registrar_clientes(request, registrado=True)
+
+# BUSCAR CLIENTES
+
+def buscar_clientes(request):
+    campo = request.GET['campo']
+    buscar = request.GET['buscar']
+    resultado = Cliente.objects.filter(**{f'{campo}__startswith': buscar})
+
+    return clientes(request, clientes=resultado)
+
+
 
 # EDITAR CLIENTES
 
