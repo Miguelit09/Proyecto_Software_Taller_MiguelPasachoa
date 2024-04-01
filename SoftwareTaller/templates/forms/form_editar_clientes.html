@@ -49,7 +49,7 @@
         <div>
             <form action="{% url "editar_cliente" %}" method="post" class="card__form_editar">
                 {% csrf_token %}
-                <input type="text" id="id" name="id" class="input_id_cliente" value="{{ cliente.id }}">
+                <input type="text" id="id" name="id" class="input_id_oculto" value="{{ cliente.id }}">
                 <div class="card__form-div">
                     <label for="nombre_cliente">Nombre</label></i>
                     <input type="text" id="nombre_cliente" name="nombre_cliente" value="{{ cliente.nombre_cliente }}" required class="card__input_form heigth_input_16">

@@ -1,5 +1,10 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+
+{% block script %}
+<script src="{% static 'eliminar_registro.js' %}" defer></script>
+{% endblock script %}
+
 {% block title %}
 <title>Inventario</title>
 {% endblock title %}
@@ -18,13 +23,65 @@
 
 {% block boton_registrar %}
 <li>
-    <a href="" class="header__boton header__registrar">
+    <a href="{% url "formulario_registrar_productos" %}" class="header__boton header__registrar">
         <img src="{% static "images/logo_mas.png" %}" alt="registrar" class="header__logo_boton">
     </a>
 </li>
 {% endblock boton_registrar %}
 
+{% block boton_buscar %}
+<li>
+    <a href="#" id="boton_buscar" class="header__boton header__buscar">
+        <img src="{% static "images/logo_buscar.png" %}" alt="buscar" class="header__logo_boton">
+    </a>
+</li>
+{% include "layouts/modals/buscador_clientes.html" %}
+{% endblock boton_buscar %}
+
 {% block boton_cerrar_sesion %}
     {% include "layouts/partials/boton_cerrar_sesion.html" %}
 {% endblock boton_cerrar_sesion %}
+
+{% block cuerpo_seccion %}
+{% include "layouts/modals/confirmar_eliminar.html" %}
+{% if eliminado %}
+    {% include "layouts/modals/mensaje_eliminacion.html" %}
+{% endif %}
+{% if actualizado %}
+    {% include "layouts/modals/mensaje_actualizado.html" %}
+{% endif %}
+{% if sin_coincidencias %}
+    {% include "layouts/modals/mensaje_sin_coincidencias.html" %}
+{% endif %}
+
+
+<div class="contenedor tabla_registros">
+    <table class="tabla_registros__tabla">
+        <tr class="celdas_encabezado">
+            <th class="celda tabla_registros__celda_id">ID</th>
+            <th class="celda tabla_registros__celda_marca">Marca</th>
+            <th class="celda tabla_registros__celda_referencia">Referencia</th>
+            <th class="celda tabla_registros__celda_tipo">Tipo</th>
+            <th class="celda tabla_registros__celda_precio">Precio</th>
+            <th class="celda tabla_registros__celda_unidades_disponibles">U.Disp.</th>
+            <th colspan="2" class="celda tabla_registros__celda_recargar"><a href="{% url "inventario" %}"><img src="{% static "images/logo_recargar.png" %}" alt="recargar" class="tabla_registros__recargar"></a></th>
+        </tr>
+        {% for producto in pagina.object_list %}
+        <tr class="celdas_datos">
+            <td class="celda tabla_registros__celda_id">{{ producto.id }}</td>
+            <td class="celda tabla_registros__celda_marca">{{ producto.marca }}</td>
+            <td class="celda tabla_registros__celda_referencia">{{ producto.referencia }}</td>
+            <td class="celda tabla_registros__celda_tipo">{{ producto.tipo_producto }}</td>
+            <td class="celda tabla_registros__celda_precio">{{ producto.precio }}</td>
+            <td class="celda tabla_registros__celda_unidades_disponibles">{{ producto.unidades_disponibles }}</td>
+            <td class="celda tabla_registros__celda_editar"><a href= {% url "formulario_editar_productos" producto.id %} class="tabla_registros__boton" ><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>
+            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-url= {% url "eliminar_producto" producto.id %} data-mensaje= "producto tipo {{ producto.tipo_producto }} de referencia {{ producto.referencia }} con ID {{ producto.id }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock cuerpo_seccion %}
+{% block paginacion %}
+{% include "layouts/partials/paginacion.html" %}
+{% endblock paginacion %}
 

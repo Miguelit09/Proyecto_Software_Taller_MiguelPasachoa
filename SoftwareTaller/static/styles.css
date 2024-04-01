@@ -354,12 +354,19 @@ body {
     border: 2px solid var(--negro); 
 }
 
+/* Ancho celdas ID  */
 .tabla_registros__celda_id {
     width: 8%;
     min-width: 8%;
-
 }
 
+/* Ancho celdas de editar y eliminar  */
+.tabla_registros__celda_editar, .tabla_registros__celda_eliminar {
+    width: 5%;
+    min-width: 5%;
+}
+
+/* Ancho celdas de clientes */
 .tabla_registros__celda_nombre, .tabla_registros__celda_correo {
     width: 21%;
     min-width: 21%;
@@ -370,9 +377,22 @@ body {
     min-width: 15%;
 }
 
-.tabla_registros__celda_editar, .tabla_registros__celda_eliminar {
-    width: 5%;
-    min-width: 5%;
+
+/* Ancho celdas de inventario  */
+
+.tabla_registros__celda_marca, .tabla_registros__celda_referencia {
+    width: 18%;
+    min-width: 18%;
+}
+
+.tabla_registros__celda_tipo, .tabla_registros__celda_precio {
+    width: 12%;
+    min-width: 12%;
+}
+
+.tabla_registros__celda_unidades_disponibles {
+    width: 10%;
+    min-width: 10%;
 }
 
 .celda {
@@ -587,7 +607,7 @@ body {
     width: 100%;
 }
 
-.input_id_cliente {
+.input_id_oculto {
     display: none;
 }
 

@@ -1,0 +1,40 @@
+{% load static %}
+
+<div class="contenedor">
+    <article class="card card_registrar">
+        <figure>
+            <img src="{% static "images/logo_inventario.png" %}" alt="logo" class="card__image_registrar">
+        </figure>
+        <div>
+            <form action="{% url "registrar_producto" %}" method="post" class="card__form_registrar">
+                {% csrf_token %}
+                <div class="card__form-div">
+                    <label for="marca">Marca</label></i>
+                    <input type="text" id="marca" name="marca" required class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="referencia">Referencia</label>
+                    <input type="text" maxlength="20" id="referencia" name="referencia" class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="tipo_producto">Tipo de producto</label>
+                    <select name="tipo_producto" id="tipo_producto" class="card__input_form heigth_input_16">
+                        <option value="Llanta">Llanta</option>
+                        <option value="Aceite">Aceite</option>
+                        <option value="Filtro">Filtro</option>
+                        <option value="Grasa">Grasa</option>
+                    </select>
+                </div>
+                <div class="card__form-div">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="unidades_disponibles">Unidades Disponibles</label>
+                    <input type="number" id="unidades_disponibles" name="unidades_disponibles" class="card__input_form heigth_input_16">
+                </div>
+                <button type="submit" class="boton boton_guardar_registro letra_roja">Registrar</button>
+            </form>
+        </div>
+    </article>
+</div>

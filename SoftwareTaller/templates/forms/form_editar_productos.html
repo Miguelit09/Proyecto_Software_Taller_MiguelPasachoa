@@ -1,0 +1,91 @@
+{% load static %}
+
+<div class="contenedor">
+    <article class="card card_editar">
+        <figure>
+            <img src="{% static "images/logo_cliente.png" %}" alt="logo" class="card__image_editar">
+        </figure>
+        <div>
+            <form action="" class="card__form_editar">
+                <div class="card__form-div">
+                    <label for="marca">Marca</label></i>
+                    <input type="text" id="marca" name="marca" disabled class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="referencia">Referencia</label>
+                    <input type="text" maxlength="20" id="referencia" name="referencia" disabled class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="tipo_producto">Tipo de producto</label>
+                    <select name="tipo_producto" id="tipo_producto" disabled class="card__input_form heigth_input_16">
+                        <option value="Llanta">Llanta</option>
+                        <option value="Aceite">Aceite</option>
+                        <option value="Filtro">Filtro</option>
+                        <option value="Grasa">Grasa</option>
+                    </select>
+                </div>
+                <div class="card__form-div">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" disabled class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="unidades_disponibles">Unidades Disponibles</label>
+                    <input type="number" id="unidades_disponibles"  name="unidades_disponibles" disabled class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <a href="{% url "inventario" %}" class="boton card_form__boton_cancelar letra_roja">Cancelar</a>
+                </div>
+            </form>
+        </div>
+        <div class="card__contenedor_flechas">
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+        </div>
+        <div>
+            <form action="{% url "editar_producto" %}" method="post" class="card__form_editar">
+                {% csrf_token %}
+                <input type="text" id="id" name="id" class="input_id_oculto" value="{{ producto.id }}">
+                <div class="card__form-div">
+                    <label for="marca">Marca</label></i>
+                    <input type="text" id="marca" name="marca" required class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="referencia">Referencia</label>
+                    <input type="text" maxlength="20" id="referencia" name="referencia" class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="tipo_producto">Tipo de producto</label>
+                    <select name="tipo_producto" id="tipo_producto" class="card__input_form heigth_input_16">
+                        <option value="Llanta">Llanta</option>
+                        <option value="Aceite">Aceite</option>
+                        <option value="Filtro">Filtro</option>
+                        <option value="Grasa">Grasa</option>
+                    </select>
+                </div>
+                <div class="card__form-div">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" class="card__input_form heigth_input_16">
+                </div>
+                <div class="card__form-div">
+                    <label for="unidades_disponibles">Unidades Disponibles</label>
+                    <input type="number" id="unidades_disponibles" name="unidades_disponibles" class="card__input_form heigth_input_16">
+                </div>
+                <button type="submit" class="boton boton_guardar_registro letra_roja">Actualizar</button>
+            </form>
+        </div>
+    </article>
+</div>
