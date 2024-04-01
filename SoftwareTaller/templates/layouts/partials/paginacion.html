@@ -1,0 +1,14 @@
+<div class="paginacion">
+    {% if pagina.has_previous %}
+        <a href="?pagina=1&campo={{ campo }}&buscar={{ buscar }}" class="paginacion__boton_paginador letra_negra">&laquo; Primera</a>
+        <a href="?pagina={{ pagina.previous_page_number }}&campo={{ campo }}&buscar={{ buscar }}" class="paginacion__boton_paginador letra_negra">&lsaquo; Anterior</a>
+    {% endif %}
+    
+    <span class="current letra_roja">Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}</span>
+    
+    {% if pagina.has_next %}
+        <a href="?pagina={{ pagina.next_page_number }}&campo={{ campo }}&buscar={{ buscar }}" class="paginacion__boton_paginador letra_negra">Siguiente &rsaquo;</a>
+        <a href="?pagina={{ pagina.paginator.num_pages }}&campo={{ campo }}&buscar={{ buscar }}" class="paginacion__boton_paginador letra_negra">Última &raquo;</a>
+    {% endif %}
+</div>
+

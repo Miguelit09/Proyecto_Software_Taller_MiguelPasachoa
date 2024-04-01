@@ -17,7 +17,7 @@
 <body>
     {% block header %}
     <header>
-        <div class="contenedor header">
+        <div class="contenedor header" >
             <div class="header__bloque_logo_y_seccion">
                 {% include "layouts/partials/logo.html" %}
                 {% block nombre_seccion %}{% endblock nombre_seccion %}
@@ -41,6 +41,7 @@
             {% block titulo_en_cuerpo %}
             {% endblock titulo_en_cuerpo %}
             {% block cuerpo_seccion %}{% endblock cuerpo_seccion %}
+            {% block paginacion %}{% endblock paginacion %}
         </section>
     </main>
 </body>

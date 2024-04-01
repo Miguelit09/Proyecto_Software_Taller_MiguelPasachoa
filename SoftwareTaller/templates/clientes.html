@@ -50,6 +50,9 @@
 {% if actualizado %}
     {% include "layouts/modals/mensaje_actualizado.html" %}
 {% endif %}
+{% if sin_coincidencias %}
+    {% include "layouts/modals/mensaje_sin_coincidencias.html" %}
+{% endif %}
 
 
 <div class="contenedor tabla_registros">
@@ -60,8 +63,9 @@
             <th class="celda tabla_registros__celda_numero_di">Número DI</th>
             <th class="celda tabla_registros__celda_correo">Correo</th>
             <th class="celda tabla_registros__celda_telefono">Teléfono</th>
+            <th colspan="2" class="celda tabla_registros__celda_recargar"><a href="{% url "clientes" %}"><img src="{% static "images/logo_recargar.png" %}" alt="recargar" class="tabla_registros__recargar"></a></th>
         </tr>
-        {% for cliente in clientes %}
+        {% for cliente in pagina.object_list %}
         <tr class="celdas_datos">
             <td class="celda tabla_registros__celda_id">{{ cliente.id }}</td>
             <td class="celda tabla_registros__celda_nombre">{{ cliente.nombre_cliente }}</td>
@@ -75,4 +79,7 @@
     </table>
 </div>
 {% endblock cuerpo_seccion %}
+{% block paginacion %}
+{% include "layouts/partials/paginacion.html" %}
+{% endblock paginacion %}
 

@@ -6,11 +6,7 @@
     --negro: rgb(7, 6, 6);
     --rojo-gris: linear-gradient(to bottom, rgb(245, 26, 26), rgb(243, 63, 63), rgb(170, 161, 161), rgb(231, 231, 231));
     --max-width: 1400px;
-    --sombra-blanca: rgb(150, 150, 150)
-    -2px -2px 0 white,  
-    2px -2px 0 white,
-    -2px 2px 0 white,
-    2px 2px 0 white; /* Sombras de texto para simular un borde */
+
     --header-heigth: 100px;
     --input-disabled: rgb(231, 231, 231, 0.7);
 }
@@ -24,7 +20,7 @@
 body {
     background: var(--rojo-gris);
     background-repeat: no-repeat;
-    height: 100vh;
+    min-height: 100vh;
     background-size: cover;
 }
 
@@ -76,7 +72,11 @@ body {
 
 .letra_roja {
     color: var(--rojo);
-    text-shadow: var(--sombra-blanca)
+    text-shadow:
+    -0.5px -0.5px 0 white,  
+    0.5px -0.5px 0 white,
+    -0.5px 0.5px 0 white,
+    0.5px 0.5px 0 white;
 }
 
 .parrafo {
@@ -162,7 +162,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: calc(100vh - var(--header-heigth));
+    height: calc(100% - var(--header-heigth));
 }
 
 /* estilos ingreso */
@@ -227,7 +227,7 @@ body {
 }
 
 .boton:active {
-    background-color: rgb(150, 150, 150);
+    background-color: var(--gris);
 }
 
 .card__form_olvido {
@@ -242,7 +242,11 @@ body {
 
 .card__form_olvido:active {
     color: var(--rojo);
-    text-shadow: var(--sombra-blanca)
+    text-shadow:
+    -0.5px -0.5px 0 white,  
+    0.5px -0.5px 0 white,
+    -0.5px 0.5px 0 white,
+    0.5px 0.5px 0 white;
 }
 
 
@@ -332,10 +336,17 @@ body {
 
 /* estilos tabla de datos */
 
+.tabla_registros {
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+}
+
 .tabla_registros__tabla {
     border: 2px solid var(--negro);
     table-layout: fixed;
     margin-top: 36px;
+    width: 1200px;
 }
 
 .celdas_encabezado {
@@ -344,19 +355,24 @@ body {
 }
 
 .tabla_registros__celda_id {
-    width: 120px;
+    width: 8%;
+    min-width: 8%;
+
 }
 
 .tabla_registros__celda_nombre, .tabla_registros__celda_correo {
-    max-width: 240px;
+    width: 21%;
+    min-width: 21%;
 }
 
 .tabla_registros__celda_numero_di, .tabla_registros__celda_telefono {
-    width: 172px;
+    width: 15%;
+    min-width: 15%;
 }
 
 .tabla_registros__celda_editar, .tabla_registros__celda_eliminar {
-    width: 48px;
+    width: 5%;
+    min-width: 5%;
 }
 
 .celda {
@@ -426,6 +442,21 @@ body {
 .tabla_registros__eliminar:active {
     background-color: var(--rojo);
 }
+
+.tabla_registros__recargar {
+    width: 32px;
+    border-radius: 50%;
+}
+
+.tabla_registros__recargar:hover {
+    transform: scale(1.3);
+    background-color: rgb(206, 205, 205)
+}
+
+.tabla_registros__recargar:active {
+    background-color: var(--gris);
+}
+
 
 /* ESTILOS DE VENTANAS EMERGENTES */
 
@@ -593,5 +624,25 @@ body {
     width: 700px;
     margin: 5% auto;
     padding: 0;
+}
+
+/* Estilos de Paginación */
+
+.paginacion {
+    margin: 24px;
+    display: flex;
+    gap: 1rem;
+}
+
+.paginacion__boton_paginador {
+    text-decoration: none;
+}
+
+.paginacion__boton_paginador:hover {
+    text-decoration: underline;
+}
+.paginacion__boton_paginador:active {
+    text-decoration: underline;
+    color: var(--rojo);
 }
 

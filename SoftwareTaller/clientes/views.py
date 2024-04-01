@@ -1,16 +1,34 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Cliente
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 # MENÚ CLIENTES
-def clientes(request, clientes=None, eliminado=False, actualizado=False):
+def clientes(request, clientes=None, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None):
     if clientes is None:
         clientes = Cliente.objects.all()
+    paginator = Paginator(clientes, 20)
+
+    numero_pagina = request.GET.get('pagina')
+
+    try:
+        # Obtener la página solicitada
+        pagina = paginator.page(numero_pagina)
+    except PageNotAnInteger:
+        # Si el número de página no es un entero, mostrar la primera página
+        pagina = paginator.page(1)
+    except EmptyPage:
+        # Si la página está fuera de rango (página vacía), mostrar la última página
+        pagina = paginator.page(paginator.num_pages)
+
     return render(request, 'clientes.html', {
-        "clientes": clientes,
         "eliminado": eliminado,
-        "actualizado": actualizado
+        "actualizado": actualizado,
+        "sin_coincidencias": sin_coincidencias,
+        "buscar": buscar,
+        "campo": campo,
+        "pagina": pagina,
     })
 
 # REGISTRAR CLIENTES
@@ -41,9 +59,12 @@ def formulario_registrar_clientes_registrado(request):
 def buscar_clientes(request):
     campo = request.GET['campo']
     buscar = request.GET['buscar']
-    resultado = Cliente.objects.filter(**{f'{campo}__startswith': buscar})
-
-    return clientes(request, clientes=resultado)
+    resultado = Cliente.objects.filter(**{f'{campo}__icontains': buscar})
+    if (resultado.count()==0):
+        no_coincidencias = True
+    else:
+        no_coincidencias = False
+    return clientes(request, clientes=resultado, sin_coincidencias=no_coincidencias, campo=campo, buscar=buscar)
 
 
 
