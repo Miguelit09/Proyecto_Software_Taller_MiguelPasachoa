@@ -361,7 +361,7 @@ body {
 }
 
 /* Ancho celdas de editar y eliminar  */
-.tabla_registros__celda_editar, .tabla_registros__celda_eliminar {
+.tabla_registros__celda_editar, .tabla_registros__celda_eliminar, .tabla_registros__celda_asignar {
     width: 5%;
     min-width: 5%;
 }
@@ -393,6 +393,22 @@ body {
 .tabla_registros__celda_unidades_disponibles {
     width: 10%;
     min-width: 10%;
+}
+
+/*  Ancho celdas de servicios  */
+.tabla_registros__celda_servicio, .tabla_registros__celda_costo_total, .tabla_registros__celda_fecha {
+    width: 10%;
+    min-width: 10%;
+}
+
+.tabla_registros__celda_info_cliente, .tabla_registros__celda_productos {
+    width: 12%;
+    min-width: 12%;
+}
+
+.tabla_registros__celda_descripcion {
+    width: 15%;
+    min-width: 15%;
 }
 
 .celda {
@@ -461,6 +477,15 @@ body {
 
 .tabla_registros__eliminar:active {
     background-color: var(--rojo);
+}
+
+.tabla_registros__asignar:hover {
+    transform: scale(1.2);
+    background-color: rgb(173, 253, 166);
+}
+
+.tabla_registros__asignar:active {
+    background-color: rgb(160, 255, 18);
 }
 
 .tabla_registros__recargar {
@@ -670,3 +695,26 @@ body {
     color: var(--rojo);
 }
 
+/*Estilos modal servicio_asignar_cliente*/
+
+
+.modal__asignar_cliente {
+    margin: 0;
+    width: 800px;
+    margin: 5% auto;
+    padding: 0;
+}
+
+.tabla_registros__tabla_modal {
+    width: 80%;
+}
+
+.tabla_registros__celda_numero_di_modal, .tabla_registros__celda_nombre_modal {
+    width: 30%;
+    max-width: 30%;
+}
+
+.tabla_registros__celda_asignar {
+    width: 5%;
+    max-width: 5%;
+}

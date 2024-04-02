@@ -35,10 +35,11 @@ def clientes(request, clientes=None, eliminado=False, actualizado=False, sin_coi
 # REGISTRAR CLIENTES
 
 ## Formulario
-def formulario_registrar_clientes(request, registrado=False, name_url="formulario_registrar_clientes"):
+def formulario_registrar_clientes(request, registrado=False, name_url="formulario_registrar_clientes", nombre_seccion="Clientes"):
     return render(request, 'registrar_clientes.html', {
         'registrado': registrado,
         'name_url': name_url,
+        'nombre_seccion': nombre_seccion,
     })
 
 ## Recepción de formulario y creacion de registro

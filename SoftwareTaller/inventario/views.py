@@ -35,10 +35,11 @@ def inventario(request, productos=None, eliminado=False, actualizado=False, sin_
 # REGISTRAR PRODUCTOS
 
 ## Formulario
-def formulario_registrar_productos(request, registrado=False, name_url="formulario_registrar_productos"):
+def formulario_registrar_productos(request, registrado=False, name_url="formulario_registrar_productos", nombre_seccion="Inventario"):
     return render(request, 'registrar_productos.html', {
         'registrado': registrado,
-        'name_url': name_url
+        'name_url': name_url,
+        'nombre_seccion': nombre_seccion,
     })
 
 ## Recepción de formulario y creacion de registro
@@ -109,7 +110,7 @@ def eliminar_producto(request, id):
     producto = Producto.objects.get(id=id)
 
     producto.delete()
-    return redirect('productos_eliminado')
+    return redirect('inventario_eliminado')
 
 ## Vista que recarga el menú de inventario con el alert de eliminación exitosa
 def inventario_eliminado(request):

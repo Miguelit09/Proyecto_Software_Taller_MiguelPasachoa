@@ -10,7 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    {% block script %}
     <script src="{% static 'main.js' %}" defer></script>
+    {% endblock script %}
     {% block title %}{% endblock title %}
 </head>
 <body>

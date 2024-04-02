@@ -1,5 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+
+
 {% block title %}
 <title>Servicios</title>
 {% endblock title %}
@@ -18,13 +20,67 @@
 
 {% block boton_registrar %}
 <li>
-    <a href="" class="header__boton header__registrar">
+    <a href="{% url "formulario_registrar_servicios" %}" class="header__boton header__registrar">
         <img src="{% static "images/logo_mas.png" %}" alt="registrar" class="header__logo_boton">
     </a>
 </li>
 {% endblock boton_registrar %}
 
+{% block boton_buscar %}
+<li>
+    <a href="#" id="boton_buscar" class="header__boton header__buscar">
+        <img src="{% static "images/logo_buscar.png" %}" alt="buscar" class="header__logo_boton">
+    </a>
+</li>
+{% include "layouts/modals/buscador_servicios.html" %}
+{% endblock boton_buscar %}
+
 {% block boton_cerrar_sesion %}
     {% include "layouts/partials/boton_cerrar_sesion.html" %}
 {% endblock boton_cerrar_sesion %}
+
+{% block cuerpo_seccion %}
+{% include "layouts/modals/confirmar_eliminar.html" %}
+{% if eliminado %}
+    {% include "layouts/modals/mensaje_eliminacion.html" %}
+{% endif %}
+{% if actualizado %}
+    {% include "layouts/modals/mensaje_actualizado.html" %}
+{% endif %}
+{% if sin_coincidencias %}
+    {% include "layouts/modals/mensaje_sin_coincidencias.html" %}
+{% endif %}
+
+
+<div class="contenedor tabla_registros">
+    <table class="tabla_registros__tabla">
+        <tr class="celdas_encabezado">
+            <th class="celda tabla_registros__celda_id">ID</th>
+            <th class="celda tabla_registros__celda_servicio">Servicio</th>
+            <th class="celda tabla_registros__celda_descripcion">Descripción</th>
+            <th class="celda tabla_registros__celda_costo_total">Costo</th>
+            <th class="celda tabla_registros__celda_fecha">Fecha</th>
+            <th class="celda tabla_registros__celda_info_cliente">ID.Cliente</th>
+            <th class="celda tabla_registros__celda_productos">Productos</th>
+            <th colspan="2" class="celda tabla_registros__celda_recargar"><a href="{% url "servicios" %}"><img src="{% static "images/logo_recargar.png" %}" alt="recargar" class="tabla_registros__recargar"></a></th>
+        </tr>
+        {% for servicio in pagina.object_list %}
+        <tr class="celdas_datos">
+            <td class="celda tabla_registros__celda_id">{{ servicio.id }}</td>
+            <td class="celda tabla_registros__celda_servicio">{{ servicio.nombre_servicio }}</td>
+            <td class="celda tabla_registros__celda_descripcion">{{ servicio.descripcion }}</td>
+            <td class="celda tabla_registros__celda_costo_total">{{ servicio.costo_total }}</td>
+            <td class="celda tabla_registros__celda_fecha">{{ servicio.fecha }}</td>
+            <td class="celda tabla_registros__celda_info_cliente">{{ servicio.cliente.nombre_cliente }}</td>
+            <td class="celda tabla_registros__celda_productos">{{ servicio.cliente.nombre_cliente }}</td>
+            <td class="celda tabla_registros__celda_editar"><a href= {% url "formulario_editar_servicios" servicio.id %} class="tabla_registros__boton" ><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>
+            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-url= {% url "eliminar_servicio" servicio.id %} data-mensaje= "servicio {{ servicio.nombre_servicio }} con ID {{ servicio.id }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock cuerpo_seccion %}
+{% block paginacion %}
+{% include "layouts/partials/paginacion.html" %}
+{% endblock paginacion %}
 

@@ -34,6 +34,7 @@ closeBuscador.onclick = function() {
     modalBuscador.style.display = 'none';
 }
 // Función para que el input de buscar varíe entre select e input dependiendo del campo a buscar
+
 function generarInput(campo, contenedorBuscar) {
     let campoSeleccionado = campo.value;
     contenedorBuscar.innerHTML = '';
@@ -62,7 +63,10 @@ function generarInput(campo, contenedorBuscar) {
     }
 }
 
-generarInput(campo, contenedorBuscar)
+if (contenedorBuscar != null) {
+    generarInput(campo, contenedorBuscar)
+}
+
 
 
 // MODAL CONFIRMAR ELIMINACIÓN --> FUNCIONES
