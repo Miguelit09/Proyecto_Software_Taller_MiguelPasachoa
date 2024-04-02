@@ -4,9 +4,9 @@
 
 <div id="mensaje_accion" class="modal mensaje_accion">
     <div class="modal-content">
-        <p class="parrafo letra_blanca">Se ha actualizado el registro</p>
+        <p class="parrafo letra_blanca">Se ha actualizado el registro de la sección {{ name_url }}</p>
         <div class="div-botones">
-            <a href={% url "clientes" %} id="boton_aceptar" class="modal__boton_aceptar letra_negra">Aceptar</a>
+            <a href={% url name_url %} id="boton_aceptar" class="modal__boton_aceptar letra_negra">Aceptar</a>
         </div>
     </div>
 </div>

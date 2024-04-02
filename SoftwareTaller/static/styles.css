@@ -591,6 +591,10 @@ body {
     margin-top: -60px;
 }
 
+.card__contenedor_flechas_productos {
+    gap: 2.3rem;
+}
+
 .card__flechas {
     display: flex;
 }

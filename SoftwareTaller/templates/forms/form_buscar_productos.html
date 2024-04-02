@@ -9,20 +9,24 @@
             <img src="{% static "images/logo_buscar.png" %}" alt="logo_buscar" class="card__image_buscar">
         </figure>
         <div>
-            <form action="{% url "buscar_clientes" %}" method="get" class="card__form_buscar">
+            <form action="{% url "buscar_productos" %}" method="get" class="card__form_buscar">
                 <div class="card__form-div">
                     <label for="campo">Campo:</label></i>
                     <select name="campo" id="campo" class="card__input_form heigth_input_16">
                         <option value="id">ID</option>
-                        <option value="nombre_cliente">Nombre</option>
-                        <option value="documento_identidad">Número DI</option>
-                        <option value="correo_electronico">Correo</option>
-                        <option value="telefono">Teléfono</option>
+                        <option value="marca">Marca</option>
+                        <option value="referencia">Referencia</option>
+                        <option value="tipo_producto">Tipo</option>
+                        <option value="precio">Precio</option>
+                        <option value="unidades_disponibles">Unidades</option>
                     </select>
                 </div>
-                <div class="card__form-div">
+                <div class="card__form-div" >
                     <label for="buscar">Buscar:</label>
-                    <input type="text" id="buscar" name="buscar" class="card__input_form heigth_input_18">
+                    <div id="contenedor_buscar">
+
+                    </div> 
+                    {% comment %} <input type="text" id="buscar" name="buscar" class="card__input_form heigth_input_18"> {% endcomment %}
                 </div>
                 <button type="submit" class="boton boton_buscar letra_roja">Buscar</button>
             </form>

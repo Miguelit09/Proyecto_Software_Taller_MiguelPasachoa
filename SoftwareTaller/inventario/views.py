@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 # MENÚ INVENTARIO
-def inventario(request, productos=None, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None):
+def inventario(request, productos=None, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="inventario"):
     if productos is None:
         productos = Producto.objects.all()
     paginator = Paginator(productos, 20)
@@ -29,14 +29,16 @@ def inventario(request, productos=None, eliminado=False, actualizado=False, sin_
         "buscar": buscar,
         "campo": campo,
         "pagina": pagina,
+        "name_url": name_url,
     })
 
-# REGISTRAR CLIENTES
+# REGISTRAR PRODUCTOS
 
 ## Formulario
-def formulario_registrar_productos(request, registrado=False):
+def formulario_registrar_productos(request, registrado=False, name_url="formulario_registrar_productos"):
     return render(request, 'registrar_productos.html', {
-        'registrado': registrado
+        'registrado': registrado,
+        'name_url': name_url
     })
 
 ## Recepción de formulario y creacion de registro
@@ -55,17 +57,17 @@ def registrar_producto(request):
 def formulario_registrar_productos_registrado(request):
     return formulario_registrar_productos(request, registrado=True)
 
-# # BUSCAR CLIENTES
+# # BUSCAR PRODUCTOS
 
-# def buscar_clientes(request):
-#     campo = request.GET['campo']
-#     buscar = request.GET['buscar']
-#     resultado = Cliente.objects.filter(**{f'{campo}__icontains': buscar})
-#     if (resultado.count()==0):
-#         no_coincidencias = True
-#     else:
-#         no_coincidencias = False
-#     return clientes(request, clientes=resultado, sin_coincidencias=no_coincidencias, campo=campo, buscar=buscar)
+def buscar_productos(request):
+    campo = request.GET['campo']
+    buscar = request.GET['buscar']
+    resultado = Producto.objects.filter(**{f'{campo}__icontains': buscar})
+    if (resultado.count()==0):
+        no_coincidencias = True
+    else:
+        no_coincidencias = False
+    return inventario(request, productos=resultado, sin_coincidencias=no_coincidencias, campo=campo, buscar=buscar)
 
 
 
@@ -73,9 +75,9 @@ def formulario_registrar_productos_registrado(request):
 
 ## Vista que recibe el id y renderiza el formulario de edicion
 def formulario_editar_productos(request, id):
-    cliente = Producto.objects.get(id=id)
-    return render(request, 'editar_clientes.html', {
-        'cliente': cliente
+    producto = Producto.objects.get(id=id)
+    return render(request, 'editar_productos.html', {
+        'producto': producto
     })
 
 def editar_producto(request):

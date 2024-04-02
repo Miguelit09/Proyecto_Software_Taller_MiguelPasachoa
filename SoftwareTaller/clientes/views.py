@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 # MENÚ CLIENTES
-def clientes(request, clientes=None, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None):
+def clientes(request, clientes=None, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="clientes"):
     if clientes is None:
         clientes = Cliente.objects.all()
     paginator = Paginator(clientes, 20)
@@ -29,14 +29,16 @@ def clientes(request, clientes=None, eliminado=False, actualizado=False, sin_coi
         "buscar": buscar,
         "campo": campo,
         "pagina": pagina,
+        "name_url": name_url,
     })
 
 # REGISTRAR CLIENTES
 
 ## Formulario
-def formulario_registrar_clientes(request, registrado=False):
+def formulario_registrar_clientes(request, registrado=False, name_url="formulario_registrar_clientes"):
     return render(request, 'registrar_clientes.html', {
-        'registrado': registrado
+        'registrado': registrado,
+        'name_url': name_url,
     })
 
 ## Recepción de formulario y creacion de registro

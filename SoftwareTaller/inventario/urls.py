@@ -10,7 +10,7 @@ urlpatterns = [
     path("registrar_producto/", views.registrar_producto, name="registrar_producto"),
     path("formulario_registrar_productos/registrado", views.formulario_registrar_productos_registrado, name="formulario_registrar_productos_registrado"),
     # #Buscar
-    # path("buscar_clientes/", views.buscar_clientes, name="buscar_clientes"),
+    path("buscar_productos/", views.buscar_productos, name="buscar_productos"),
     #Editar
     path("formulario_editar_productos/<int:id>", views.formulario_editar_productos, name="formulario_editar_productos"), 
     path("editar_producto/", views.editar_producto, name="editar_producto"),
