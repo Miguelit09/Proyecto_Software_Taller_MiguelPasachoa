@@ -26,6 +26,7 @@ body {
 
 .contenedor {
     max-width: var(--max-width);
+    margin: auto;
 }
 
 
@@ -161,8 +162,9 @@ body {
 .seccion_principal {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    height: calc(100% - var(--header-heigth));
+    height: calc(100vh - var(--header-heigth));
 }
 
 /* estilos ingreso */
@@ -340,6 +342,7 @@ body {
     display: flex;
     justify-content: center;
     overflow-x: auto;
+    margin-top: 72px;
 }
 
 .tabla_registros__tabla {
