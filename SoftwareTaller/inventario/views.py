@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import JsonResponse
 from .models import Producto
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 # MENÚ INVENTARIO
-def inventario(request, productos=None, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="inventario"):
+def inventario(request, productos=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="inventario"):
     if productos is None:
         productos = Producto.objects.all()
     paginator = Paginator(productos, 20)
@@ -23,6 +23,7 @@ def inventario(request, productos=None, eliminado=False, actualizado=False, sin_
         pagina = paginator.page(paginator.num_pages)
 
     return render(request, 'inventario.html', {
+        "registrado": registrado,
         "eliminado": eliminado,
         "actualizado": actualizado,
         "sin_coincidencias": sin_coincidencias,
@@ -34,13 +35,6 @@ def inventario(request, productos=None, eliminado=False, actualizado=False, sin_
 
 # REGISTRAR PRODUCTOS
 
-## Formulario
-def formulario_registrar_productos(request, registrado=False, name_url="formulario_registrar_productos", nombre_seccion="Inventario"):
-    return render(request, 'registrar_productos.html', {
-        'registrado': registrado,
-        'name_url': name_url,
-        'nombre_seccion': nombre_seccion,
-    })
 
 ## Recepción de formulario y creacion de registro
 def registrar_producto(request):
@@ -52,18 +46,23 @@ def registrar_producto(request):
 
     Producto.objects.create(marca=marca, referencia=referencia, tipo_producto=tipo_producto, precio=precio, unidades_disponibles=unidades_disponibles)
 
-    return redirect('formulario_registrar_productos_registrado')
+    return inventario(request, registrado=True)
 
-## Vista del formulario con el alert de registro exitoso
-def formulario_registrar_productos_registrado(request):
-    return formulario_registrar_productos(request, registrado=True)
+
 
 # # BUSCAR PRODUCTOS
 
 def buscar_productos(request):
     campo = request.GET['campo']
     buscar = request.GET['buscar']
-    resultado = Producto.objects.filter(**{f'{campo}__icontains': buscar})
+    filtro = request.GET.get('filtro')
+
+    if filtro == "menor_igual":
+        resultado = Producto.objects.filter(**{f'{campo}__lte': buscar}).order_by('-' + campo)
+    elif filtro == "mayor_igual":
+        resultado = Producto.objects.filter(**{f'{campo}__gte': buscar}).order_by(campo)
+    else:
+        resultado = Producto.objects.filter(**{f'{campo}__icontains': buscar})
     if (resultado.count()==0):
         no_coincidencias = True
     else:
@@ -75,14 +74,21 @@ def buscar_productos(request):
 # EDITAR PRODUCTOS
 
 ## Vista que recibe el id y renderiza el formulario de edicion
-def formulario_editar_productos(request, id):
-    producto = Producto.objects.get(id=id)
-    return render(request, 'editar_productos.html', {
-        'producto': producto
-    })
+
+def obtener_registro_inventario(request, producto_id):
+    producto = Producto.objects.get(id=producto_id)
+    datos_producto = {
+        'id': producto.id,
+        'marca': producto.marca,
+        'referencia': producto.referencia,
+        'tipo_producto': producto.tipo_producto,
+        'precio': producto.precio,
+        'unidades_disponibles': producto.unidades_disponibles,
+    }
+    return JsonResponse(datos_producto)
 
 def editar_producto(request):
-    id = request.POST['id']
+    id = request.POST['registro_id']
     marca = request.POST['marca']
     referencia = request.POST['referencia']
     tipo_producto = request.POST['tipo_producto']

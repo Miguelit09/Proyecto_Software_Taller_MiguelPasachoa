@@ -2,9 +2,6 @@
 
 
     <article class="card card_buscar">
-        <div class="div-close div-close-buscador">
-            <span id="close_buscador" class="close">&times;</span>
-        </div>
         <figure>
             <img src="{% static "images/logo_buscar.png" %}" alt="logo_buscar" class="card__image_buscar">
         </figure>
@@ -23,7 +20,7 @@
                 </div>
                 <div class="card__form-div" >
                     <label for="buscar">Buscar:</label>
-                    <div id="contenedor_buscar">
+                    <div id="contenedor_buscar" class="contenedor_buscar">
 
                     </div> 
                     {% comment %} <input type="text" id="buscar" name="buscar" class="card__input_form heigth_input_18"> {% endcomment %}

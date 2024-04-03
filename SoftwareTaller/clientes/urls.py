@@ -10,7 +10,7 @@ urlpatterns = [
     #Buscar
     path("buscar_clientes/", views.buscar_clientes, name="buscar_clientes"),
     #Editar
-    path('obtener_cliente/<int:cliente_id>/', views.obtener_cliente, name='obtener_cliente'),
+    path('obtener_registro_clientes/<int:cliente_id>/', views.obtener_registro_clientes, name='obtener_registro_clientes'),
     path("editar_cliente/", views.editar_cliente, name="editar_cliente"),
     #Eliminar
     path("eliminar_cliente/<int:id>", views.eliminar_cliente, name="eliminar_cliente"),

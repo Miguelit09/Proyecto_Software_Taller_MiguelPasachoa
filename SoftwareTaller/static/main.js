@@ -1,4 +1,4 @@
-
+let baseURL = "http://127.0.0.1:8000/";
 // BOTON REGISTRAR --> ELEMENTOS
 
 let botonRegistrar = document.getElementById('boton_registrar');
@@ -17,7 +17,7 @@ let contenedorBuscar = document.getElementById('contenedor_buscar');
 let botonesEditar = document.getElementsByClassName('boton_editar');
 let modalEditar = document.getElementById('modal_editar');
 let closeEditar = document.getElementById('close_editar');
-
+let cancelarEditar = document.getElementById('cancelar_editar');
 
 // MODAL CONFIRMAR ELIMINACION --> ELEMENTOS
 let modalConfirmarEliminar = document.getElementById('confirmar_eliminar');
@@ -46,23 +46,36 @@ closeRegistrar.onclick = function() {
 for(let i = 0; i<botonesEditar.length; i++) {
     botonesEditar[i].addEventListener('click', function(event){ //Añadir el escuchar evento a todos los botones de la plantilla
         let registroId = this.getAttribute('data-registro-id');
-        let tipoRegistro = this.getAttribute('data-tipo-registro');
-        let url = `/obtener_cliente/${registroId}/`;
+        let appRegistro = this.getAttribute('data-app-registro');
+        let url = `${baseURL}${appRegistro}/obtener_registro_${appRegistro}/${registroId}/`;
         fetch(url)
             .then(response => response.json())
             .then(datosRegistro => {
                 document.getElementById('registro_id').value = datosRegistro.id
                 // Aquí puedes acceder a los detalles del cliente en datosCliente
-                if (tipoRegistro === "cliente"){
+                if (appRegistro === "clientes"){
                     let inputs_nombre_cliente = document.getElementsByClassName('nombre_cliente');
                     let inputs_documento_identidad = document.getElementsByClassName('documento_identidad');
                     let inputs_correo_electronico = document.getElementsByClassName('correo_electronico');
                     let inputs_telefono = document.getElementsByClassName('telefono');
                     for (let i=0; i<inputs_nombre_cliente.length; i++) {
-                        inputs_nombre_cliente[i].value = datosRegistro.nombre_cliente
-                        inputs_documento_identidad[i].value = datosRegistro.documento_identidad
-                        inputs_correo_electronico[i].value = datosRegistro.correo_electronico
-                        inputs_telefono[i].value = datosRegistro.telefono
+                        inputs_nombre_cliente[i].value = datosRegistro.nombre_cliente;
+                        inputs_documento_identidad[i].value = datosRegistro.documento_identidad;
+                        inputs_correo_electronico[i].value = datosRegistro.correo_electronico;
+                        inputs_telefono[i].value = datosRegistro.telefono;
+                    }
+                } else if (appRegistro == "inventario") {
+                    let inputs_marca = document.getElementsByClassName('marca');
+                    let inputs_referencia = document.getElementsByClassName('referencia');
+                    let inputs_tipo_producto = document.getElementsByClassName('tipo_producto');
+                    let inputs_precio = document.getElementsByClassName('precio');
+                    let inputs_unidades_disponibles = document.getElementsByClassName('unidades_disponibles');
+                    for (let i=0; i<inputs_marca.length; i++) {
+                        inputs_marca[i].value = datosRegistro.marca;
+                        inputs_referencia[i].value = datosRegistro.referencia;
+                        inputs_tipo_producto[i].value = datosRegistro.tipo_producto;
+                        inputs_precio[i].value = datosRegistro.precio;
+                        inputs_unidades_disponibles[i].value = datosRegistro.unidades_disponibles;
                     }
                 }
                 event.preventDefault(); // Detenemos el envío de la etiqueta a
@@ -74,6 +87,10 @@ for(let i = 0; i<botonesEditar.length; i++) {
 }
 
 closeEditar.onclick = function() {
+    modalEditar.style.display = 'none';
+}
+cancelarEditar.onclick = function(event) {
+    event.preventDefault();
     modalEditar.style.display = 'none';
 }
 
@@ -113,6 +130,43 @@ function generarInput(campo, contenedorBuscar) {
         }
 
         contenedorBuscar.appendChild(select);
+    } else if (campoSeleccionado === "precio"){
+        let divMenorIgual = document.createElement("div");
+        let divMayorIgual = document.createElement("div");
+        let labelMenorIgual = document.createElement("label");
+        let labelMayorIgual = document.createElement("label");
+        let menorIgual = document.createElement("input");
+        let input = document.createElement("input")
+        let mayorIgual = document.createElement("input");
+        divMenorIgual.className = "div_radio_inputs";
+        divMayorIgual.className = "div_radio_inputs";
+        labelMenorIgual.textContent = "<=";
+        labelMayorIgual.textContent = "=<";
+        labelMenorIgual.setAttribute("for", "menor_igual");
+        labelMayorIgual.setAttribute("for", "mayor_igual");
+        labelMenorIgual.classList.add("card__input_form", "heigth_input_18")
+        input.classList.add("card__input_form", "heigth_input_18");
+        labelMayorIgual.classList.add("card__input_form", "heigth_input_18")
+        menorIgual.value = "menor_igual";
+        mayorIgual.value = "mayor_igual";
+        menorIgual.type = "radio";
+        input.id = "buscar";
+        input.name = "buscar";
+        input.type = "text";
+        mayorIgual.type = "radio";
+        menorIgual.name = "filtro";
+        mayorIgual.name = "filtro";
+        menorIgual.id = "menor_igual";
+        mayorIgual.id = "mayor_igual";
+        menorIgual.className = "input_oculto";
+        mayorIgual.className = "input_oculto";
+        divMenorIgual.appendChild(menorIgual);
+        divMenorIgual.appendChild(labelMenorIgual);
+        divMayorIgual.appendChild(mayorIgual);
+        divMayorIgual.appendChild(labelMayorIgual);
+        contenedorBuscar.appendChild(divMenorIgual);
+        contenedorBuscar.appendChild(input);
+        contenedorBuscar.appendChild(divMayorIgual);
     } else {
         let input = document.createElement("input")
         input.classList.add("card__input_form", "heigth_input_18");

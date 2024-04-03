@@ -65,7 +65,7 @@ def buscar_clientes(request):
 # EDITAR CLIENTES
 
 ## Vista que recibe el id y renderiza el formulario de edicion
-def obtener_cliente(request, cliente_id):
+def obtener_registro_clientes(request, cliente_id):
     cliente = Cliente.objects.get(id=cliente_id)
     datos_cliente = {
         'id': cliente.id,
@@ -77,7 +77,7 @@ def obtener_cliente(request, cliente_id):
     return JsonResponse(datos_cliente)
 
 def editar_cliente(request):
-    id = request.POST['id']
+    id = request.POST['registro_id']
     nombre_cliente = request.POST['nombre_cliente']
     documento_identidad = request.POST['documento_identidad']
     correo_electronico = request.POST['correo_electronico']
@@ -92,8 +92,6 @@ def editar_cliente(request):
     cliente.save()
 
     return clientes(request, actualizado=True)
-
-
 
 
 # ELIMINAR CLIENTES

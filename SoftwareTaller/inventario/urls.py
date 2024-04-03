@@ -6,13 +6,11 @@ urlpatterns = [
     #Menú de inventario
     path("", views.inventario, name="inventario"),
     #Registrar
-    path("formulario_registrar_productos/", views.formulario_registrar_productos, name="formulario_registrar_productos"),
     path("registrar_producto/", views.registrar_producto, name="registrar_producto"),
-    path("formulario_registrar_productos/registrado", views.formulario_registrar_productos_registrado, name="formulario_registrar_productos_registrado"),
-    # #Buscar
+    #Buscar
     path("buscar_productos/", views.buscar_productos, name="buscar_productos"),
     #Editar
-    path("formulario_editar_productos/<int:id>", views.formulario_editar_productos, name="formulario_editar_productos"), 
+    path('obtener_registro_inventario/<int:producto_id>/', views.obtener_registro_inventario, name='obtener_registro_inventario'),
     path("editar_producto/", views.editar_producto, name="editar_producto"),
     #Eliminar
     path("eliminar_producto/<int:id>", views.eliminar_producto, name="eliminar_producto"),

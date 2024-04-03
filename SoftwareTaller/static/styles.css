@@ -17,12 +17,31 @@
     font-style: normal;
 }
 
+
 body {
     background: var(--rojo-gris);
     background-repeat: no-repeat;
     min-height: 100vh;
     background-size: cover;
 }
+
+body::-webkit-scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: var(--gris); /* Color del "pulgón" de la barra de desplazamiento */
+    border-radius: 5px; /* Radio de borde del "pulgón" */
+}
+
+body::-webkit-scrollbar-track {
+    background-color: rgb(175, 175, 175) /* Color de fondo de la pista de la barra de desplazamiento */
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(63, 63, 63); /* Color del "pulgón" al pasar el ratón sobre él */
+}
+
 
 .contenedor {
     max-width: var(--max-width);
@@ -304,6 +323,8 @@ body {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .card__image_registrar, .card__image_editar {
@@ -344,7 +365,7 @@ body {
 }
 
 .tabla_registros::-webkit-scrollbar {
-    height: 4px; /* Ancho de la barra de desplazamiento */
+    width: 12px; /* Ancho de la barra de desplazamiento */
 }
 
 .tabla_registros::-webkit-scrollbar-thumb {
@@ -438,7 +459,7 @@ body {
 
 /* Estilos para la barra de desplazamiento */
 .celda::-webkit-scrollbar {
-    height: 4px; /* Ancho de la barra de desplazamiento */
+    height: 3px; /* Ancho de la barra de desplazamiento */
 }
 
 .celda::-webkit-scrollbar-thumb {
@@ -481,7 +502,7 @@ body {
 
 .tabla_registros__editar:hover {
     transform: scale(1.2);
-    background-color: rgb(240, 255, 145);;
+    background-color: rgb(240, 255, 145);
 }
 
 .tabla_registros__editar:active {
@@ -673,6 +694,7 @@ body {
 
 
 .heigth_input_18 {
+    min-width: 40px;
     font-size: 18px;
 }
 
@@ -683,6 +705,30 @@ body {
 .modal__buscador {
     width: 700px;
     margin: 5% auto;
+}
+
+.contenedor_buscar {
+    display: flex;
+    gap: 2rem;
+}
+
+.input_oculto {
+    position: absolute;
+    left: -9999px;
+}
+
+
+.input_oculto:hover + label {
+    cursor: pointer;
+    background-color: rgb(206, 205, 205);
+}
+
+.input_oculto:checked + label {
+    background-color: var(--gris);
+}
+
+.div_radio_inputs {
+    min-width: 40px;
 }
 
 /* Estilos de Paginación */
@@ -732,8 +778,11 @@ body {
 
 .modal__registrar {
     width: 800px;
+    max-height: 90vh;
     margin: 1% auto;
     padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .modal__header {
@@ -743,4 +792,32 @@ body {
     font-size: 28px;
     height: 40px;
     padding: 0 76px;
+}
+
+/* Estilos modal editar */
+
+.modal__editar {
+    width: 1200px;
+    max-height: 90vh;
+    margin: 1% auto;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento */
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background-color: var(--gris); /* Color del "pulgón" de la barra de desplazamiento */
+    border-radius: 5px; /* Radio de borde del "pulgón" */
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background-color: transparent; /* Color de fondo de la pista de la barra de desplazamiento */
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(63, 63, 63); /* Color del "pulgón" al pasar el ratón sobre él */
 }
