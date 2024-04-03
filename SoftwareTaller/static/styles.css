@@ -26,7 +26,7 @@ body {
 
 .contenedor {
     max-width: var(--max-width);
-    margin: auto;
+    margin: 0 auto;
 }
 
 
@@ -99,9 +99,6 @@ body {
     gap: 4rem;
 }
 
-.header__titulo {
-    width: 248px;
-}
 
 .header__menu {
     list-style: none;
@@ -165,6 +162,7 @@ body {
     justify-content: center;
     align-items: center;
     height: calc(100vh - var(--header-heigth));
+    margin-top: 48px;
 }
 
 /* estilos ingreso */
@@ -342,7 +340,24 @@ body {
     display: flex;
     justify-content: center;
     overflow-x: auto;
-    margin-top: 72px;
+    border: 5px ridge var(--negro);
+}
+
+.tabla_registros::-webkit-scrollbar {
+    height: 4px; /* Ancho de la barra de desplazamiento */
+}
+
+.tabla_registros::-webkit-scrollbar-thumb {
+    background-color: var(--gris); /* Color del "pulgón" de la barra de desplazamiento */
+    border-radius: 5px; /* Radio de borde del "pulgón" */
+}
+
+.tabla_registros::-webkit-scrollbar-track {
+    background-color: transparent; /* Color de fondo de la pista de la barra de desplazamiento */
+}
+
+.tabla_registros::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(63, 63, 63); /* Color del "pulgón" al pasar el ratón sobre él */
 }
 
 .tabla_registros__tabla {
@@ -639,9 +654,6 @@ body {
     width: 100%;
 }
 
-.input_id_oculto {
-    display: none;
-}
 
 /* Estilos modal buscador */
 
@@ -659,9 +671,6 @@ body {
     gap: 2rem;
 }
 
-.div-close-buscador {
-    width: 95%;
-}
 
 .heigth_input_18 {
     font-size: 18px;
@@ -672,10 +681,8 @@ body {
 }
 
 .modal__buscador {
-    margin: 0;
     width: 700px;
     margin: 5% auto;
-    padding: 0;
 }
 
 /* Estilos de Paginación */
@@ -702,7 +709,6 @@ body {
 
 
 .modal__asignar_cliente {
-    margin: 0;
     width: 800px;
     margin: 5% auto;
     padding: 0;
@@ -720,4 +726,21 @@ body {
 .tabla_registros__celda_asignar {
     width: 5%;
     max-width: 5%;
+}
+
+/* Estilos modal registrar */
+
+.modal__registrar {
+    width: 800px;
+    margin: 1% auto;
+    padding: 20px;
+}
+
+.modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 28px;
+    height: 40px;
+    padding: 0 76px;
 }

@@ -20,19 +20,15 @@
 
 {% block boton_registrar %}
 <li>
-    <a href="{% url "formulario_registrar_servicios" %}" class="header__boton header__registrar">
-        <img src="{% static "images/logo_mas.png" %}" alt="registrar" class="header__logo_boton">
-    </a>
+    {% include "layouts/partials/boton_registrar.html" %}
 </li>
 {% endblock boton_registrar %}
 
 {% block boton_buscar %}
 <li>
-    <a href="#" id="boton_buscar" class="header__boton header__buscar">
-        <img src="{% static "images/logo_buscar.png" %}" alt="buscar" class="header__logo_boton">
-    </a>
+    {% include "layouts/partials/boton_buscar.html" %}
 </li>
-{% include "layouts/modals/buscador_servicios.html" %}
+{% include "layouts/modals/modals_servicios/buscador_servicios.html" %}
 {% endblock boton_buscar %}
 
 {% block boton_cerrar_sesion %}
@@ -40,15 +36,15 @@
 {% endblock boton_cerrar_sesion %}
 
 {% block cuerpo_seccion %}
-{% include "layouts/modals/confirmar_eliminar.html" %}
+{% include "layouts/modals/mensajes/confirmar_eliminar.html" %}
 {% if eliminado %}
-    {% include "layouts/modals/mensaje_eliminacion.html" %}
+    {% include "layouts/modals/mensajes/mensaje_eliminacion.html" %}
 {% endif %}
 {% if actualizado %}
-    {% include "layouts/modals/mensaje_actualizado.html" %}
+    {% include "layouts/modals/mensajes/mensaje_actualizado.html" %}
 {% endif %}
 {% if sin_coincidencias %}
-    {% include "layouts/modals/mensaje_sin_coincidencias.html" %}
+    {% include "layouts/modals/mensajes/mensaje_sin_coincidencias.html" %}
 {% endif %}
 
 

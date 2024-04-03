@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import JsonResponse
 from .models import Cliente
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 # MENÚ CLIENTES
-def clientes(request, clientes=None, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="clientes"):
+def clientes(request, clientes=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="clientes"):
     if clientes is None:
         clientes = Cliente.objects.all()
     paginator = Paginator(clientes, 20)
@@ -23,6 +23,7 @@ def clientes(request, clientes=None, eliminado=False, actualizado=False, sin_coi
         pagina = paginator.page(paginator.num_pages)
 
     return render(request, 'clientes.html', {
+        'registrado': registrado,
         "eliminado": eliminado,
         "actualizado": actualizado,
         "sin_coincidencias": sin_coincidencias,
@@ -34,13 +35,6 @@ def clientes(request, clientes=None, eliminado=False, actualizado=False, sin_coi
 
 # REGISTRAR CLIENTES
 
-## Formulario
-def formulario_registrar_clientes(request, registrado=False, name_url="formulario_registrar_clientes", nombre_seccion="Clientes"):
-    return render(request, 'registrar_clientes.html', {
-        'registrado': registrado,
-        'name_url': name_url,
-        'nombre_seccion': nombre_seccion,
-    })
 
 ## Recepción de formulario y creacion de registro
 def registrar_cliente(request):
@@ -51,11 +45,8 @@ def registrar_cliente(request):
 
     Cliente.objects.create(nombre_cliente=nombre_cliente, documento_identidad=documento_identidad, correo_electronico=correo_electronico, telefono=telefono)
 
-    return redirect('formulario_registrar_clientes_registrado')
+    return clientes(request, registrado=True)
 
-## Vista del formulario con el alert de registro exitoso
-def formulario_registrar_clientes_registrado(request):
-    return formulario_registrar_clientes(request, registrado=True)
 
 # BUSCAR CLIENTES
 
@@ -74,11 +65,16 @@ def buscar_clientes(request):
 # EDITAR CLIENTES
 
 ## Vista que recibe el id y renderiza el formulario de edicion
-def formulario_editar_clientes(request, id):
-    cliente = Cliente.objects.get(id=id)
-    return render(request, 'editar_clientes.html', {
-        'cliente': cliente
-    })
+def obtener_cliente(request, cliente_id):
+    cliente = Cliente.objects.get(id=cliente_id)
+    datos_cliente = {
+        'id': cliente.id,
+        'nombre_cliente': cliente.nombre_cliente,
+        'documento_identidad': cliente.documento_identidad,
+        'correo_electronico': cliente.correo_electronico,
+        'telefono': cliente.telefono
+    }
+    return JsonResponse(datos_cliente)
 
 def editar_cliente(request):
     id = request.POST['id']
