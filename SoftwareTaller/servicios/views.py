@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 # MENÚ SERVICIOS
-def servicios(request, servicios=None, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="servicios"):
+def servicios(request, servicios=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="servicios"):
     if servicios is None:
         servicios = Servicio.objects.all()
     paginator = Paginator(servicios, 20)
@@ -23,6 +23,7 @@ def servicios(request, servicios=None, eliminado=False, actualizado=False, sin_c
         pagina = paginator.page(paginator.num_pages)
 
     return render(request, 'servicios.html', {
+        "registrado": registrado,
         "eliminado": eliminado,
         "actualizado": actualizado,
         "sin_coincidencias": sin_coincidencias,

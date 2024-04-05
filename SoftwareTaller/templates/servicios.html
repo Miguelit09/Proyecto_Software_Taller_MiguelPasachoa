@@ -37,6 +37,10 @@
 
 {% block cuerpo_seccion %}
 {% include "layouts/modals/mensajes/confirmar_eliminar.html" %}
+{% include "layouts/modals/modals_servicios/registrar_servicios.html" %}
+{% if registrado %}
+    {% include "layouts/modals/mensajes/mensaje_registrado.html" %}
+{% endif %}
 {% if eliminado %}
     {% include "layouts/modals/mensajes/mensaje_eliminacion.html" %}
 {% endif %}

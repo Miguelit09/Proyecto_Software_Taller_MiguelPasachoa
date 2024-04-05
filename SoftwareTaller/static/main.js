@@ -29,203 +29,246 @@ let mensajeModal = document.getElementById("mensaje_modal")
 let eliminar = document.getElementById("eliminar_registro")
 let cancelar = document.getElementById("cancelar_eliminacion")
 
+// ASIGNAR CLIENTE AL SERVICIO --> ELEMENTOS
+let botonCliente = document.getElementById('boton_cliente');
+
+let modalAsignarCliente = document.getElementById('modal_asignar_cliente');
+let closeModalAsignarCliente = document.getElementById('close_modal_asignar_cliente');
+
+
+
+
 
 // REGISTRAR --> FUNCIONES
 
-botonRegistrar.addEventListener("click", function(event) {
-    event.preventDefault()
-    modalRegistrar.style.display = "block";
+botonRegistrar.addEventListener("click", function (event) {
+  event.preventDefault()
+  modalRegistrar.style.display = "block";
 })
 
-closeRegistrar.onclick = function() {
-    modalRegistrar.style.display = 'none';
+closeRegistrar.onclick = function () {
+  modalRegistrar.style.display = 'none';
 }
 
 // EDITAR --> FUNCIONES
 
-for(let i = 0; i<botonesEditar.length; i++) {
-    botonesEditar[i].addEventListener('click', function(event){ //Añadir el escuchar evento a todos los botones de la plantilla
-        let registroId = this.getAttribute('data-registro-id');
-        let appRegistro = this.getAttribute('data-app-registro');
-        let url = `${baseURL}${appRegistro}/obtener_registro_${appRegistro}/${registroId}/`;
-        fetch(url)
-            .then(response => response.json())
-            .then(datosRegistro => {
-                document.getElementById('registro_id').value = datosRegistro.id
-                // Aquí puedes acceder a los detalles del cliente en datosCliente
-                if (appRegistro === "clientes"){
-                    let inputs_nombre_cliente = document.getElementsByClassName('nombre_cliente');
-                    let inputs_documento_identidad = document.getElementsByClassName('documento_identidad');
-                    let inputs_correo_electronico = document.getElementsByClassName('correo_electronico');
-                    let inputs_telefono = document.getElementsByClassName('telefono');
-                    for (let i=0; i<inputs_nombre_cliente.length; i++) {
-                        inputs_nombre_cliente[i].value = datosRegistro.nombre_cliente;
-                        inputs_documento_identidad[i].value = datosRegistro.documento_identidad;
-                        inputs_correo_electronico[i].value = datosRegistro.correo_electronico;
-                        inputs_telefono[i].value = datosRegistro.telefono;
-                    }
-                } else if (appRegistro == "inventario") {
-                    let inputs_marca = document.getElementsByClassName('marca');
-                    let inputs_referencia = document.getElementsByClassName('referencia');
-                    let inputs_tipo_producto = document.getElementsByClassName('tipo_producto');
-                    let inputs_precio = document.getElementsByClassName('precio');
-                    let inputs_unidades_disponibles = document.getElementsByClassName('unidades_disponibles');
-                    for (let i=0; i<inputs_marca.length; i++) {
-                        inputs_marca[i].value = datosRegistro.marca;
-                        inputs_referencia[i].value = datosRegistro.referencia;
-                        inputs_tipo_producto[i].value = datosRegistro.tipo_producto;
-                        inputs_precio[i].value = datosRegistro.precio;
-                        inputs_unidades_disponibles[i].value = datosRegistro.unidades_disponibles;
-                    }
-                }
-                event.preventDefault(); // Detenemos el envío de la etiqueta a
-                modalEditar.style.display = 'block';
-            })
-            .catch(error => console.error('Error al obtener detalles del cliente:', error));
-        
-    })
-}
+if (botonesEditar.length != 0) {
+  for (let i = 0; i < botonesEditar.length; i++) {
+    botonesEditar[i].addEventListener('click', function (event) { //Añadir el escuchar evento a todos los botones de la plantilla
+      let registroId = this.getAttribute('data-registro-id');
+      let appRegistro = this.getAttribute('data-app-registro');
+      let url = `${baseURL}${appRegistro}/obtener_registro_${appRegistro}/${registroId}/`;
+      fetch(url)
+        .then(response => response.json())
+        .then(datosRegistro => {
+          document.getElementById('registro_id').value = datosRegistro.id
+          // Aquí puedes acceder a los detalles del cliente en datosCliente
+          if (appRegistro === "clientes") {
+            let inputs_nombre_cliente = document.getElementsByClassName('nombre_cliente');
+            let inputs_documento_identidad = document.getElementsByClassName('documento_identidad');
+            let inputs_correo_electronico = document.getElementsByClassName('correo_electronico');
+            let inputs_telefono = document.getElementsByClassName('telefono');
+            for (let i = 0; i < inputs_nombre_cliente.length; i++) {
+              inputs_nombre_cliente[i].value = datosRegistro.nombre_cliente;
+              inputs_documento_identidad[i].value = datosRegistro.documento_identidad;
+              inputs_correo_electronico[i].value = datosRegistro.correo_electronico;
+              inputs_telefono[i].value = datosRegistro.telefono;
+            }
+          } else if (appRegistro == "inventario") {
+            let inputs_marca = document.getElementsByClassName('marca');
+            let inputs_referencia = document.getElementsByClassName('referencia');
+            let inputs_tipo_producto = document.getElementsByClassName('tipo_producto');
+            let inputs_precio = document.getElementsByClassName('precio');
+            let inputs_unidades_disponibles = document.getElementsByClassName('unidades_disponibles');
+            for (let i = 0; i < inputs_marca.length; i++) {
+              inputs_marca[i].value = datosRegistro.marca;
+              inputs_referencia[i].value = datosRegistro.referencia;
+              inputs_tipo_producto[i].value = datosRegistro.tipo_producto;
+              inputs_precio[i].value = datosRegistro.precio;
+              inputs_unidades_disponibles[i].value = datosRegistro.unidades_disponibles;
+            }
+          }
+          event.preventDefault(); // Detenemos el envío de la etiqueta a
+          modalEditar.style.display = 'block';
+        })
+        .catch(error => console.error('Error al obtener detalles del cliente:', error));
 
-closeEditar.onclick = function() {
+    })
+  }
+
+  closeEditar.onclick = function () {
     modalEditar.style.display = 'none';
-}
-cancelarEditar.onclick = function(event) {
+  }
+  cancelarEditar.onclick = function (event) {
     event.preventDefault();
     modalEditar.style.display = 'none';
+  }
 }
+
 
 // BUSCADOR --> FUNCIONES
 
 //Aparecer el buscador al presionar el botón
-botonBuscar.addEventListener("click", function(event) {
-    event.preventDefault()
-    modalBuscador.style.display = "block";
-})
-
-campo.addEventListener("change", function(){
-    generarInput(campo, contenedorBuscar);
+botonBuscar.addEventListener("click", function (event) {
+  event.preventDefault()
+  modalBuscador.style.display = "block";
 });
 
-// Cerrar buscador al darle a la X
-closeBuscador.onclick = function() {
+if (campo != null) {
+  campo.addEventListener("change", function () {
+    generarInput(campo, contenedorBuscar);
+  });
+  closeBuscador.onclick = function () {
     modalBuscador.style.display = 'none';
-}
+  };
+};
+
+// Cerrar buscador al darle a la X
+
 // Función para que el input de buscar varíe entre select e input dependiendo del campo a buscar
 
 function generarInput(campo, contenedorBuscar) {
-    let campoSeleccionado = campo.value;
-    contenedorBuscar.innerHTML = '';
+  let campoSeleccionado = campo.value;
+  contenedorBuscar.innerHTML = '';
 
-    if (campoSeleccionado === "tipo_producto") {
-        let select = document.createElement("select");
-        let opciones = ["Llanta", "Aceite", "Filtro", "Grasa"];
-        for (let i=0; i<opciones.length; i++) {
-            let opcion = document.createElement("option");
-            opcion.textContent = opciones[i]
-            select.classList.add("card__input_form", "heigth_input_18");
-            select.id = "buscar";
-            select.name = "buscar";
-            select.type = "text";
-            select.appendChild(opcion)
-        }
-
-        contenedorBuscar.appendChild(select);
-    } else if (campoSeleccionado === "precio"){
-        let divMenorIgual = document.createElement("div");
-        let divMayorIgual = document.createElement("div");
-        let labelMenorIgual = document.createElement("label");
-        let labelMayorIgual = document.createElement("label");
-        let menorIgual = document.createElement("input");
-        let input = document.createElement("input")
-        let mayorIgual = document.createElement("input");
-        divMenorIgual.className = "div_radio_inputs";
-        divMayorIgual.className = "div_radio_inputs";
-        labelMenorIgual.textContent = "<=";
-        labelMayorIgual.textContent = "=<";
-        labelMenorIgual.setAttribute("for", "menor_igual");
-        labelMayorIgual.setAttribute("for", "mayor_igual");
-        labelMenorIgual.classList.add("card__input_form", "heigth_input_18")
-        input.classList.add("card__input_form", "heigth_input_18");
-        labelMayorIgual.classList.add("card__input_form", "heigth_input_18")
-        menorIgual.value = "menor_igual";
-        mayorIgual.value = "mayor_igual";
-        menorIgual.type = "radio";
-        input.id = "buscar";
-        input.name = "buscar";
-        input.type = "text";
-        mayorIgual.type = "radio";
-        menorIgual.name = "filtro";
-        mayorIgual.name = "filtro";
-        menorIgual.id = "menor_igual";
-        mayorIgual.id = "mayor_igual";
-        menorIgual.className = "input_oculto";
-        mayorIgual.className = "input_oculto";
-        divMenorIgual.appendChild(menorIgual);
-        divMenorIgual.appendChild(labelMenorIgual);
-        divMayorIgual.appendChild(mayorIgual);
-        divMayorIgual.appendChild(labelMayorIgual);
-        contenedorBuscar.appendChild(divMenorIgual);
-        contenedorBuscar.appendChild(input);
-        contenedorBuscar.appendChild(divMayorIgual);
-    } else {
-        let input = document.createElement("input")
-        input.classList.add("card__input_form", "heigth_input_18");
-        input.id = "buscar";
-        input.name = "buscar";
-        input.type = "text";
-        contenedorBuscar.appendChild(input);
+  if (campoSeleccionado === "tipo_producto") {
+    let select = document.createElement("select");
+    let opciones = ["Llanta", "Aceite", "Filtro", "Grasa"];
+    for (let i = 0; i < opciones.length; i++) {
+      let opcion = document.createElement("option");
+      opcion.textContent = opciones[i]
+      select.classList.add("card__input_form", "heigth_input_18");
+      select.id = "buscar";
+      select.name = "buscar";
+      select.type = "text";
+      select.appendChild(opcion)
     }
+
+    contenedorBuscar.appendChild(select);
+  } else if (campoSeleccionado === "precio" || campoSeleccionado === "unidades_disponibles") {
+    let divMenorIgual = document.createElement("div");
+    let divMayorIgual = document.createElement("div");
+    let labelMenorIgual = document.createElement("label");
+    let labelMayorIgual = document.createElement("label");
+    let menorIgual = document.createElement("input");
+    let input = document.createElement("input")
+    let mayorIgual = document.createElement("input");
+    divMenorIgual.className = "div_radio_inputs";
+    divMayorIgual.className = "div_radio_inputs";
+    labelMenorIgual.textContent = "Menores";
+    labelMayorIgual.textContent = "Mayores";
+    labelMenorIgual.setAttribute("for", "menor_igual");
+    labelMayorIgual.setAttribute("for", "mayor_igual");
+    labelMenorIgual.classList.add("card__input_form", "heigth_input_18")
+    input.classList.add("card__input_form", "heigth_input_18");
+    labelMayorIgual.classList.add("card__input_form", "heigth_input_18")
+    menorIgual.value = "menor_igual";
+    mayorIgual.value = "mayor_igual";
+    menorIgual.type = "radio";
+    input.id = "buscar";
+    input.name = "buscar";
+    input.type = "text";
+    mayorIgual.type = "radio";
+    menorIgual.name = "filtro";
+    mayorIgual.name = "filtro";
+    menorIgual.id = "menor_igual";
+    mayorIgual.id = "mayor_igual";
+    menorIgual.className = "input_oculto";
+    mayorIgual.className = "input_oculto";
+    menorIgual.checked = true
+    divMenorIgual.appendChild(menorIgual);
+    divMenorIgual.appendChild(labelMenorIgual);
+    divMayorIgual.appendChild(mayorIgual);
+    divMayorIgual.appendChild(labelMayorIgual);
+    contenedorBuscar.appendChild(divMenorIgual);
+    contenedorBuscar.appendChild(input);
+    contenedorBuscar.appendChild(divMayorIgual);
+  } else {
+    let input = document.createElement("input")
+    input.classList.add("card__input_form", "heigth_input_18");
+    input.id = "buscar";
+    input.name = "buscar";
+    input.type = "text";
+    contenedorBuscar.appendChild(input);
+  }
 }
 
 if (contenedorBuscar != null) {
-    generarInput(campo, contenedorBuscar)
+  generarInput(campo, contenedorBuscar)
 }
 
 
 
 // MODAL CONFIRMAR ELIMINACIÓN --> FUNCIONES
-
-// Mostrar la ventana emergente cuando se hace clic en el botón de eliminar
-for (let i=0; i<botonesEliminar.length; i++) {
-    botonesEliminar[i].addEventListener('click', function(event){ //Añadir el escuchar evento a todos los botones de la plantilla
-        event.preventDefault() // Detenemos el envío de la etiqueta a
-        let mensaje = this.getAttribute('data-mensaje') // Obtenemos el mensaje asociado al botón
-        mensajeModal.textContent = "¿Estás seguro que deseas eliminar el registro del " + mensaje + "?"
-        let url = this.getAttribute('data-url'); // Obtenemos el url relacionado al botón presionado
-        eliminar.setAttribute('data-url', url); // Le seteamos el url al boton eliminar de la ventana emergente
-        modalConfirmarEliminar.style.display = 'block'; // Mostramos la ventana emergente
+if (botonesEliminar.length != 0) {
+  for (let i = 0; i < botonesEliminar.length; i++) {
+    botonesEliminar[i].addEventListener('click', function (event) { //Añadir el escuchar evento a todos los botones de la plantilla
+      event.preventDefault() // Detenemos el envío de la etiqueta a
+      let mensaje = this.getAttribute('data-mensaje') // Obtenemos el mensaje asociado al botón
+      mensajeModal.textContent = "¿Estás seguro que deseas eliminar el registro del " + mensaje + "?"
+      let url = this.getAttribute('data-url'); // Obtenemos el url relacionado al botón presionado
+      eliminar.setAttribute('data-url', url); // Le seteamos el url al boton eliminar de la ventana emergente
+      modalConfirmarEliminar.style.display = 'block'; // Mostramos la ventana emergente
     })
-}
-// Eliminar registro al clickear en el botón Eliminar
-eliminar.addEventListener('click', function(){
+  }
+  // Eliminar registro al clickear en el botón Eliminar
+  eliminar.addEventListener('click', function () {
     let url = this.getAttribute('data-url'); // Obtenemos la url que nos seteó el botón de la tabla
     window.location.href = url; // Asignamos la url al botón de eliminar de la ventana emergente
     modalConfirmarEliminar.style.display = 'none';
-})
+  })
 
-//Ocultar modal de eliminar al clickear el botón Cancelar
+  //Ocultar modal de eliminar al clickear el botón Cancelar
 
-cancelar.addEventListener('click', function(){
+  cancelar.addEventListener('click', function () {
     eliminar.removeAttribute('data-url'); // Eliminamos la url seteada si se cancela la eliminación 
     modalConfirmarEliminar.style.display = 'none';
-})
+  })
 
-// Ocultar modal de eliminar al clickear la X
-closeModalConfirmarEliminar.onclick = function() {
+  // Ocultar modal de eliminar al clickear la X
+  closeModalConfirmarEliminar.onclick = function () {
     eliminar.removeAttribute('data-url');
     modalConfirmarEliminar.style.display = 'none';
+  }
 }
+// Mostrar la ventana emergente cuando se hace clic en el botón de eliminar
+
 
 // Ocultar cualquiera de los modales clickeando por fuera de ellos
-window.onclick = function(event) {
-    if (event.target == modalBuscador) {
-        modalBuscador.style.display = 'none';
-    } else if (event.target == modalConfirmarEliminar) {
-        eliminar.removeAttribute('data-url');
-        modalConfirmarEliminar.style.display = 'none';
-    } else if (event.target == modalRegistrar) {
-        modalRegistrar.style.display = 'none';
-    } else if (event.target == modalEditar) {
-        modalEditar.style.display = 'none';
-    } 
+window.onclick = function (event) {
+  if (event.target == modalBuscador) {
+    modalBuscador.style.display = 'none';
+  } else if (event.target == modalConfirmarEliminar) {
+    eliminar.removeAttribute('data-url');
+    modalConfirmarEliminar.style.display = 'none';
+  } else if (event.target == modalRegistrar) {
+    modalRegistrar.style.display = 'none';
+  } else if (event.target == modalEditar) {
+    modalEditar.style.display = 'none';
+  }
+}
+
+// ASIGNAR CLIENTE AL SERVICIO --> FUNCIONES
+
+
+if (botonCliente != null) {
+  // Cerrar modal de asignar cliente al clickear fuera de él
+  closeModalAsignarCliente.onclick = function () {
+    modalAsignarCliente.style.display = 'none';
+  };
+
+  // Ocultar cualquiera de los modales clickeando por fuera de ellos
+  window.onclick = function (event) {
+    if (event.target == modalAsignarCliente) {
+      modalAsignarCliente.style.display = 'none';
+    } // else if (event.target == modalConfirmarEliminar) {
+    //     eliminar.removeAttribute('data-url');
+    //     modalConfirmarEliminar.style.display = 'none';
+    // }
+  };
+
+  botonCliente.addEventListener("click", function (event) {
+    event.preventDefault();
+    modalAsignarCliente.style.display = 'block';
+  });
 }

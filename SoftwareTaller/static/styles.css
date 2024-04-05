@@ -694,6 +694,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 
 .heigth_input_18 {
+    max-width: 160px;
     min-width: 40px;
     font-size: 18px;
 }
@@ -709,7 +710,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 .contenedor_buscar {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .input_oculto {
