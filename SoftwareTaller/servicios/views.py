@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import JsonResponse
 from .models import Cliente, Servicio
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
@@ -35,28 +35,13 @@ def servicios(request, servicios=None, registrado=False, eliminado=False, actual
 
 # REGISTRAR servicios
 
-## Formulario
-def formulario_registrar_servicios(request, registrado=False, name_url="formulario_registrar_servicios"):
-    clientes = Cliente.objects.all()
-    paginator = Paginator(clientes, 5)
+def buscar_asignacion_cliente(request):
+    valor_buscar = request.GET.get('buscar', '')
+    clientes = Cliente.objects.filter(documento_identidad__icontains=valor_buscar)
+    data = [{'id':cliente.id, 'nombre_cliente':cliente.nombre_cliente, 'documento_identidad':cliente.documento_identidad} for cliente in clientes]
+    return JsonResponse(data, safe=False)
 
-    numero_pagina = request.GET.get('pagina')
 
-    try:
-        # Obtener la página solicitada
-        pagina = paginator.page(numero_pagina)
-    except PageNotAnInteger:
-        # Si el número de página no es un entero, mostrar la primera página
-        pagina = paginator.page(1)
-    except EmptyPage:
-        # Si la página está fuera de rango (página vacía), mostrar la última página
-        pagina = paginator.page(paginator.num_pages)
-
-    return render(request, 'registrar_servicios.html', {
-        'registrado': registrado,
-        'name_url': name_url,
-        "pagina": pagina,
-    })
 
 # ## Recepción de formulario y creacion de registro
 # def registrar_servicio(request):

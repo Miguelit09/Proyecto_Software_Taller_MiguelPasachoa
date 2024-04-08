@@ -2,12 +2,15 @@
 
 <div id="modal_asignar_cliente" class="modal">
     <div class="modal-content modal__asignar_cliente">
-        <div class="div-close">
-            <span id="close_modal_asignar_cliente" class="close">&times;</span>
+        <div class="modal__header">
+            <p class="header__titulo letra_blanca">Servicios -> Registrar</p>
+            <div class="div-close div-close-registrar">
+                <span id="close_modal_asignar_cliente" class="close">&times;</span>
+            </div>
         </div>
         <div class="modal__div_buscador_clientes">
-            <label for="buscar_cliente"><img src="{% static "images/logo_buscar.png" %}" alt="logo_buscar" class="header__logo_boton"></label>
-            <input type="text" name="buscar_cliente" id="buscar_cliente" placeholder="N° DI" class="card__input_form heigth_input_16">
+            <label for="campo_buscar_di"><img src="{% static "images/logo_buscar.png" %}" alt="logo_buscar" class="header__logo_boton"></label>
+            <input type="text" name="campo_buscar_di" id="campo_buscar_di" placeholder="N° DI" class="card__input_form heigth_input_16">
         </div>
         <div class="contenedor tabla_registros">
             <table class="tabla_registros__tabla tabla_registros__tabla_modal">
@@ -16,17 +19,14 @@
                     <th class="celda tabla_registros__celda_nombre_modal">Nombre</th>
                     <th class="celda tabla_registros__celda_numero_di_modal">Número DI</th>
                 </tr>
-                {% for cliente in pagina.object_list %}
                 <tr class="celdas_datos">
-                    <td class="celda tabla_registros__celda_id_modal">{{ cliente.id }}</td>
+                    {% comment %} <td class="celda tabla_registros__celda_id_modal">{{ cliente.id }}</td>
                     <td class="celda tabla_registros__celda_nombre_modal">{{ cliente.nombre_cliente }}</td>
                     <td class="celda tabla_registros__celda_numero_di_modal">{{ cliente.documento_identidad }}</td>
-                    <td class="celda tabla_registros__celda_asignar"><a href="#" data-url= {% url "eliminar_cliente" cliente.id %} data-mensaje= "cliente {{ cliente.nombre_cliente }} con ID {{ cliente.id }}" class="tabla_registros__boton boton_asignar"><img src="{% static "images/logo_mas.png" %}" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
+                    <td class="celda tabla_registros__celda_asignar"><a href="#" data-url= {% url "eliminar_cliente" cliente.id %} data-mensaje= "cliente {{ cliente.nombre_cliente }} con ID {{ cliente.id }}" class="tabla_registros__boton boton_asignar"><img src="{% static "images/logo_mas.png" %}" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td> {% endcomment %}
                 </tr>
-                {% endfor %}
             </table>
         </div>
-        {% include "layouts/partials/paginacion.html" %}
     </div>
 </div>
 

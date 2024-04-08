@@ -30,11 +30,12 @@ let eliminar = document.getElementById("eliminar_registro")
 let cancelar = document.getElementById("cancelar_eliminacion")
 
 // ASIGNAR CLIENTE AL SERVICIO --> ELEMENTOS
-let botonCliente = document.getElementById('boton_cliente');
 
+let botonCliente = document.getElementById('boton_cliente');
+let inputCliente = document.getElementById('input_cliente');
 let modalAsignarCliente = document.getElementById('modal_asignar_cliente');
 let closeModalAsignarCliente = document.getElementById('close_modal_asignar_cliente');
-
+let campoBuscarDI = document.getElementById('campo_buscar_di');
 
 
 
@@ -245,6 +246,8 @@ window.onclick = function (event) {
     modalRegistrar.style.display = 'none';
   } else if (event.target == modalEditar) {
     modalEditar.style.display = 'none';
+  }else if(event.target == modalAsignarCliente) {
+    modalAsignarCliente.style.display = 'none';
   }
 }
 
@@ -258,17 +261,56 @@ if (botonCliente != null) {
   };
 
   // Ocultar cualquiera de los modales clickeando por fuera de ellos
-  window.onclick = function (event) {
-    if (event.target == modalAsignarCliente) {
-      modalAsignarCliente.style.display = 'none';
-    } // else if (event.target == modalConfirmarEliminar) {
-    //     eliminar.removeAttribute('data-url');
-    //     modalConfirmarEliminar.style.display = 'none';
-    // }
-  };
 
   botonCliente.addEventListener("click", function (event) {
     event.preventDefault();
     modalAsignarCliente.style.display = 'block';
   });
+
+  campoBuscarDI.addEventListener('input', function() {
+    const valorBuscar = campoBuscarDI.value.trim(); // Obtener el valor del campo y eliminar espacios en blanco al principio y al final
+    if (valorBuscar.length >=4) {
+      buscarAsignacionCliente();
+    }
+  });
+}
+
+function buscarAsignacionCliente() {
+  const valorBuscar = campoBuscarDI.value;
+  const urlBuscarAsignacionCliente = `${baseURL}/servicios/buscar_asignacion_cliente/?buscar=${valorBuscar}`;
+  fetch(urlBuscarAsignacionCliente)
+        .then(response => response.json())
+        .then(data => {
+            // Obtener la tabla y las celdas de encabezado
+            const tablaRegistros = document.querySelector('.tabla_registros__tabla_modal');
+            const celdasEncabezado = tablaRegistros.querySelector('.celdas_encabezado');
+
+            // Limpiar las filas de datos
+            const filasDatos = tablaRegistros.querySelectorAll('.celdas_datos');
+            filasDatos.forEach(fila => fila.remove());
+
+            // Recorrer los datos obtenidos y agregar filas de datos a la tabla
+            data.forEach(cliente => {
+                const nuevaFila = `
+                    <tr class="celdas_datos">
+                        <td class="celda tabla_registros__celda_id_modal">${cliente.id}</td>
+                        <td class="celda tabla_registros__celda_nombre_modal">${cliente.nombre_cliente}</td>
+                        <td class="celda tabla_registros__celda_numero_di_modal">${cliente.documento_identidad}</td>
+                        <td class="celda tabla_registros__celda_asignar"><a href="#" data-numero-di="${cliente.documento_identidad}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
+                    </tr>
+                `;
+                tablaRegistros.insertAdjacentHTML('beforeend', nuevaFila);
+            });
+            const botonesAsignar = document.querySelectorAll('.boton_asignar');
+            botonesAsignar.forEach(boton => {
+              boton.addEventListener('click', function(event){
+                event.preventDefault();
+                inputCliente.value = boton.getAttribute('data-numero-di');
+                modalAsignarCliente.style.display = 'none';
+              })
+            })
+            // Reinsertar las celdas de encabezado
+            tablaRegistros.insertBefore(celdasEncabezado, tablaRegistros.firstChild);
+        })
+        .catch(error => console.error('Error al buscar clientes:', error));
 }
