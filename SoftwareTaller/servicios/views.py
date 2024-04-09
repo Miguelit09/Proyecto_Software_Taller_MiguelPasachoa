@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from .models import Cliente, Servicio
+from .models import Cliente, Servicio, Producto
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
@@ -39,6 +39,13 @@ def buscar_asignacion_cliente(request):
     valor_buscar = request.GET.get('buscar', '')
     clientes = Cliente.objects.filter(documento_identidad__icontains=valor_buscar)
     data = [{'id':cliente.id, 'nombre_cliente':cliente.nombre_cliente, 'documento_identidad':cliente.documento_identidad} for cliente in clientes]
+    return JsonResponse(data, safe=False)
+
+
+def buscar_asignacion_productos(request):
+    valor_buscar = request.GET.get('buscar', '')
+    productos = Producto.objects.filter(referencia__icontains=valor_buscar)
+    data = [{'id':producto.id, 'referencia':producto.referencia, 'tipo_producto':producto.tipo_producto, 'precio': producto.precio} for producto in productos]
     return JsonResponse(data, safe=False)
 
 

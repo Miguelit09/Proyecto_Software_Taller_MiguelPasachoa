@@ -36,9 +36,18 @@ let inputCliente = document.getElementById('input_cliente');
 let modalAsignarCliente = document.getElementById('modal_asignar_cliente');
 let closeModalAsignarCliente = document.getElementById('close_modal_asignar_cliente');
 let campoBuscarDI = document.getElementById('campo_buscar_di');
+let modalRegistrarClienteDesdeServicios = document.getElementById('modal_registrar_cliente_desde_servicios');
+let closeModalRegistrarClienteDesdeServicios = document.getElementById('close_modal_registrar_cliente_desde_servicios');
 
+// ASIGNAR PRODUCTOS AL SERVICIO --> ELEMENTOS
 
-
+let botonProductos = document.getElementById('boton_productos');
+let inputProductos = document.getElementById('input_productos');
+let modalAsignarProductos = document.getElementById('modal_asignar_productos');
+let closeModalAsignarProductos = document.getElementById('close_modal_asignar_productos');
+let campoBuscarReferencia = document.getElementById('campo_buscar_referencia');
+let modalRegistrarProductosDesdeServicios = document.getElementById('modal_registrar_productos_desde_servicios');
+let closeModalRegistrarProductosDesdeServicios = document.getElementById('close_modal_registrar_productos_desde_servicios');
 
 // REGISTRAR --> FUNCIONES
 
@@ -248,6 +257,12 @@ window.onclick = function (event) {
     modalEditar.style.display = 'none';
   }else if(event.target == modalAsignarCliente) {
     modalAsignarCliente.style.display = 'none';
+  } else if(event.target == modalRegistrarClienteDesdeServicios) {
+    modalRegistrarClienteDesdeServicios.style.display = 'none';
+  } else if(event.target == modalAsignarProductos) {
+    modalAsignarProductos.style.display = 'none';
+  } else if(event.target == modalRegistrarProductosDesdeServicios) {
+    modalRegistrarProductosDesdeServicios.style.display = 'none';
   }
 }
 
@@ -282,15 +297,14 @@ function buscarAsignacionCliente() {
         .then(response => response.json())
         .then(data => {
             // Obtener la tabla y las celdas de encabezado
-            const tablaRegistros = document.querySelector('.tabla_registros__tabla_modal');
+            const tablaRegistros = document.getElementById('tabla_registros__tabla_modal_clientes');
             const celdasEncabezado = tablaRegistros.querySelector('.celdas_encabezado');
 
             // Limpiar las filas de datos
             const filasDatos = tablaRegistros.querySelectorAll('.celdas_datos');
             filasDatos.forEach(fila => fila.remove());
-
-            // Recorrer los datos obtenidos y agregar filas de datos a la tabla
-            data.forEach(cliente => {
+            if (data.length > 0) {
+              data.forEach(cliente => { // Recorrer los datos obtenidos y agregar filas de datos a la tabla
                 const nuevaFila = `
                     <tr class="celdas_datos">
                         <td class="celda tabla_registros__celda_id_modal">${cliente.id}</td>
@@ -309,8 +323,150 @@ function buscarAsignacionCliente() {
                 modalAsignarCliente.style.display = 'none';
               })
             })
+            
             // Reinsertar las celdas de encabezado
             tablaRegistros.insertBefore(celdasEncabezado, tablaRegistros.firstChild);
+          } else {
+            // Crea una fila para el mensaje
+            const filaMensaje = document.createElement('tr');
+            filaMensaje.classList.add('celdas_datos');
+            // Crea una celda que ocupe todo el ancho de la tabla
+            const celdaMensaje = document.createElement('td');
+            celdaMensaje.setAttribute('colspan', '3'); // Ajusta el número de columnas según tu tabla
+            celdaMensaje.textContent = 'No se encontraron resultados de clientes. ';
+            const enlaceAgregarCliente = document.createElement('a');
+            enlaceAgregarCliente.href = '#'; // Agrega aquí la URL a la que quieres que el enlace redirija
+            enlaceAgregarCliente.textContent = 'Click aquí para registrar cliente.'; // Texto del enlace
+            celdaMensaje.appendChild(enlaceAgregarCliente); // Agrega el enlace al párrafo
+            // Agrega la celda al fila
+            filaMensaje.appendChild(celdaMensaje);
+            // Inserta la fila en la tabla
+            tablaRegistros.appendChild(filaMensaje);
+            enlaceAgregarCliente.addEventListener("click", function (event) {
+              event.preventDefault();
+              modalRegistrarClienteDesdeServicios.style.display = "block";
+            })
+            
+            closeModalRegistrarClienteDesdeServicios.onclick = function () {
+              modalRegistrarClienteDesdeServicios.style.display = 'none';
+            }
+          }
         })
         .catch(error => console.error('Error al buscar clientes:', error));
+}
+
+// ASIGNAR PRODUCTOS AL SERVICIO --> FUNCIONES
+
+if (botonProductos != null) {
+  // Cerrar modal de asignar productos al clickear fuera de él
+  closeModalAsignarProductos.onclick = function () {
+    modalAsignarProductos.style.display = 'none';
+  };
+
+  // Ocultar cualquiera de los modales clickeando por fuera de ellos
+
+  botonProductos.addEventListener("click", function (event) {
+    event.preventDefault();
+    modalAsignarProductos.style.display = 'block';
+  });
+
+
+  campoBuscarReferencia.addEventListener('input', function() {
+    const valorBuscar = campoBuscarReferencia.value.trim();
+    if (valorBuscar.length >=3) {
+      buscarAsignacionProductos();
+    }
+  });
+}
+
+function buscarAsignacionProductos() {
+  const valorBuscar = campoBuscarReferencia.value;
+  const urlBuscarAsignacionProductos = `${baseURL}/servicios/buscar_asignacion_productos/?buscar=${valorBuscar}`;
+  fetch(urlBuscarAsignacionProductos)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            // Obtener la tabla y las celdas de encabezado
+            const tablaRegistros = document.getElementById('tabla_registros__tabla_modal_productos');
+            console.log(tablaRegistros)
+            const celdasEncabezado = tablaRegistros.querySelector('.celdas_encabezado');
+
+            // Limpiar las filas de datos
+            const filasDatos = tablaRegistros.querySelectorAll('.celdas_datos');
+            filasDatos.forEach(fila => fila.remove());
+            if (data.length > 0) {
+              console.log(tablaRegistros)
+              data.forEach(producto => { // Recorrer los datos obtenidos y agregar filas de datos a la tabla
+                const nuevaFila = `
+                    <tr class="celdas_datos">
+                        <td class="celda tabla_registros__celda_id_modal">${producto.id}</td>
+                        <td class="celda tabla_registros__celda_referencia_modal">${producto.referencia}</td>
+                        <td class="celda tabla_registros__celda_tipo_producto_modal">${producto.tipo_producto}</td>
+                        <td class="celda tabla_registros__celda_precio_modal">${producto.precio}</td>
+                        <td class="celda tabla_registros__celda_asignar"><a href="#" data-id= ${producto.id} data-referencia="${producto.referencia}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
+                    </tr>
+                `;
+                tablaRegistros.insertAdjacentHTML('beforeend', nuevaFila);
+            });
+            const botonesAsignar = document.querySelectorAll('.boton_asignar');
+            botonesAsignar.forEach(boton => {
+              boton.addEventListener('click', function(event){
+                event.preventDefault();
+                agregarProductoAlServicio(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'));
+                modalAsignarProductos.style.display = 'none';
+              })
+            })
+            
+            // Reinsertar las celdas de encabezado
+            tablaRegistros.insertBefore(celdasEncabezado, tablaRegistros.firstChild);
+          } else {
+            // Crea una fila para el mensaje
+            const filaMensaje = document.createElement('tr');
+            filaMensaje.classList.add('celdas_datos');
+            // Crea una celda que ocupe todo el ancho de la tabla
+            const celdaMensaje = document.createElement('td');
+            celdaMensaje.setAttribute('colspan', '4'); // Ajusta el número de columnas según tu tabla
+            celdaMensaje.textContent = 'No se encontraron resultados de Productos. ';
+            const enlaceAgregarProducto = document.createElement('a');
+            enlaceAgregarProducto.href = '#'; // Agrega aquí la URL a la que quieres que el enlace redirija
+            enlaceAgregarProducto.textContent = 'Click aquí para registrar producto.'; // Texto del enlace
+            celdaMensaje.appendChild(enlaceAgregarProducto); // Agrega el enlace al párrafo
+            // Agrega la celda al fila
+            filaMensaje.appendChild(celdaMensaje);
+            // Inserta la fila en la tabla
+            tablaRegistros.appendChild(filaMensaje);
+            enlaceAgregarProducto.addEventListener("click", function (event) {
+              event.preventDefault();
+              modalRegistrarProductosDesdeServicios.style.display = "block";
+            })
+            
+            closeModalRegistrarProductosDesdeServicios.onclick = function () {
+              modalRegistrarProductosDesdeServicios.style.display = 'none';
+            }
+          }
+        })
+        .catch(error => console.error('Error al buscar productos:', error));
+}
+
+function agregarProductoAlServicio(idProducto, referenciaProducto) {
+  // Crear un nuevo elemento de opción
+  const opcionProducto = document.createElement('option');
+  opcionProducto.value = idProducto;
+  opcionProducto.textContent = referenciaProducto;
+
+  // Establecer la opción como seleccionada
+  opcionProducto.selected = true;
+
+  // Crear un botón de eliminación
+  const botonEliminarProducto = document.createElement('a');
+  botonEliminarProducto.textContent = 'x';
+  botonEliminarProducto.addEventListener('click', function() {
+      opcionProducto.remove(); // Eliminar la opción al hacer clic en el botón
+  });
+
+  // Agregar el botón de eliminación junto a la opción
+  opcionProducto.appendChild(botonEliminarProducto);
+
+  // Agregar la opción al input de productos
+  inputProductos.appendChild(opcionProducto);
 }

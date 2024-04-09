@@ -1,0 +1,29 @@
+{% load static %}
+
+<div id="modal_asignar_productos" class="modal">
+    <div class="modal-content modal__asignar_productos">
+        <div class="modal__header">
+            <p class="header__titulo letra_blanca">Servicios -> Registrar</p>
+            <div class="div-close div-close-registrar">
+                <span id="close_modal_asignar_productos" class="close">&times;</span>
+            </div>
+        </div>
+        <div class="modal__div_buscador_productos">
+            <label for="campo_buscar_referencia"><img src="{% static "images/logo_buscar.png" %}" alt="logo_buscar" class="header__logo_boton"></label>
+            <input type="text" name="campo_buscar_referencia" id="campo_buscar_referencia" placeholder="Referencia" class="card__input_form heigth_input_16">
+        </div>
+        <div class="contenedor tabla_registros">
+            <table id="tabla_registros__tabla_modal_productos" class="tabla_registros__tabla tabla_registros__tabla_modal">
+                <tr class="celdas_encabezado">
+                    <th class="celda tabla_registros__celda_id_modal">ID</th>
+                    <th class="celda tabla_registros__celda_referencia_modal">Referencia</th>
+                    <th class="celda tabla_registros__celda_tipo_producto_modal">Tipo</th>
+                    <th class="celda tabla_registros__celda_precio_modal">Precio</th>
+                </tr>
+                <tr class="celdas_datos">
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% include "layouts/modals/modals_servicios/registrar_productos_desde_servicios.html" %}

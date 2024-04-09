@@ -755,19 +755,35 @@ body::-webkit-scrollbar-thumb:hover {
 /*Estilos modal servicio_asignar_cliente*/
 
 
-.modal__asignar_cliente {
+.modal__asignar_cliente, .modal__asignar_productos {
     width: 800px;
     margin: 5% auto;
     padding: 0;
 }
 
 .tabla_registros__tabla_modal {
+    margin-bottom: 24px;
     width: 80%;
 }
 
 .tabla_registros__celda_numero_di_modal, .tabla_registros__celda_nombre_modal {
     width: 30%;
     max-width: 30%;
+}
+
+.tabla_registros__celda_id_modal {
+    width: 15%;
+    max-width: 15%;
+}
+
+.tabla_registros__celda_referencia_modal {
+    width: 25%;
+    max-width: 25%;
+}
+
+.tabla_registros__celda_tipo_producto_modal, .tabla_registros__celda_precio_modal {
+    width: 15%;
+    max-width: 15%;
 }
 
 .tabla_registros__celda_asignar {
@@ -824,9 +840,10 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 
-.modal__div_buscador_clientes {
+.modal__div_buscador_clientes, .modal__div_buscador_productos {
     display: flex;
     align-items: center;
     gap: 2rem;
     margin: 40px auto;
 }
+

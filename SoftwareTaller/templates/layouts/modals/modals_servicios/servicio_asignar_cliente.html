@@ -13,7 +13,7 @@
             <input type="text" name="campo_buscar_di" id="campo_buscar_di" placeholder="N° DI" class="card__input_form heigth_input_16">
         </div>
         <div class="contenedor tabla_registros">
-            <table class="tabla_registros__tabla tabla_registros__tabla_modal">
+            <table id="tabla_registros__tabla_modal_clientes" class="tabla_registros__tabla tabla_registros__tabla_modal">
                 <tr class="celdas_encabezado">
                     <th class="celda tabla_registros__celda_id_modal">ID</th>
                     <th class="celda tabla_registros__celda_nombre_modal">Nombre</th>
@@ -29,4 +29,5 @@
         </div>
     </div>
 </div>
+{% include "layouts/modals/modals_servicios/registrar_clientes_desde_servicios.html" %}
 
