@@ -101,8 +101,4 @@ def eliminar_cliente(request, id):
     cliente = Cliente.objects.get(id=id)
 
     cliente.delete()
-    return redirect('clientes_eliminado')
-
-## Vista que recarga el menú de clientes con el alert de eliminación exitosa
-def clientes_eliminado(request):
     return clientes(request, eliminado=True)

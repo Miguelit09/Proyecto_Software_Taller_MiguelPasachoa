@@ -116,8 +116,4 @@ def eliminar_producto(request, id):
     producto = Producto.objects.get(id=id)
 
     producto.delete()
-    return redirect('inventario_eliminado')
-
-## Vista que recarga el menú de inventario con el alert de eliminación exitosa
-def inventario_eliminado(request):
     return inventario(request, eliminado=True)

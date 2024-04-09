@@ -14,5 +14,4 @@ urlpatterns = [
     path("editar_cliente/", views.editar_cliente, name="editar_cliente"),
     #Eliminar
     path("eliminar_cliente/<int:id>", views.eliminar_cliente, name="eliminar_cliente"),
-    path("clientes/eliminado/", views.clientes_eliminado, name="clientes_eliminado"),
 ]

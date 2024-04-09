@@ -1,0 +1,111 @@
+{% load static %}
+
+<div class="contenedor">
+    <article class="card card_editar">
+        <figure>
+            <img src="{% static "images/logo_servicios.png" %}" alt="logo" class="card__image_editar">
+        </figure>
+        <div>
+            <form action="" class="card__form_editar">
+                <div class="card__form-div">
+                    <label for="nombre_servicio">Servicio</label>
+                    <select name="nombre_servicio" disabled class="card__input_form card_input_form_disabled heigth_input_16 nombre_servicio">
+                        <option value="Venta">Venta</option>
+                        <option value="Engrase">Engrase</option>
+                        <option value="Servicio3">Servicio 3</option>
+                        <option value="Servicio4">Servicio 4</option>
+                    </select>
+                </div>
+                <div class="card__form-div">
+                    <label for="descripcion">Descripción</label></i>
+                    <input type="text" name="descripcion" disabled class="card__input_form card_input_form_disabled heigth_input_16 descripcion">
+                </div>
+                <div class="card__form-div">
+                    <label for="costo_total">Costo total</label>
+                    <input type="text" maxlength="20" disabled name="costo_total" readonly class="card__input_form card_input_form_disabled heigth_input_16 costo_total">
+                </div>
+
+                <div class="card__form-div">
+                    <label for="fecha">Fecha</label>
+                    <input type="date" name="fecha" disabled class="card__input_form card_input_form_disabled heigth_input_16 fecha">
+                </div>
+                <div class="card__form-div">
+                    <a>Cliente</a>
+                    <input type="text" name="input_cliente_di_visual" disabled class="card__input_form card_input_form_disabled heigth_input_16 cliente_di">
+                </div>
+                <div class="card__form-div">
+                    <a>Productos</a>
+                    <div class= "card__input_form card_input_form_disabled heigth_input_16 productos"></div>
+                </div>
+                <div class="card__form-div">
+                    <a href="#" id="cancelar_editar" class="boton card_form__boton_cancelar letra_roja">Cancelar</a>
+                </div>
+            </form>
+        </div>
+        <div class="card__contenedor_flechas">
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
+        </div>
+        <div>
+            <form action="{% url "editar_servicio" %}" method="post" class="card__form_editar">
+                {% csrf_token %}
+                <input type="hidden" id="registro_id" name="registro_id">
+                <div class="card__form-div">
+                    <label for="nombre_servicio">Servicio</label>
+                    <select name="nombre_servicio" id="nombre_servicio" class="card__input_form heigth_input_16 nombre_servicio">
+                        <option value="Venta">Venta</option>
+                        <option value="Engrase">Engrase</option>
+                        <option value="Servicio3">Servicio 3</option>
+                        <option value="Servicio4">Servicio 4</option>
+                    </select>
+                </div>
+                <div class="card__form-div">
+                    <label for="descripcion">Descripción</label></i>
+                    <input type="text" id="descripcion" name="descripcion" required class="card__input_form heigth_input_16 descripcion">
+                </div>
+                <div class="card__form-div">
+                    <label for="costo_total">Costo total</label>
+                    <input type="text" maxlength="20" id="costo_total" name="costo_total" readonly class="card__input_form heigth_input_16 costo_total">
+                </div>
+
+                <div class="card__form-div">
+                    <label for="fecha">Fecha</label>
+                    <input type="date" id="fecha" name="fecha" class="card__input_form heigth_input_16 fecha">
+                </div>
+                <div class="card__form-div">
+                    <a href="#" id="boton_cliente">Cliente</a>
+                    <input type="text" id="input_cliente_di_visual" name="input_cliente_di_visual" disabled class="card__input_form heigth_input_16 cliente_di">
+                    <input type="hidden" id="input_cliente_id_hidden" name="input_cliente_id_hidden">
+                </div>
+                <div class="card__form-div">
+                    <a href="#" id="boton_productos">Productos</a>
+                    <div id="contenedor_productos_asociados" class= "card__input_form heigth_input_16 productos"></div>
+                    <input type="hidden" id="productos_seleccionados" name="productos_seleccionados">
+                </div>
+                <button type="submit" class="boton boton_guardar_registro letra_roja">Actualizar</button>
+            </form>
+        </div>
+    </article>
+</div>

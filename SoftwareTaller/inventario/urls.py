@@ -14,6 +14,5 @@ urlpatterns = [
     path("editar_producto/", views.editar_producto, name="editar_producto"),
     #Eliminar
     path("eliminar_producto/<int:id>", views.eliminar_producto, name="eliminar_producto"),
-    path("inventario/eliminado/", views.inventario_eliminado, name="inventario_eliminado"),
 ]
 

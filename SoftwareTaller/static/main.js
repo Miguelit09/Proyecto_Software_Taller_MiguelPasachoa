@@ -32,7 +32,8 @@ let cancelar = document.getElementById("cancelar_eliminacion")
 // ASIGNAR CLIENTE AL SERVICIO --> ELEMENTOS
 
 let botonCliente = document.getElementById('boton_cliente');
-let inputCliente = document.getElementById('input_cliente');
+let inputClienteDiVisual = document.getElementById('input_cliente_di_visual'); // Este muestra el DI del cliente seleccionado
+let inputClienteIdHidden = document.getElementById('input_cliente_id_hidden'); // Este se envía a la vista para obtener el cliente
 let modalAsignarCliente = document.getElementById('modal_asignar_cliente');
 let closeModalAsignarCliente = document.getElementById('close_modal_asignar_cliente');
 let campoBuscarDI = document.getElementById('campo_buscar_di');
@@ -40,9 +41,12 @@ let modalRegistrarClienteDesdeServicios = document.getElementById('modal_registr
 let closeModalRegistrarClienteDesdeServicios = document.getElementById('close_modal_registrar_cliente_desde_servicios');
 
 // ASIGNAR PRODUCTOS AL SERVICIO --> ELEMENTOS
-
+let costoTotal = document.getElementById('costo_total');
+if (costoTotal != null){ 
+  costoTotal.value = 0
+}
 let botonProductos = document.getElementById('boton_productos');
-let inputProductos = document.getElementById('input_productos');
+let contenedorProductosAsociados = document.getElementById('contenedor_productos_asociados');
 let modalAsignarProductos = document.getElementById('modal_asignar_productos');
 let closeModalAsignarProductos = document.getElementById('close_modal_asignar_productos');
 let campoBuscarReferencia = document.getElementById('campo_buscar_referencia');
@@ -97,11 +101,28 @@ if (botonesEditar.length != 0) {
               inputs_precio[i].value = datosRegistro.precio;
               inputs_unidades_disponibles[i].value = datosRegistro.unidades_disponibles;
             }
+          } else if (appRegistro == "servicios") {
+            let inputs_nombre_servicio = document.getElementsByClassName('nombre_servicio');
+            let inputs_descripcion = document.getElementsByClassName('descripcion');
+            let inputs_costo_total = document.getElementsByClassName('costo_total');
+            let inputs_fecha = document.getElementsByClassName('fecha');
+            let inputs_cliente_di = document.getElementsByClassName('cliente_di');
+            let inputs_productos = document.getElementsByClassName('productos');
+            let inputClienteIdHidden = document.getElementById('input_cliente_id_hidden');
+            inputClienteIdHidden.value = datosRegistro.cliente_id;
+            for (let i = 0; i < inputs_nombre_servicio.length; i++) {
+              inputs_nombre_servicio[i].value = datosRegistro.nombre_servicio;
+              inputs_descripcion[i].value = datosRegistro.descripcion;
+              inputs_costo_total[i].value = datosRegistro.costo_total;
+              inputs_fecha[i].value = datosRegistro.fecha;
+              inputs_cliente_di[i].value = datosRegistro.cliente_documento_identidad;
+              inputs_productos[i].value = datosRegistro.productos;
+            }
           }
           event.preventDefault(); // Detenemos el envío de la etiqueta a
           modalEditar.style.display = 'block';
         })
-        .catch(error => console.error('Error al obtener detalles del cliente:', error));
+        .catch(error => console.error('Error al obtener detalles del servicio:', error));
 
     })
   }
@@ -310,7 +331,7 @@ function buscarAsignacionCliente() {
                         <td class="celda tabla_registros__celda_id_modal">${cliente.id}</td>
                         <td class="celda tabla_registros__celda_nombre_modal">${cliente.nombre_cliente}</td>
                         <td class="celda tabla_registros__celda_numero_di_modal">${cliente.documento_identidad}</td>
-                        <td class="celda tabla_registros__celda_asignar"><a href="#" data-numero-di="${cliente.documento_identidad}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
+                        <td class="celda tabla_registros__celda_asignar"><a href="#" data-id="${cliente.id}" data-numero-di="${cliente.documento_identidad}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
                     </tr>
                 `;
                 tablaRegistros.insertAdjacentHTML('beforeend', nuevaFila);
@@ -319,7 +340,8 @@ function buscarAsignacionCliente() {
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
                 event.preventDefault();
-                inputCliente.value = boton.getAttribute('data-numero-di');
+                inputClienteIdHidden.value = boton.getAttribute('data-id');
+                inputClienteDiVisual.value = boton.getAttribute('data-numero-di');
                 modalAsignarCliente.style.display = 'none';
               })
             })
@@ -385,17 +407,14 @@ function buscarAsignacionProductos() {
   fetch(urlBuscarAsignacionProductos)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             // Obtener la tabla y las celdas de encabezado
             const tablaRegistros = document.getElementById('tabla_registros__tabla_modal_productos');
-            console.log(tablaRegistros)
             const celdasEncabezado = tablaRegistros.querySelector('.celdas_encabezado');
 
             // Limpiar las filas de datos
             const filasDatos = tablaRegistros.querySelectorAll('.celdas_datos');
             filasDatos.forEach(fila => fila.remove());
             if (data.length > 0) {
-              console.log(tablaRegistros)
               data.forEach(producto => { // Recorrer los datos obtenidos y agregar filas de datos a la tabla
                 const nuevaFila = `
                     <tr class="celdas_datos">
@@ -403,7 +422,7 @@ function buscarAsignacionProductos() {
                         <td class="celda tabla_registros__celda_referencia_modal">${producto.referencia}</td>
                         <td class="celda tabla_registros__celda_tipo_producto_modal">${producto.tipo_producto}</td>
                         <td class="celda tabla_registros__celda_precio_modal">${producto.precio}</td>
-                        <td class="celda tabla_registros__celda_asignar"><a href="#" data-id= ${producto.id} data-referencia="${producto.referencia}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
+                        <td class="celda tabla_registros__celda_asignar"><a href="#" data-id= ${producto.id} data-referencia="${producto.referencia}" data-precio="${producto.precio}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
                     </tr>
                 `;
                 tablaRegistros.insertAdjacentHTML('beforeend', nuevaFila);
@@ -412,7 +431,7 @@ function buscarAsignacionProductos() {
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
                 event.preventDefault();
-                agregarProductoAlServicio(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'));
+                agregarProductoAlServicio(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'));
                 modalAsignarProductos.style.display = 'none';
               })
             })
@@ -448,25 +467,57 @@ function buscarAsignacionProductos() {
         .catch(error => console.error('Error al buscar productos:', error));
 }
 
-function agregarProductoAlServicio(idProducto, referenciaProducto) {
-  // Crear un nuevo elemento de opción
-  const opcionProducto = document.createElement('option');
-  opcionProducto.value = idProducto;
-  opcionProducto.textContent = referenciaProducto;
+function agregarProductoAlServicio(idProducto, referenciaProducto, precioProducto) {
+  // Crear un nuevo elemento de producto
+  const nuevoProducto = document.createElement('div');
+  nuevoProducto.classList.add('producto');
 
-  // Establecer la opción como seleccionada
-  opcionProducto.selected = true;
+  // Crear un elemento para mostrar la referencia del producto
+  const referenciaElemento = document.createElement('span');
+  referenciaElemento.textContent = referenciaProducto;
+  nuevoProducto.appendChild(referenciaElemento);
 
   // Crear un botón de eliminación
-  const botonEliminarProducto = document.createElement('a');
-  botonEliminarProducto.textContent = 'x';
+  const botonEliminarProducto = document.createElement('button');
+  botonEliminarProducto.textContent = 'Eliminar';
   botonEliminarProducto.addEventListener('click', function() {
-      opcionProducto.remove(); // Eliminar la opción al hacer clic en el botón
+    nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
+
+    //Eliminar el valor correspondiente del input
+    eliminarValorProductoDelInput(idProducto, precioProducto);
   });
+  nuevoProducto.appendChild(botonEliminarProducto);
 
-  // Agregar el botón de eliminación junto a la opción
-  opcionProducto.appendChild(botonEliminarProducto);
+  // Agregar el producto al contenedor de productos
+  contenedorProductosAsociados.appendChild(nuevoProducto);
 
-  // Agregar la opción al input de productos
-  inputProductos.appendChild(opcionProducto);
+  agregarValorProductoAlInput(idProducto, precioProducto);
+}
+
+function agregarValorProductoAlInput(idProducto, precioProducto) {
+  // Obtener el input de productos
+  const inputProductos = document.getElementById('productos_seleccionados');
+  // Obtener el valor actual del input
+  let valorActual = inputProductos.value.trim();
+  // Agregar el ID del producto al valor del input, separado por comas
+  valorActual += (valorActual ? ',' : '') + idProducto;
+  // Asignar el nuevo valor al input
+  inputProductos.value = valorActual;
+  costoTotal.value = parseInt(costoTotal.value) + parseInt(precioProducto);
+}
+
+function eliminarValorProductoDelInput(idProducto, precioProducto) {
+  // Obtener el input de productos
+  const inputProductos = document.getElementById('productos_seleccionados');
+  // Obtener el valor actual del input
+  let valorActual = inputProductos.value.trim();
+  // Separar los IDs de productos en un arreglo
+  const idsProductos = valorActual.split(',');
+  // Filtrar los IDs para eliminar el ID del producto que se está eliminando
+  const nuevosIdsProductos = idsProductos.filter(id => id !== idProducto);
+  // Construir nuevamente el valor del input
+  const nuevoValor = nuevosIdsProductos.join(',');
+  // Asignar el nuevo valor al input
+  inputProductos.value = nuevoValor;
+  costoTotal.value = parseInt(costoTotal.value) - parseInt(precioProducto);
 }

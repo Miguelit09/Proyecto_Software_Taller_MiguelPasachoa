@@ -7,15 +7,15 @@
             <img src="{% static "images/logo_servicios.png" %}" alt="logo" class="card__image_registrar">
         </figure>
         <div>
-            <form action="" method="post" class="card__form_registrar">
+            <form action="{% url "registrar_servicio" %}" method="post" class="card__form_registrar">
                 {% csrf_token %}
                 <div class="card__form-div">
                     <label for="nombre_servicio">Servicio</label>
                     <select name="nombre_servicio" id="nombre_servicio" class="card__input_form heigth_input_16">
-                        <option value="Llanta">Venta</option>
-                        <option value="Aceite">Engrase</option>
-                        <option value="Filtro">Servicio 3</option>
-                        <option value="Grasa">Servicio 4</option>
+                        <option value="Venta">Venta</option>
+                        <option value="Engrase">Engrase</option>
+                        <option value="Servicio3">Servicio 3</option>
+                        <option value="Servicio4">Servicio 4</option>
                     </select>
                 </div>
                 <div class="card__form-div">
@@ -33,11 +33,13 @@
                 </div>
                 <div class="card__form-div">
                     <a href="#" id="boton_cliente">Cliente</a>
-                    <input type="text" id="input_cliente" name="input_cliente" readonly class="card__input_form heigth_input_16">
+                    <input type="text" id="input_cliente_di_visual" name="input_cliente_di_visual" disabled class="card__input_form heigth_input_16">
+                    <input type="hidden" id="input_cliente_id_hidden" name="input_cliente_id_hidden">
                 </div>
                 <div class="card__form-div">
                     <a href="#" id="boton_productos">Productos</a>
-                    <select name="productos[]" id="input_productos" multiple class="card__input_form heigth_input_16"></select>
+                    <div id="contenedor_productos_asociados" class= "card__input_form heigth_input_16"></div>
+                    <input type="hidden" id="productos_seleccionados" name="productos_seleccionados">
                 </div>
                 <button type="submit" class="boton boton_guardar_registro letra_roja">Registrar</button>
             </form>

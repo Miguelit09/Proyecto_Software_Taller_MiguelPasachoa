@@ -38,6 +38,7 @@
 {% block cuerpo_seccion %}
 {% include "layouts/modals/mensajes/confirmar_eliminar.html" %}
 {% include "layouts/modals/modals_servicios/registrar_servicios.html" %}
+{% include "layouts/modals/modals_servicios/editar_servicios.html" %}
 {% if registrado %}
     {% include "layouts/modals/mensajes/mensaje_registrado.html" %}
 {% endif %}
@@ -49,6 +50,9 @@
 {% endif %}
 {% if sin_coincidencias %}
     {% include "layouts/modals/mensajes/mensaje_sin_coincidencias.html" %}
+{% endif %}
+{% if error %}
+    {% include "layouts/modals/mensajes/mensaje_error.html" %}
 {% endif %}
 
 
@@ -73,8 +77,8 @@
             <td class="celda tabla_registros__celda_fecha">{{ servicio.fecha }}</td>
             <td class="celda tabla_registros__celda_info_cliente">{{ servicio.cliente.nombre_cliente }}</td>
             <td class="celda tabla_registros__celda_productos">{{ servicio.cliente.nombre_cliente }}</td>
-            <td class="celda tabla_registros__celda_editar"><a href= {% url "formulario_editar_servicios" servicio.id %} class="tabla_registros__boton" ><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>
-            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-url= {% url "eliminar_servicio" servicio.id %} data-mensaje= "servicio {{ servicio.nombre_servicio }} con ID {{ servicio.id }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
+            <td class="celda tabla_registros__celda_editar"><a href="#" data-registro-id={{ servicio.id }} data-app-registro="servicios" class="tabla_registros__boton boton_editar"><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>
+            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-url= {% url "eliminar_servicio" servicio.id %} data-mensaje= "Servicio  {{ servicio.nombre_servicio }} con ID {{ servicio.id }} realizado al cliente {{ servicio.cliente.nombre_cliente }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
         </tr>
         {% endfor %}
     </table>
