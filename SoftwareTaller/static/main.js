@@ -29,6 +29,10 @@ let mensajeModal = document.getElementById("mensaje_modal")
 let eliminar = document.getElementById("eliminar_registro")
 let cancelar = document.getElementById("cancelar_eliminacion")
 
+// BANDERA REGISTRAR O EDITAR
+
+let editar = false;
+
 // ASIGNAR CLIENTE AL SERVICIO --> ELEMENTOS
 
 let botonCliente = document.getElementById('boton_cliente');
@@ -39,6 +43,12 @@ let closeModalAsignarCliente = document.getElementById('close_modal_asignar_clie
 let campoBuscarDI = document.getElementById('campo_buscar_di');
 let modalRegistrarClienteDesdeServicios = document.getElementById('modal_registrar_cliente_desde_servicios');
 let closeModalRegistrarClienteDesdeServicios = document.getElementById('close_modal_registrar_cliente_desde_servicios');
+// Elementos editar cliente del servicio
+let inputClienteDiVisualEditar = document.getElementById('input_cliente_di_visual_editar');
+let inputClienteIdHiddenEditar = document.getElementById('input_cliente_id_hidden_editar');
+let botonClienteEditar = document.getElementById('boton_cliente_editar');
+
+
 
 // ASIGNAR PRODUCTOS AL SERVICIO --> ELEMENTOS
 let costoTotal = document.getElementById('costo_total');
@@ -52,11 +62,17 @@ let closeModalAsignarProductos = document.getElementById('close_modal_asignar_pr
 let campoBuscarReferencia = document.getElementById('campo_buscar_referencia');
 let modalRegistrarProductosDesdeServicios = document.getElementById('modal_registrar_productos_desde_servicios');
 let closeModalRegistrarProductosDesdeServicios = document.getElementById('close_modal_registrar_productos_desde_servicios');
+// Elementos editar productos del servicio
+let botonProductosEditar = document.getElementById('boton_productos_editar');
+let costoTotalEditar = document.getElementById('costo_total_editar');
+let contenedorProductosAsociadosEditar = document.getElementById('contenedor_productos_asociados_editar');
+
 
 // REGISTRAR --> FUNCIONES
 
 botonRegistrar.addEventListener("click", function (event) {
   event.preventDefault()
+  editar = false;
   modalRegistrar.style.display = "block";
 })
 
@@ -69,6 +85,7 @@ closeRegistrar.onclick = function () {
 if (botonesEditar.length != 0) {
   for (let i = 0; i < botonesEditar.length; i++) {
     botonesEditar[i].addEventListener('click', function (event) { //Añadir el escuchar evento a todos los botones de la plantilla
+      editar = true;
       let registroId = this.getAttribute('data-registro-id');
       let appRegistro = this.getAttribute('data-app-registro');
       let url = `${baseURL}${appRegistro}/obtener_registro_${appRegistro}/${registroId}/`;
@@ -76,47 +93,67 @@ if (botonesEditar.length != 0) {
         .then(response => response.json())
         .then(datosRegistro => {
           document.getElementById('registro_id').value = datosRegistro.id
-          // Aquí puedes acceder a los detalles del cliente en datosCliente
+          // Aquí puedes acceder a los detalles del registro en la datosRegistro
           if (appRegistro === "clientes") {
-            let inputs_nombre_cliente = document.getElementsByClassName('nombre_cliente');
-            let inputs_documento_identidad = document.getElementsByClassName('documento_identidad');
-            let inputs_correo_electronico = document.getElementsByClassName('correo_electronico');
-            let inputs_telefono = document.getElementsByClassName('telefono');
-            for (let i = 0; i < inputs_nombre_cliente.length; i++) {
-              inputs_nombre_cliente[i].value = datosRegistro.nombre_cliente;
-              inputs_documento_identidad[i].value = datosRegistro.documento_identidad;
-              inputs_correo_electronico[i].value = datosRegistro.correo_electronico;
-              inputs_telefono[i].value = datosRegistro.telefono;
+            let inputsNombreCliente = document.getElementsByClassName('nombre_cliente');
+            let inputsDocumentoIdentidad = document.getElementsByClassName('documento_identidad');
+            let inputsCorreoElectronico = document.getElementsByClassName('correo_electronico');
+            let inputsTelefono = document.getElementsByClassName('telefono');
+            for (let i = 0; i < inputsNombreCliente.length; i++) {
+              inputsNombreCliente[i].value = datosRegistro.nombre_cliente;
+              inputsDocumentoIdentidad[i].value = datosRegistro.documento_identidad;
+              inputsCorreoElectronico[i].value = datosRegistro.correo_electronico;
+              inputsTelefono[i].value = datosRegistro.telefono;
             }
           } else if (appRegistro == "inventario") {
-            let inputs_marca = document.getElementsByClassName('marca');
-            let inputs_referencia = document.getElementsByClassName('referencia');
-            let inputs_tipo_producto = document.getElementsByClassName('tipo_producto');
-            let inputs_precio = document.getElementsByClassName('precio');
-            let inputs_unidades_disponibles = document.getElementsByClassName('unidades_disponibles');
-            for (let i = 0; i < inputs_marca.length; i++) {
-              inputs_marca[i].value = datosRegistro.marca;
-              inputs_referencia[i].value = datosRegistro.referencia;
-              inputs_tipo_producto[i].value = datosRegistro.tipo_producto;
-              inputs_precio[i].value = datosRegistro.precio;
-              inputs_unidades_disponibles[i].value = datosRegistro.unidades_disponibles;
+            let inputsMarca = document.getElementsByClassName('marca');
+            let inputsReferencia = document.getElementsByClassName('referencia');
+            let inputsTipoProducto = document.getElementsByClassName('tipo_producto');
+            let inputsPrecio = document.getElementsByClassName('precio');
+            let inputsUnidadesDisponibles = document.getElementsByClassName('unidades_disponibles');
+            for (let i = 0; i < inputsMarca.length; i++) {
+              inputsMarca[i].value = datosRegistro.marca;
+              inputsReferencia[i].value = datosRegistro.referencia;
+              inputsTipoProducto[i].value = datosRegistro.tipo_producto;
+              inputsPrecio[i].value = datosRegistro.precio;
+              inputsUnidadesDisponibles[i].value = datosRegistro.unidades_disponibles;
             }
           } else if (appRegistro == "servicios") {
-            let inputs_nombre_servicio = document.getElementsByClassName('nombre_servicio');
-            let inputs_descripcion = document.getElementsByClassName('descripcion');
-            let inputs_costo_total = document.getElementsByClassName('costo_total');
-            let inputs_fecha = document.getElementsByClassName('fecha');
-            let inputs_cliente_di = document.getElementsByClassName('cliente_di');
-            let inputs_productos = document.getElementsByClassName('productos');
-            let inputClienteIdHidden = document.getElementById('input_cliente_id_hidden');
-            inputClienteIdHidden.value = datosRegistro.cliente_id;
-            for (let i = 0; i < inputs_nombre_servicio.length; i++) {
-              inputs_nombre_servicio[i].value = datosRegistro.nombre_servicio;
-              inputs_descripcion[i].value = datosRegistro.descripcion;
-              inputs_costo_total[i].value = datosRegistro.costo_total;
-              inputs_fecha[i].value = datosRegistro.fecha;
-              inputs_cliente_di[i].value = datosRegistro.cliente_documento_identidad;
-              inputs_productos[i].value = datosRegistro.productos;
+            let inputsNombreServicio = document.getElementsByClassName('nombre_servicio');
+            let inputsDescripcion = document.getElementsByClassName('descripcion');
+            let inputsCostoTotal = document.getElementsByClassName('costo_total');
+            let inputsFecha = document.getElementsByClassName('fecha');
+            let inputsClienteDi = document.getElementsByClassName('cliente_di');
+            let inputsProductos = document.getElementsByClassName('productos');
+            let inputClienteIdHiddenEditar = document.getElementById('input_cliente_id_hidden_editar');
+            // let inputProductosSeleccionadosEditar = document.getElementById('productos_seleccionados_editar');
+            inputClienteIdHiddenEditar.value = datosRegistro.cliente_id;
+            // inputProductosSeleccionadosEditar.value = datosRegistro.productos_ids.join(',');
+            for (let i = 0; i < inputsNombreServicio.length; i++) {
+              inputsNombreServicio[i].value = datosRegistro.nombre_servicio;
+              inputsDescripcion[i].value = datosRegistro.descripcion;
+              inputsFecha[i].value = datosRegistro.fecha;
+              inputsClienteDi[i].value = datosRegistro.cliente_documento_identidad;
+              if (i=== 0){
+                inputsCostoTotal[i].value = datosRegistro.costo_total;
+                inputsProductos[i].innerHTML = '';
+                for (let t = 0; t < datosRegistro.productos_referencias.length; t++){
+                  const nuevoProducto = document.createElement('div');
+                  nuevoProducto.classList.add('producto');
+
+                  // Crear un elemento para mostrar la referencia del producto
+                  const referenciaElemento = document.createElement('span');
+                  referenciaElemento.textContent = datosRegistro.productos_referencias[t];
+                  nuevoProducto.appendChild(referenciaElemento);
+                  inputsProductos[i].appendChild(nuevoProducto);
+                }
+              } else {
+                inputsCostoTotal[i].value = 0;
+                contenedorProductosAsociadosEditar.innerHTML = '';
+                for (let t = 0; t < datosRegistro.productos_referencias.length; t++){
+                  agregarProductoAlServicio(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, editar);
+                }
+              }
             }
           }
           event.preventDefault(); // Detenemos el envío de la etiqueta a
@@ -291,12 +328,11 @@ window.onclick = function (event) {
 
 
 if (botonCliente != null) {
-  // Cerrar modal de asignar cliente al clickear fuera de él
+  // Cerrar modal de asignar cliente al clickear la X
   closeModalAsignarCliente.onclick = function () {
     modalAsignarCliente.style.display = 'none';
   };
 
-  // Ocultar cualquiera de los modales clickeando por fuera de ellos
 
   botonCliente.addEventListener("click", function (event) {
     event.preventDefault();
@@ -306,12 +342,19 @@ if (botonCliente != null) {
   campoBuscarDI.addEventListener('input', function() {
     const valorBuscar = campoBuscarDI.value.trim(); // Obtener el valor del campo y eliminar espacios en blanco al principio y al final
     if (valorBuscar.length >=4) {
-      buscarAsignacionCliente();
+      buscarAsignacionCliente(editar);
     }
   });
 }
 
-function buscarAsignacionCliente() {
+if (botonClienteEditar != null) {
+  botonClienteEditar.addEventListener("click", function (event) {
+    event.preventDefault();
+    modalAsignarCliente.style.display = 'block';
+  });
+}
+
+function buscarAsignacionCliente(editar=editar) {
   const valorBuscar = campoBuscarDI.value;
   const urlBuscarAsignacionCliente = `${baseURL}/servicios/buscar_asignacion_cliente/?buscar=${valorBuscar}`;
   fetch(urlBuscarAsignacionCliente)
@@ -340,8 +383,13 @@ function buscarAsignacionCliente() {
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
                 event.preventDefault();
-                inputClienteIdHidden.value = boton.getAttribute('data-id');
-                inputClienteDiVisual.value = boton.getAttribute('data-numero-di');
+                if (editar === false) {
+                  inputClienteIdHidden.value = boton.getAttribute('data-id');
+                  inputClienteDiVisual.value = boton.getAttribute('data-numero-di');
+                } else {
+                  inputClienteIdHiddenEditar.value = boton.getAttribute('data-id');
+                  inputClienteDiVisualEditar.value = boton.getAttribute('data-numero-di');
+                }
                 modalAsignarCliente.style.display = 'none';
               })
             })
@@ -380,12 +428,11 @@ function buscarAsignacionCliente() {
 // ASIGNAR PRODUCTOS AL SERVICIO --> FUNCIONES
 
 if (botonProductos != null) {
-  // Cerrar modal de asignar productos al clickear fuera de él
+  // Cerrar modal de asignar productos al clickear la X
   closeModalAsignarProductos.onclick = function () {
     modalAsignarProductos.style.display = 'none';
   };
 
-  // Ocultar cualquiera de los modales clickeando por fuera de ellos
 
   botonProductos.addEventListener("click", function (event) {
     event.preventDefault();
@@ -396,12 +443,20 @@ if (botonProductos != null) {
   campoBuscarReferencia.addEventListener('input', function() {
     const valorBuscar = campoBuscarReferencia.value.trim();
     if (valorBuscar.length >=3) {
-      buscarAsignacionProductos();
+      buscarAsignacionProductos(editar);
     }
   });
 }
 
-function buscarAsignacionProductos() {
+if (botonProductosEditar != null) {
+  botonProductosEditar.addEventListener("click", function (event) {
+    event.preventDefault();
+    modalAsignarProductos.style.display = 'block';
+  });
+}
+
+
+function buscarAsignacionProductos(editar=editar) {
   const valorBuscar = campoBuscarReferencia.value;
   const urlBuscarAsignacionProductos = `${baseURL}/servicios/buscar_asignacion_productos/?buscar=${valorBuscar}`;
   fetch(urlBuscarAsignacionProductos)
@@ -431,7 +486,14 @@ function buscarAsignacionProductos() {
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
                 event.preventDefault();
-                agregarProductoAlServicio(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'));
+                if (editar === false){
+                  contenedor = contenedorProductosAsociados;
+                  total = costoTotal;
+                } else {
+                  contenedor = contenedorProductosAsociadosEditar;
+                  total = costoTotalEditar;
+                }
+                agregarProductoAlServicio(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, editar);
                 modalAsignarProductos.style.display = 'none';
               })
             })
@@ -467,7 +529,7 @@ function buscarAsignacionProductos() {
         .catch(error => console.error('Error al buscar productos:', error));
 }
 
-function agregarProductoAlServicio(idProducto, referenciaProducto, precioProducto) {
+function agregarProductoAlServicio(idProducto, referenciaProducto, precioProducto, contenedor, total, editar) {
   // Crear un nuevo elemento de producto
   const nuevoProducto = document.createElement('div');
   nuevoProducto.classList.add('producto');
@@ -484,40 +546,52 @@ function agregarProductoAlServicio(idProducto, referenciaProducto, precioProduct
     nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
 
     //Eliminar el valor correspondiente del input
-    eliminarValorProductoDelInput(idProducto, precioProducto);
+    eliminarValorProductoDelInput(idProducto, precioProducto, total, editar);
   });
   nuevoProducto.appendChild(botonEliminarProducto);
 
   // Agregar el producto al contenedor de productos
-  contenedorProductosAsociados.appendChild(nuevoProducto);
+  contenedor.appendChild(nuevoProducto);
 
-  agregarValorProductoAlInput(idProducto, precioProducto);
+  agregarValorProductoAlInput(idProducto, precioProducto, total, editar);
 }
 
-function agregarValorProductoAlInput(idProducto, precioProducto) {
+function agregarValorProductoAlInput(idProducto, precioProducto, total, editar) {
+  let inputProductos = null;
   // Obtener el input de productos
-  const inputProductos = document.getElementById('productos_seleccionados');
+  if (editar === false){
+    inputProductos = document.getElementById('productos_seleccionados');
+  } else {
+    inputProductos = document.getElementById('productos_seleccionados_editar');
+  }
   // Obtener el valor actual del input
   let valorActual = inputProductos.value.trim();
   // Agregar el ID del producto al valor del input, separado por comas
   valorActual += (valorActual ? ',' : '') + idProducto;
   // Asignar el nuevo valor al input
   inputProductos.value = valorActual;
-  costoTotal.value = parseInt(costoTotal.value) + parseInt(precioProducto);
+  total.value = parseInt(total.value) + parseInt(precioProducto);
 }
 
-function eliminarValorProductoDelInput(idProducto, precioProducto) {
+function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar) {
+  let inputProductos = null;
   // Obtener el input de productos
-  const inputProductos = document.getElementById('productos_seleccionados');
+  if (editar === false){
+    inputProductos = document.getElementById('productos_seleccionados');
+  } else {
+    inputProductos = document.getElementById('productos_seleccionados_editar');
+  }
   // Obtener el valor actual del input
   let valorActual = inputProductos.value.trim();
   // Separar los IDs de productos en un arreglo
   const idsProductos = valorActual.split(',');
   // Filtrar los IDs para eliminar el ID del producto que se está eliminando
-  const nuevosIdsProductos = idsProductos.filter(id => id !== idProducto);
+  const nuevosIdsProductos = idsProductos.filter(id => id != idProducto);
+
   // Construir nuevamente el valor del input
   const nuevoValor = nuevosIdsProductos.join(',');
   // Asignar el nuevo valor al input
   inputProductos.value = nuevoValor;
-  costoTotal.value = parseInt(costoTotal.value) - parseInt(precioProducto);
+
+  total.value = parseInt(total.value) - parseInt(precioProducto);
 }

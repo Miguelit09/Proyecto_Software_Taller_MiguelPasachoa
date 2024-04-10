@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.core.serializers import serialize
 from .models import Cliente, Servicio, Producto
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
@@ -95,7 +94,13 @@ def obtener_registro_servicios(request, servicio_id):
     servicio = Servicio.objects.get(id=servicio_id)
 
     # Convertir los productos a una lista de diccionarios
-    productos = serialize('json', servicio.productos.all())
+    productos_ids = []
+    productos_referencias = []
+    productos_precios = []
+    for producto in servicio.productos.all():
+        productos_ids.append(producto.id)
+        productos_referencias.append(producto.referencia)
+        productos_precios.append(producto.precio)
 
 
     datos_servicio = {
@@ -106,7 +111,9 @@ def obtener_registro_servicios(request, servicio_id):
         'fecha': servicio.fecha,
         'cliente_id': servicio.cliente.id,
         'cliente_documento_identidad': servicio.cliente.documento_identidad,
-        'productos': productos,
+        'productos_ids': productos_ids,
+        'productos_referencias': productos_referencias,
+        'productos_precios': productos_precios,
     }
     return JsonResponse(datos_servicio)
 
@@ -116,16 +123,17 @@ def editar_servicio(request):
     descripcion = request.POST.get('descripcion', None)
     costo_total = request.POST.get('costo_total', None)
     fecha = request.POST.get('fecha', None)
-    cliente = Cliente.objects.get(id=request.POST('input_cliente_id_hidden'))
-    productos_seleccionados = request.POST.get('productos_seleccionados', '')
+    id_cliente_editar = request.POST.get('input_cliente_id_hidden_editar', None)
+    productos_seleccionados = request.POST.get('productos_seleccionados_editar', '')
     
-    if id and nombre_servicio and descripcion and costo_total and fecha and cliente is not None:
+    if id and nombre_servicio and descripcion and costo_total and fecha and id_cliente_editar is not None:
         try:
             servicio = Servicio.objects.get(id=id)
             servicio.nombre_servicio = nombre_servicio
             servicio.descripcion = descripcion
             servicio.costo_total = costo_total
             servicio.fecha = fecha
+            cliente = Cliente.objects.get(id=id_cliente_editar)
             servicio.cliente = cliente
 
             # Eliminar todos los productos asociados al servicio

@@ -74,7 +74,7 @@
                 <input type="hidden" id="registro_id" name="registro_id">
                 <div class="card__form-div">
                     <label for="nombre_servicio">Servicio</label>
-                    <select name="nombre_servicio" id="nombre_servicio" class="card__input_form heigth_input_16 nombre_servicio">
+                    <select name="nombre_servicio" class="card__input_form heigth_input_16 nombre_servicio">
                         <option value="Venta">Venta</option>
                         <option value="Engrase">Engrase</option>
                         <option value="Servicio3">Servicio 3</option>
@@ -83,26 +83,26 @@
                 </div>
                 <div class="card__form-div">
                     <label for="descripcion">Descripción</label></i>
-                    <input type="text" id="descripcion" name="descripcion" required class="card__input_form heigth_input_16 descripcion">
+                    <input type="text" name="descripcion" required class="card__input_form heigth_input_16 descripcion">
                 </div>
                 <div class="card__form-div">
                     <label for="costo_total">Costo total</label>
-                    <input type="text" maxlength="20" id="costo_total" name="costo_total" readonly class="card__input_form heigth_input_16 costo_total">
+                    <input type="text" maxlength="20" id="costo_total_editar" name="costo_total" readonly class="card__input_form heigth_input_16 costo_total">
                 </div>
 
                 <div class="card__form-div">
                     <label for="fecha">Fecha</label>
-                    <input type="date" id="fecha" name="fecha" class="card__input_form heigth_input_16 fecha">
+                    <input type="date" name="fecha" class="card__input_form heigth_input_16 fecha">
                 </div>
                 <div class="card__form-div">
-                    <a href="#" id="boton_cliente">Cliente</a>
-                    <input type="text" id="input_cliente_di_visual" name="input_cliente_di_visual" disabled class="card__input_form heigth_input_16 cliente_di">
-                    <input type="hidden" id="input_cliente_id_hidden" name="input_cliente_id_hidden">
+                    <a href="#" id="boton_cliente_editar">Cliente</a>
+                    <input type="text" id="input_cliente_di_visual_editar" name="input_cliente_di_visual_editar" disabled class="card__input_form heigth_input_16 cliente_di">
+                    <input type="hidden" id="input_cliente_id_hidden_editar" name="input_cliente_id_hidden_editar">
                 </div>
                 <div class="card__form-div">
-                    <a href="#" id="boton_productos">Productos</a>
-                    <div id="contenedor_productos_asociados" class= "card__input_form heigth_input_16 productos"></div>
-                    <input type="hidden" id="productos_seleccionados" name="productos_seleccionados">
+                    <a href="#" id="boton_productos_editar">Productos</a>
+                    <div id="contenedor_productos_asociados_editar" class= "card__input_form heigth_input_16 productos"></div>
+                    <input type="hidden" id="productos_seleccionados_editar" name="productos_seleccionados_editar">
                 </div>
                 <button type="submit" class="boton boton_guardar_registro letra_roja">Actualizar</button>
             </form>
