@@ -849,3 +849,13 @@ body::-webkit-scrollbar-thumb:hover {
     margin: 40px auto;
 }
 
+.producto {
+  display: flex;
+  gap: 1rem;
+}
+
+.productos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
