@@ -47,7 +47,7 @@ def buscar_asignacion_cliente(request):
 def buscar_asignacion_productos(request):
     valor_buscar = request.GET.get('buscar', '')
     productos = Producto.objects.filter(referencia__icontains=valor_buscar)
-    data = [{'id':producto.id, 'referencia':producto.referencia, 'tipo_producto':producto.tipo_producto, 'precio': producto.precio} for producto in productos]
+    data = [{'id':producto.id, 'referencia':producto.referencia, 'tipo_producto':producto.tipo_producto, 'precio': producto.precio, 'unidades_disponibles': producto.unidades_disponibles} for producto in productos]
     return JsonResponse(data, safe=False)
 
 

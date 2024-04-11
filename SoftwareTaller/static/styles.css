@@ -758,7 +758,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 
 .modal__asignar_cliente, .modal__asignar_productos {
-    width: 800px;
+    width: 80%;
     margin: 5% auto;
     padding: 0;
 }
@@ -774,16 +774,16 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .tabla_registros__celda_id_modal {
-    width: 15%;
-    max-width: 15%;
+    width: 10%;
+    max-width: 10%;
 }
 
 .tabla_registros__celda_referencia_modal {
-    width: 25%;
-    max-width: 25%;
+    width: 20%;
+    max-width: 20%;
 }
 
-.tabla_registros__celda_tipo_producto_modal, .tabla_registros__celda_precio_modal {
+.tabla_registros__celda_tipo_producto_modal, .tabla_registros__celda_precio_modal, .tabla_registros__celda_unidades_asignar {
     width: 15%;
     max-width: 15%;
 }
@@ -849,6 +849,34 @@ body::-webkit-scrollbar-thumb:hover {
     margin: 40px auto;
 }
 
+.div_celda_unidades_asignar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tabla_registros__input_unidades_agregar {
+    width: 80%;
+}
+
+
+.range_valor {
+    font-size: 12px;
+}
+
+.div_unidades_asignar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+.parrafo_valor_range {
+    margin: 0;
+    padding: 0;
+}
+
 .producto {
   display: flex;
   gap: 1rem;
@@ -858,4 +886,12 @@ body::-webkit-scrollbar-thumb:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.boton_input_range {
+    text-decoration: none;
+}
+
+.boton_input_range:hover {
+    color: var(--rojo);
 }

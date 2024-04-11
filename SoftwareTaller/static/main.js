@@ -477,10 +477,42 @@ function buscarAsignacionProductos(editar=editar) {
                         <td class="celda tabla_registros__celda_referencia_modal">${producto.referencia}</td>
                         <td class="celda tabla_registros__celda_tipo_producto_modal">${producto.tipo_producto}</td>
                         <td class="celda tabla_registros__celda_precio_modal">${producto.precio}</td>
-                        <td class="celda tabla_registros__celda_asignar"><a href="#" data-id= ${producto.id} data-referencia="${producto.referencia}" data-precio="${producto.precio}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
+                        <td class="celda tabla_registros__celda_unidades_asignar">
+                        <div class="div_celda_unidades_asignar">
+                          <div>
+                            <span class="min_range range_valor">1</span>
+                            <input type="range" name="unidades_asignar" id="unidades_asignar_id_${producto.id}" min="1" max="${producto.unidades_disponibles}" value="1"  step="1" class="tabla_registros__input_unidades_agregar input_unidades_agregar"/>
+                            <span class="max_range range_valor">${producto.unidades_disponibles}</span>
+                          </div>
+                          <div class="div_unidades_asignar">
+                            <a href="#" id="disminuir_unidades_asignar_id_${producto.id}" class="boton_input_range letra_negra">-</a>
+                            <p id="parrafo_valor_range_id_${producto.id}" class="parrafo_valor_range">Valor: 1</p>
+                            <a href="#" id="aumentar_unidades_asignar_id_${producto.id}" class="boton_input_range letra_negra">+</a>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="celda tabla_registros__celda_asignar"><a href="#" data-id= ${producto.id} data-referencia="${producto.referencia}" data-precio="${producto.precio}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
                     </tr>
                 `;
                 tablaRegistros.insertAdjacentHTML('beforeend', nuevaFila);
+                const inputRango = document.getElementById("unidades_asignar_id_" + producto.id);
+                const parrafoUnidadesAsignar = document.getElementById("parrafo_valor_range_id_" + producto.id);
+                const disminuirUnidadesAsignar = document.getElementById("disminuir_unidades_asignar_id_" + producto.id);
+                const aumentarUnidadesAsignar = document.getElementById("aumentar_unidades_asignar_id_" + producto.id);
+
+                inputRango.addEventListener('input', function() {
+                  parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
+                })
+
+                disminuirUnidadesAsignar.addEventListener('click', function() {
+                  inputRango.value = parseInt(inputRango.value) - 1;
+                  parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
+                })
+
+                aumentarUnidadesAsignar.addEventListener('click', function() {
+                  inputRango.value = parseInt(inputRango.value) + 1;
+                  parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
+                })
             });
             const botonesAsignar = document.querySelectorAll('.boton_asignar');
             botonesAsignar.forEach(boton => {
