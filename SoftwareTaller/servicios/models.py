@@ -14,6 +14,8 @@ class Servicio(models.Model):
     costo_total = models.IntegerField(null=False, blank=False)
     fecha = models.DateField(default=timezone.now)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
-    productos = models.ManyToManyField(Producto)
 
-
+class Servicio_Productos(models.Model):
+    servicio = models.ForeignKey(Servicio, on_delete=models.PROTECT)
+    producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
+    cantidad = models.IntegerField(default=1)

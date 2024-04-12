@@ -870,6 +870,7 @@ body::-webkit-scrollbar-thumb:hover {
     flex-direction: row;
     align-items: center;
     gap: 1rem;
+    min-width: 104px;
 }
 
 .parrafo_valor_range {
@@ -880,12 +881,22 @@ body::-webkit-scrollbar-thumb:hover {
 .producto {
   display: flex;
   gap: 1rem;
+  justify-content: center;
 }
 
 .productos {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.botonEliminarProducto {
+    cursor: pointer;
+    color: var(--gris);
+}
+
+.botonEliminarProducto:hover {
+    color: var(--negro);
 }
 
 .boton_input_range {
@@ -895,3 +906,4 @@ body::-webkit-scrollbar-thumb:hover {
 .boton_input_range:hover {
     color: var(--rojo);
 }
+

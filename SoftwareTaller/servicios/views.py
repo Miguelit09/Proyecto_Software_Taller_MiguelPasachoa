@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Cliente, Servicio, Producto
+from .models import Cliente, Servicio, Producto, Servicio_Productos
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
@@ -60,13 +60,19 @@ def registrar_servicio(request):
     fecha = request.POST['fecha']
     cliente = Cliente.objects.get(id=request.POST['input_cliente_id_hidden'])
     productos_seleccionados = request.POST.get('productos_seleccionados', '')
-    ids_productos = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
+    productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
 
     nuevo_servicio = Servicio.objects.create(nombre_servicio=nombre_servicio, descripcion=descripcion, costo_total=costo_total, fecha=fecha, cliente=cliente)
 
-    for id_producto in ids_productos:
-        producto = Producto.objects.get(id=id_producto)
-        nuevo_servicio.productos.add(producto)
+    for producto_item in productos_lista:
+        producto_id, cantidad = producto_item.split(':')
+        producto = Producto.objects.get(id=producto_id)
+        cantidad = int(cantidad)
+        nuevo_servicio_producto = Servicio_Productos.objects.create(
+            servicio=nuevo_servicio,
+            producto=producto,
+            cantidad=cantidad
+        )
     
     return servicios(request, registrado=True)
 
