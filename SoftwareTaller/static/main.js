@@ -151,7 +151,7 @@ if (botonesEditar.length != 0) {
                 inputsCostoTotal[i].value = 0;
                 contenedorProductosAsociadosEditar.innerHTML = '';
                 for (let t = 0; t < datosRegistro.productos_referencias.length; t++){
-                  agregarProductoAlServicio(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, editar);
+                  agregarProductoAlServicio(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, editar, datosRegistro.cantidad_productos[t]);
                 }
               }
             }
@@ -480,13 +480,13 @@ function buscarAsignacionProductos(editar=editar) {
                         <td class="celda tabla_registros__celda_unidades_asignar">
                         <div class="div_celda_unidades_asignar">
                           <div>
-                            <span class="min_range range_valor">1</span>
-                            <input type="range" name="unidades_asignar" id="unidades_asignar_id_${producto.id}" min="1" max="${producto.unidades_disponibles}" value="1"  step="1" class="tabla_registros__input_unidades_agregar input_unidades_agregar"/>
-                            <span class="max_range range_valor">${producto.unidades_disponibles}</span>
+                            <span class="min_range range_valor">0</span>
+                            <input type="range" name="unidades_asignar" id="unidades_asignar_id_${producto.id}" min="0" max="${producto.unidades_disponibles}" value="0"  step="1" class="tabla_registros__input_unidades_agregar input_unidades_agregar"/>
+                            <span id="max_range_${producto.id}" class="max_range range_valor"></span>
                           </div>
                           <div class="div_unidades_asignar">
                             <a href="#" id="disminuir_unidades_asignar_id_${producto.id}" class="boton_input_range letra_negra">-</a>
-                            <p id="parrafo_valor_range_id_${producto.id}" class="parrafo_valor_range">Valor: 1</p>
+                            <p id="parrafo_valor_range_id_${producto.id}" class="parrafo_valor_range">Valor: 0</p>
                             <a href="#" id="aumentar_unidades_asignar_id_${producto.id}" class="boton_input_range letra_negra">+</a>
                           </div>
                         </div>
@@ -496,6 +496,8 @@ function buscarAsignacionProductos(editar=editar) {
                 `;
                 tablaRegistros.insertAdjacentHTML('beforeend', nuevaFila);
                 const inputRango = document.getElementById("unidades_asignar_id_" + producto.id);
+                let maxSpan = document.getElementById("max_range_" + producto.id);
+                maxSpan.textContent = inputRango.max;
                 const asignarValorRange = document.getElementById("asignar_valor_range_id_" + producto.id);
                 const parrafoUnidadesAsignar = document.getElementById("parrafo_valor_range_id_" + producto.id);
                 const disminuirUnidadesAsignar = document.getElementById("disminuir_unidades_asignar_id_" + producto.id);
@@ -554,6 +556,8 @@ function buscarAsignacionProductos(editar=editar) {
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
                 event.preventDefault();
+                let inputRango = document.getElementById("unidades_asignar_id_" + boton.getAttribute('data-id'));
+                let maxSpan = document.getElementById("max_range_" + boton.getAttribute('data-id'));
                 if (editar === false){
                   contenedor = contenedorProductosAsociados;
                   total = costoTotal;
@@ -561,7 +565,8 @@ function buscarAsignacionProductos(editar=editar) {
                   contenedor = contenedorProductosAsociadosEditar;
                   total = costoTotalEditar;
                 }
-                agregarProductoAlServicio(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, editar, boton.getAttribute('data-unidades-añadir'));
+                agregarProductoAlServicio(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, editar, boton.getAttribute('data-unidades-añadir'), inputRango);
+                maxSpan.textContent = inputRango.max;
                 modalAsignarProductos.style.display = 'none';
               })
             })
@@ -597,7 +602,7 @@ function buscarAsignacionProductos(editar=editar) {
         .catch(error => console.error('Error al buscar productos:', error));
 }
 
-function agregarProductoAlServicio(idProducto, referenciaProducto, precioProducto, contenedor, total, editar, unidades_asignar) {
+function agregarProductoAlServicio(idProducto, referenciaProducto, precioProducto, contenedor, total, editar, unidades_asignar, inputRango=null) {
   // Crear un nuevo elemento de producto
   const nuevoProducto = document.createElement('div');
   nuevoProducto.classList.add('producto');
@@ -616,18 +621,19 @@ function agregarProductoAlServicio(idProducto, referenciaProducto, precioProduct
     nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
 
     //Eliminar el valor correspondiente del input
-    eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar);
+    eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango);
   });
   nuevoProducto.appendChild(botonEliminarProducto);
 
   // Agregar el producto al contenedor de productos
   contenedor.appendChild(nuevoProducto);
 
-  agregarValorProductoAlInput(idProducto, precioProducto, total, editar, unidades_asignar);
+  agregarValorProductoAlInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango);
 }
 
-function agregarValorProductoAlInput(idProducto, precioProducto, total, editar, unidades_asignar) {
+function agregarValorProductoAlInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango) {
   let inputProductos = null;
+
   // Obtener el input de productos
   if (editar === false){
     inputProductos = document.getElementById('productos_seleccionados');
@@ -637,13 +643,16 @@ function agregarValorProductoAlInput(idProducto, precioProducto, total, editar, 
   // Obtener el valor actual del input
   let valorActual = inputProductos.value.trim();
   // Agregar el ID del producto al valor del input, separado por comas
-  valorActual += (valorActual ? ',' : '') + idProducto + ':' + unidades_asignar
+  valorActual += (valorActual ? ',' : '') + idProducto + ':' + unidades_asignar;
   // Asignar el nuevo valor al input
+  if (inputRango != null) {
+    inputRango.max = parseInt(inputRango.max) - parseInt(unidades_asignar);
+  }
   inputProductos.value = valorActual;
   total.value = parseInt(total.value) + (parseInt(precioProducto)*parseInt(unidades_asignar));
 }
 
-function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar) {
+function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango) {
   let inputProductos = null;
   // Obtener el input de productos
   if (editar === false){
@@ -658,6 +667,9 @@ function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar
   // Filtrar los IDs para eliminar el ID del producto que se está eliminando
   const nuevosProductos = productos.filter(producto => {
     const [id, unidades] = producto.split(':');
+    if (inputRango != null){
+      inputRango.max = parseInt(inputRango.max) + parseInt(unidades);
+    }
     return id != idProducto.toString();
   });
 
@@ -665,6 +677,8 @@ function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar
   const nuevoValor = nuevosProductos.join(',');
   // Asignar el nuevo valor al input
   inputProductos.value = nuevoValor;
+
+
 
   total.value = parseInt(total.value) - (parseInt(precioProducto)*parseInt(unidades_asignar));
 }

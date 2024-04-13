@@ -73,7 +73,6 @@ def registrar_servicio(request):
             producto=producto,
             cantidad=cantidad
         )
-    
     return servicios(request, registrado=True)
 
 # ## Vista del formulario con el alert de registro exitoso
@@ -103,10 +102,13 @@ def obtener_registro_servicios(request, servicio_id):
     productos_ids = []
     productos_referencias = []
     productos_precios = []
-    for producto in servicio.productos.all():
+    cantidad_productos = []
+    for servicio_producto in servicio.servicio_productos_set.all():
+        producto = servicio_producto.producto
         productos_ids.append(producto.id)
         productos_referencias.append(producto.referencia)
         productos_precios.append(producto.precio)
+        cantidad_productos.append(servicio_producto.cantidad)
 
 
     datos_servicio = {
@@ -120,6 +122,7 @@ def obtener_registro_servicios(request, servicio_id):
         'productos_ids': productos_ids,
         'productos_referencias': productos_referencias,
         'productos_precios': productos_precios,
+        'cantidad_productos': cantidad_productos,
     }
     return JsonResponse(datos_servicio)
 
@@ -143,11 +146,17 @@ def editar_servicio(request):
             servicio.cliente = cliente
 
             # Eliminar todos los productos asociados al servicio
-            servicio.productos.clear()
-            ids_productos = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
-            for id_producto in ids_productos:
-                producto = Producto.objects.get(id=id_producto)
-                servicio.productos.add(producto)
+            Servicio_Productos.objects.filter(servicio=servicio).delete()
+            productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
+            for producto_item in productos_lista:
+                producto_id, cantidad = producto_item.split(':')
+                producto = Producto.objects.get(id=producto_id)
+                cantidad = int(cantidad)
+                Servicio_Productos.objects.create(
+                  servicio = servicio,
+                  producto=producto,
+                  cantidad=cantidad,
+                )
             servicio.save()
             return servicios(request, actualizado=True)
         except Servicio.DoesNotExist:

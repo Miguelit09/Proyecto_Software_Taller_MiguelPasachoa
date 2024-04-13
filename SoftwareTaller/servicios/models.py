@@ -16,6 +16,6 @@ class Servicio(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
 
 class Servicio_Productos(models.Model):
-    servicio = models.ForeignKey(Servicio, on_delete=models.PROTECT)
+    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.PROTECT)
     cantidad = models.IntegerField(default=1)
