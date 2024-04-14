@@ -151,7 +151,7 @@ if (botonesEditar.length != 0) {
                 inputsCostoTotal[i].value = 0;
                 contenedorProductosAsociadosEditar.innerHTML = '';
                 for (let t = 0; t < datosRegistro.productos_referencias.length; t++){
-                  agregarProductoAlServicio(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, editar, datosRegistro.cantidad_productos[t]);
+                  agregarValorProductoAlInput(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, editar, datosRegistro.cantidad_productos[t]);
                 }
               }
             }
@@ -503,16 +503,16 @@ function buscarAsignacionProductos(editar=editar) {
                 const disminuirUnidadesAsignar = document.getElementById("disminuir_unidades_asignar_id_" + producto.id);
                 const aumentarUnidadesAsignar = document.getElementById("aumentar_unidades_asignar_id_" + producto.id);
                 asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
-                if (producto.unidades_disponibles == 1){
+                if (producto.unidades_disponibles == 0){
                   disminuirUnidadesAsignar.style.visibility = 'hidden';
                   aumentarUnidadesAsignar.style.visibility = 'hidden';
-                } else if (inputRango.value == 1){
+                } else if (inputRango.value == 0){
                   disminuirUnidadesAsignar.style.visibility = 'hidden';
                 } 
                 inputRango.addEventListener('input', function() {
                   parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
                   asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
-                  if (inputRango.value == 1) {
+                  if (inputRango.value == 0) {
                     disminuirUnidadesAsignar.style.visibility = 'hidden';
                   }
                   if ((aumentarUnidadesAsignar.style.visibility == 'hidden') && (inputRango.value < producto.unidades_disponibles)) {
@@ -530,12 +530,10 @@ function buscarAsignacionProductos(editar=editar) {
                   inputRango.value = parseInt(inputRango.value) - 1;
                   parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
                   asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
-                  if (inputRango.value == 1) {
+                  if (inputRango.value == 0) {
                     disminuirUnidadesAsignar.style.visibility = 'hidden';
-                    console.log(disminuirUnidadesAsignar)
-                    console.log(disminuirUnidadesAsignar.style.visibility)
                   }
-                  if (aumentarUnidadesAsignar.style.visibility == 'hidden') {
+                  if (aumentarUnidadesAsignar.style.visibility == 'hidden' && inputRango.value != 0) {
                     aumentarUnidadesAsignar.style.visibility = 'visible';
                   }
                 })
@@ -547,7 +545,7 @@ function buscarAsignacionProductos(editar=editar) {
                   if (inputRango.value == producto.unidades_disponibles) {
                     aumentarUnidadesAsignar.style.visibility = 'hidden';
                   }
-                  if (disminuirUnidadesAsignar.style.visibility == 'hidden') {
+                  if (disminuirUnidadesAsignar.style.visibility == 'hidden' && inputRango.value != 0) {
                     disminuirUnidadesAsignar.style.visibility = 'visible';
                   }
                 })
@@ -565,8 +563,7 @@ function buscarAsignacionProductos(editar=editar) {
                   contenedor = contenedorProductosAsociadosEditar;
                   total = costoTotalEditar;
                 }
-                agregarProductoAlServicio(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, editar, boton.getAttribute('data-unidades-añadir'), inputRango);
-                maxSpan.textContent = inputRango.max;
+                agregarValorProductoAlInput(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, editar, boton.getAttribute('data-unidades-añadir'), inputRango, maxSpan);
                 modalAsignarProductos.style.display = 'none';
               })
             })
@@ -602,8 +599,27 @@ function buscarAsignacionProductos(editar=editar) {
         .catch(error => console.error('Error al buscar productos:', error));
 }
 
-function agregarProductoAlServicio(idProducto, referenciaProducto, precioProducto, contenedor, total, editar, unidades_asignar, inputRango=null) {
-  // Crear un nuevo elemento de producto
+function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProducto, contenedor, total, editar, unidades_asignar, inputRango, maxSpan) {
+  let inputProductos = null;
+
+  // Obtener el input de productos
+  if (editar === false){
+    inputProductos = document.getElementById('productos_seleccionados');
+  } else {
+    inputProductos = document.getElementById('productos_seleccionados_editar');
+  }
+  // Obtener el valor actual del input
+  let valorActual = inputProductos.value.trim();
+  const productos = valorActual.split(',');
+  const idsProductos = productos.map(producto => producto.split(':')[0]);
+  if (idsProductos.includes(idProducto)) {
+    // El idProducto ya está presente, puedes manejar esta situación aquí
+    alert('Lo sentimos. El producto ya está agregado.');
+  } else if(unidades_asignar == 0){
+    alert('Lo sentimos. No se están agregando unidades.')
+  } else {
+      // Agregar el ID del producto al valor del input, separado por comas
+  valorActual += (valorActual ? ',' : '') + idProducto + ':' + unidades_asignar;
   const nuevoProducto = document.createElement('div');
   nuevoProducto.classList.add('producto');
 
@@ -621,38 +637,23 @@ function agregarProductoAlServicio(idProducto, referenciaProducto, precioProduct
     nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
 
     //Eliminar el valor correspondiente del input
-    eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango);
+    eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango, maxSpan);
   });
   nuevoProducto.appendChild(botonEliminarProducto);
 
   // Agregar el producto al contenedor de productos
   contenedor.appendChild(nuevoProducto);
-
-  agregarValorProductoAlInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango);
-}
-
-function agregarValorProductoAlInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango) {
-  let inputProductos = null;
-
-  // Obtener el input de productos
-  if (editar === false){
-    inputProductos = document.getElementById('productos_seleccionados');
-  } else {
-    inputProductos = document.getElementById('productos_seleccionados_editar');
-  }
-  // Obtener el valor actual del input
-  let valorActual = inputProductos.value.trim();
-  // Agregar el ID del producto al valor del input, separado por comas
-  valorActual += (valorActual ? ',' : '') + idProducto + ':' + unidades_asignar;
   // Asignar el nuevo valor al input
   if (inputRango != null) {
     inputRango.max = parseInt(inputRango.max) - parseInt(unidades_asignar);
+    maxSpan.textContent = inputRango.max;
   }
   inputProductos.value = valorActual;
   total.value = parseInt(total.value) + (parseInt(precioProducto)*parseInt(unidades_asignar));
+  }
 }
 
-function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango) {
+function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango, maxSpan) {
   let inputProductos = null;
   // Obtener el input de productos
   if (editar === false){
@@ -669,6 +670,7 @@ function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar
     const [id, unidades] = producto.split(':');
     if (inputRango != null){
       inputRango.max = parseInt(inputRango.max) + parseInt(unidades);
+      maxSpan.textContent = inputRango.max;
     }
     return id != idProducto.toString();
   });
@@ -677,8 +679,6 @@ function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar
   const nuevoValor = nuevosProductos.join(',');
   // Asignar el nuevo valor al input
   inputProductos.value = nuevoValor;
-
-
 
   total.value = parseInt(total.value) - (parseInt(precioProducto)*parseInt(unidades_asignar));
 }

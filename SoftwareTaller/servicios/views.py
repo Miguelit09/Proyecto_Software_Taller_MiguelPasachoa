@@ -102,6 +102,7 @@ def obtener_registro_servicios(request, servicio_id):
     productos_ids = []
     productos_referencias = []
     productos_precios = []
+    productos_unidades = []
     cantidad_productos = []
     for servicio_producto in servicio.servicio_productos_set.all():
         producto = servicio_producto.producto
@@ -122,6 +123,7 @@ def obtener_registro_servicios(request, servicio_id):
         'productos_ids': productos_ids,
         'productos_referencias': productos_referencias,
         'productos_precios': productos_precios,
+        'productos_unidades': productos_unidades,
         'cantidad_productos': cantidad_productos,
     }
     return JsonResponse(datos_servicio)
@@ -146,17 +148,25 @@ def editar_servicio(request):
             servicio.cliente = cliente
 
             # Eliminar todos los productos asociados al servicio
-            Servicio_Productos.objects.filter(servicio=servicio).delete()
+            consulta_productos_en_eliminacion = Servicio_Productos.objects.filter(servicio=servicio)
+            for producto_en_eliminacion in consulta_productos_en_eliminacion:
+                item = producto_en_eliminacion.producto
+                item.unidades_disponibles += producto_en_eliminacion.cantidad
+                item.save()
+            consulta_productos_en_eliminacion.delete()
+
             productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
             for producto_item in productos_lista:
                 producto_id, cantidad = producto_item.split(':')
                 producto = Producto.objects.get(id=producto_id)
                 cantidad = int(cantidad)
                 Servicio_Productos.objects.create(
-                  servicio = servicio,
-                  producto=producto,
-                  cantidad=cantidad,
+                    servicio = servicio,
+                    producto=producto,
+                    cantidad=cantidad,
                 )
+                producto.unidades_disponibles -= cantidad
+                producto.save()
             servicio.save()
             return servicios(request, actualizado=True)
         except Servicio.DoesNotExist:
