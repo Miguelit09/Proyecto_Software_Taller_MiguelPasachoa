@@ -31,7 +31,7 @@ let cancelar = document.getElementById("cancelar_eliminacion")
 
 // BANDERA REGISTRAR O EDITAR
 
-let registrar_editar_buscar = "registrar";
+let registrarEditarBuscar = "registrar";
 
 // ASIGNAR CLIENTE AL SERVICIO --> ELEMENTOS
 
@@ -72,12 +72,13 @@ let contenedorProductosAsociadosEditar = document.getElementById('contenedor_pro
 
 botonRegistrar.addEventListener("click", function (event) {
   event.preventDefault()
-  registrar_editar_buscar = "registrar";
+  registrarEditarBuscar = "registrar";
   modalRegistrar.style.display = "block";
 })
 
 closeRegistrar.onclick = function () {
   modalRegistrar.style.display = 'none';
+  location.reload();
 }
 
 // EDITAR --> FUNCIONES
@@ -85,7 +86,7 @@ closeRegistrar.onclick = function () {
 if (botonesEditar.length != 0) {
   for (let i = 0; i < botonesEditar.length; i++) {
     botonesEditar[i].addEventListener('click', function (event) { //Añadir el escuchar evento a todos los botones de la plantilla
-      registrar_editar_buscar = "editar";
+      registrarEditarBuscar = "editar";
       let registroId = this.getAttribute('data-registro-id');
       let appRegistro = this.getAttribute('data-app-registro');
       let url = `${baseURL}${appRegistro}/obtener_registro_${appRegistro}/${registroId}/`;
@@ -151,7 +152,7 @@ if (botonesEditar.length != 0) {
                 inputsCostoTotal[i].value = 0;
                 contenedorProductosAsociadosEditar.innerHTML = '';
                 for (let t = 0; t < datosRegistro.productos_referencias.length; t++){
-                  agregarValorProductoAlInput(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, registrar_editar_buscar, datosRegistro.cantidad_productos[t]);
+                  agregarValorProductoAlInput(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, registrarEditarBuscar, datosRegistro.cantidad_productos[t]);
                 }
               }
             }
@@ -166,10 +167,12 @@ if (botonesEditar.length != 0) {
 
   closeEditar.onclick = function () {
     modalEditar.style.display = 'none';
+    location.reload();
   }
   cancelarEditar.onclick = function (event) {
     event.preventDefault();
     modalEditar.style.display = 'none';
+    location.reload();
   }
 }
 
@@ -180,7 +183,7 @@ if (botonesEditar.length != 0) {
 botonBuscar.addEventListener("click", function (event) {
   event.preventDefault()
   modalBuscador.style.display = "block";
-  registrar_editar_buscar = "buscar";
+  registrarEditarBuscar = "buscar";
 });
 
 if (campo != null) {
@@ -189,6 +192,7 @@ if (campo != null) {
   });
   closeBuscador.onclick = function () {
     modalBuscador.style.display = 'none';
+    location.reload();
   };
 };
 
@@ -282,6 +286,31 @@ function generarInput(campo, contenedorBuscar) {
         modalAsignarCliente.style.display = 'block';
       });
     }
+  } else if (campoSeleccionado === "producto") {
+    let botonProducto = document.createElement("a");
+    let inputVisualBuscar = document.createElement("input");
+    let inputHiddenBuscar = document.createElement("input");
+    botonProducto.href = "#";
+    botonProducto.id = "boton_productos";
+    botonProducto.textContent = "Producto:";
+    inputVisualBuscar.classList.add("card__input_form", "heigth_input_18");
+    inputVisualBuscar.id = "input_producto_visual_buscar";
+    inputVisualBuscar.name = "input_producto_visual_buscar";
+    inputVisualBuscar.type = "text";
+    inputVisualBuscar.disabled = true;
+    inputHiddenBuscar.id = "input_producto_hidden_buscar";
+    inputHiddenBuscar.name = "buscar";
+    inputHiddenBuscar.type = "hidden";
+    contenedorBuscar.appendChild(botonProducto);
+    contenedorBuscar.appendChild(inputVisualBuscar);
+    contenedorBuscar.appendChild(inputHiddenBuscar);
+    if (botonProducto != null) {
+      // Cerrar modal de asignar cliente al clickear la X
+      botonProducto.addEventListener("click", function (event) {
+        event.preventDefault();
+        modalAsignarProductos.style.display = 'block';
+      });
+    }
   } else {
     let input = document.createElement("input")
     input.classList.add("card__input_form", "heigth_input_18");
@@ -337,13 +366,16 @@ if (botonesEliminar.length != 0) {
 window.onclick = function (event) {
   if (event.target == modalBuscador) {
     modalBuscador.style.display = 'none';
+    location.reload();
   } else if (event.target == modalConfirmarEliminar) {
     eliminar.removeAttribute('data-url');
     modalConfirmarEliminar.style.display = 'none';
   } else if (event.target == modalRegistrar) {
     modalRegistrar.style.display = 'none';
+    location.reload();
   } else if (event.target == modalEditar) {
     modalEditar.style.display = 'none';
+    location.reload();
   }else if(event.target == modalAsignarCliente) {
     modalAsignarCliente.style.display = 'none';
   } else if(event.target == modalRegistrarClienteDesdeServicios) {
@@ -373,7 +405,7 @@ if (botonCliente != null) {
   campoBuscarDI.addEventListener('input', function() {
     const valorBuscar = campoBuscarDI.value.trim(); // Obtener el valor del campo y eliminar espacios en blanco al principio y al final
     if (valorBuscar.length >=4) {
-      buscarAsignacionCliente(registrar_editar_buscar);
+      buscarAsignacionCliente(registrarEditarBuscar);
     }
   });
 }
@@ -385,7 +417,7 @@ if (botonClienteEditar != null) {
   });
 }
 
-function buscarAsignacionCliente(registrar_editar_buscar=registrar_editar_buscar) {
+function buscarAsignacionCliente(registrarEditarBuscar=registrarEditarBuscar) {
   const valorBuscar = campoBuscarDI.value;
   const urlBuscarAsignacionCliente = `${baseURL}/servicios/buscar_asignacion_cliente/?buscar=${valorBuscar}`;
   fetch(urlBuscarAsignacionCliente)
@@ -414,10 +446,10 @@ function buscarAsignacionCliente(registrar_editar_buscar=registrar_editar_buscar
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
                 event.preventDefault();
-                if (registrar_editar_buscar === "registrar") {
+                if (registrarEditarBuscar === "registrar") {
                   inputClienteIdHidden.value = boton.getAttribute('data-id');
                   inputClienteDiVisual.value = boton.getAttribute('data-numero-di');
-                } else if (registrar_editar_buscar === "editar"){
+                } else if (registrarEditarBuscar === "editar"){
                   inputClienteIdHiddenEditar.value = boton.getAttribute('data-id');
                   inputClienteDiVisualEditar.value = boton.getAttribute('data-numero-di');
                 } else {
@@ -479,7 +511,7 @@ if (botonProductos != null) {
   campoBuscarReferencia.addEventListener('input', function() {
     const valorBuscar = campoBuscarReferencia.value.trim();
     if (valorBuscar.length >=3) {
-      buscarAsignacionProductos(registrar_editar_buscar);
+      buscarAsignacionProductos(registrarEditarBuscar);
     }
   });
 }
@@ -492,7 +524,7 @@ if (botonProductosEditar != null) {
 }
 
 
-function buscarAsignacionProductos(registrar_editar_buscar=registrar_editar_buscar) {
+function buscarAsignacionProductos(registrarEditarBuscar=registrarEditarBuscar) {
   const valorBuscar = campoBuscarReferencia.value;
   const urlBuscarAsignacionProductos = `${baseURL}/servicios/buscar_asignacion_productos/?buscar=${valorBuscar}`;
   fetch(urlBuscarAsignacionProductos)
@@ -507,7 +539,9 @@ function buscarAsignacionProductos(registrar_editar_buscar=registrar_editar_busc
             filasDatos.forEach(fila => fila.remove());
             if (data.length > 0) {
               data.forEach(producto => { // Recorrer los datos obtenidos y agregar filas de datos a la tabla
-                const nuevaFila = `
+                let nuevaFila = null
+                if (registrarEditarBuscar != "buscar") {
+                  nuevaFila = `
                     <tr class="celdas_datos">
                         <td class="celda tabla_registros__celda_id_modal">${producto.id}</td>
                         <td class="celda tabla_registros__celda_referencia_modal">${producto.referencia}</td>
@@ -530,78 +564,94 @@ function buscarAsignacionProductos(registrar_editar_buscar=registrar_editar_busc
                       <td class="celda tabla_registros__celda_asignar"><a href="#" id="asignar_valor_range_id_${producto.id}" data-id= ${producto.id} data-referencia="${producto.referencia}" data-precio="${producto.precio}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
                     </tr>
                 `;
+                } else {
+                  nuevaFila = `
+                    <tr class="celdas_datos">
+                        <td class="celda tabla_registros__celda_id_modal">${producto.id}</td>
+                        <td class="celda tabla_registros__celda_referencia_modal">${producto.referencia}</td>
+                        <td class="celda tabla_registros__celda_tipo_producto_modal">${producto.tipo_producto}</td>
+                        <td class="celda tabla_registros__celda_precio_modal">${producto.precio}</td>
+                      <td class="celda tabla_registros__celda_asignar"><a href="#" id="asignar_valor_range_id_${producto.id}" data-id= ${producto.id} data-referencia="${producto.referencia}" data-precio="${producto.precio}" class="tabla_registros__boton boton_asignar"><img src="/static/images/logo_mas.png" alt="asignar" class="tabla_registros__logo_boton tabla_registros__asignar"></a></td>
+                    </tr>
+                `;
+                }
                 tablaRegistros.insertAdjacentHTML('beforeend', nuevaFila);
                 const inputRango = document.getElementById("unidades_asignar_id_" + producto.id);
-                let maxSpan = document.getElementById("max_range_" + producto.id);
-                maxSpan.textContent = inputRango.max;
-                const asignarValorRange = document.getElementById("asignar_valor_range_id_" + producto.id);
-                const parrafoUnidadesAsignar = document.getElementById("parrafo_valor_range_id_" + producto.id);
-                const disminuirUnidadesAsignar = document.getElementById("disminuir_unidades_asignar_id_" + producto.id);
-                const aumentarUnidadesAsignar = document.getElementById("aumentar_unidades_asignar_id_" + producto.id);
-                asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
-                if (producto.unidades_disponibles == 0){
-                  disminuirUnidadesAsignar.style.visibility = 'hidden';
-                  aumentarUnidadesAsignar.style.visibility = 'hidden';
-                } else if (inputRango.value == 0){
-                  disminuirUnidadesAsignar.style.visibility = 'hidden';
-                } 
-                inputRango.addEventListener('input', function() {
-                  parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
+                if (inputRango != null) {
+                  let maxSpan = document.getElementById("max_range_" + producto.id);
+                  maxSpan.textContent = inputRango.max;
+                  const asignarValorRange = document.getElementById("asignar_valor_range_id_" + producto.id);
+                  const parrafoUnidadesAsignar = document.getElementById("parrafo_valor_range_id_" + producto.id);
+                  const disminuirUnidadesAsignar = document.getElementById("disminuir_unidades_asignar_id_" + producto.id);
+                  const aumentarUnidadesAsignar = document.getElementById("aumentar_unidades_asignar_id_" + producto.id);
                   asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
-                  if (inputRango.value == 0) {
+                  if (producto.unidades_disponibles == 0){
                     disminuirUnidadesAsignar.style.visibility = 'hidden';
-                  }
-                  if ((aumentarUnidadesAsignar.style.visibility == 'hidden') && (inputRango.value < producto.unidades_disponibles)) {
-                    aumentarUnidadesAsignar.style.visibility = 'visible';
-                  }
-                  if (inputRango.value == producto.unidades_disponibles) {
                     aumentarUnidadesAsignar.style.visibility = 'hidden';
-                  }
-                  if ((disminuirUnidadesAsignar.style.visibility == 'hidden') && (inputRango.value > 1)) {
-                    disminuirUnidadesAsignar.style.visibility = 'visible';
-                  }
-                })
-
-                disminuirUnidadesAsignar.addEventListener('click', function() {
-                  inputRango.value = parseInt(inputRango.value) - 1;
-                  parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
-                  asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
-                  if (inputRango.value == 0) {
+                  } else if (inputRango.value == 0){
                     disminuirUnidadesAsignar.style.visibility = 'hidden';
-                  }
-                  if (aumentarUnidadesAsignar.style.visibility == 'hidden' && inputRango.value != 0) {
-                    aumentarUnidadesAsignar.style.visibility = 'visible';
-                  }
-                })
-
-                aumentarUnidadesAsignar.addEventListener('click', function() {
-                  inputRango.value = parseInt(inputRango.value) + 1;
-                  parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
-                  asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
-                  if (inputRango.value == producto.unidades_disponibles) {
-                    aumentarUnidadesAsignar.style.visibility = 'hidden';
-                  }
-                  if (disminuirUnidadesAsignar.style.visibility == 'hidden' && inputRango.value != 0) {
-                    disminuirUnidadesAsignar.style.visibility = 'visible';
-                  }
-                })
+                  } 
+                  inputRango.addEventListener('input', function() {
+                    parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
+                    asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
+                    if (inputRango.value == 0) {
+                      disminuirUnidadesAsignar.style.visibility = 'hidden';
+                    }
+                    if ((aumentarUnidadesAsignar.style.visibility == 'hidden') && (inputRango.value < producto.unidades_disponibles)) {
+                      aumentarUnidadesAsignar.style.visibility = 'visible';
+                    }
+                    if (inputRango.value == producto.unidades_disponibles) {
+                      aumentarUnidadesAsignar.style.visibility = 'hidden';
+                    }
+                    if ((disminuirUnidadesAsignar.style.visibility == 'hidden') && (inputRango.value > 1)) {
+                      disminuirUnidadesAsignar.style.visibility = 'visible';
+                    }
+                  })
+  
+                  disminuirUnidadesAsignar.addEventListener('click', function() {
+                    inputRango.value = parseInt(inputRango.value) - 1;
+                    parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
+                    asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
+                    if (inputRango.value == 0) {
+                      disminuirUnidadesAsignar.style.visibility = 'hidden';
+                    }
+                    if (aumentarUnidadesAsignar.style.visibility == 'hidden' && inputRango.value != 0) {
+                      aumentarUnidadesAsignar.style.visibility = 'visible';
+                    }
+                  })
+  
+                  aumentarUnidadesAsignar.addEventListener('click', function() {
+                    inputRango.value = parseInt(inputRango.value) + 1;
+                    parrafoUnidadesAsignar.textContent = "Valor: " + inputRango.value;
+                    asignarValorRange.setAttribute('data-unidades-añadir', inputRango.value);
+                    if (inputRango.value == producto.unidades_disponibles) {
+                      aumentarUnidadesAsignar.style.visibility = 'hidden';
+                    }
+                    if (disminuirUnidadesAsignar.style.visibility == 'hidden' && inputRango.value != 0) {
+                      disminuirUnidadesAsignar.style.visibility = 'visible';
+                    }
+                  })
+                }
             });
             const botonesAsignar = document.querySelectorAll('.boton_asignar');
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
                 event.preventDefault();
-                let inputRango = document.getElementById("unidades_asignar_id_" + boton.getAttribute('data-id'));
-                let maxSpan = document.getElementById("max_range_" + boton.getAttribute('data-id'));
-                if (registrar_editar_buscar === "registrar"){
+                if (registrarEditarBuscar === "registrar"){
                   contenedor = contenedorProductosAsociados;
                   total = costoTotal;
-                } else if (registrar_editar_buscar === "editar"){
+                } else if (registrarEditarBuscar === "editar"){
                   contenedor = contenedorProductosAsociadosEditar;
                   total = costoTotalEditar;
                 } else {
-                  contenedor = contenedorProductosAsociadosBuscar;
+                  let inputHiddenBuscar = document.getElementById('input_producto_hidden_buscar')
+                  let inputVisualBuscar = document.getElementById('input_producto_visual_buscar')
+                  inputHiddenBuscar.value = boton.getAttribute('data-id');
+                  inputVisualBuscar.value = boton.getAttribute('data-referencia');
                 }
-                agregarValorProductoAlInput(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, registrar_editar_buscar, boton.getAttribute('data-unidades-añadir'), inputRango, maxSpan);
+                if (registrarEditarBuscar != "buscar"){
+                  agregarValorProductoAlInput(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, registrarEditarBuscar, boton.getAttribute('data-unidades-añadir'));
+                }
                 modalAsignarProductos.style.display = 'none';
               })
             })
@@ -637,13 +687,13 @@ function buscarAsignacionProductos(registrar_editar_buscar=registrar_editar_busc
         .catch(error => console.error('Error al buscar productos:', error));
 }
 
-function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProducto, contenedor, total, registrar_editar_buscar, unidades_asignar, inputRango, maxSpan) {
+function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProducto, contenedor, total, registrarEditarBuscar, unidades_asignar) {
   let inputProductos = null;
 
   // Obtener el input de productos
-  if (registrar_editar_buscar === "registrar"){
+  if (registrarEditarBuscar === "registrar"){
     inputProductos = document.getElementById('productos_seleccionados');
-  } else if (registrar_editar_buscar === "editar"){
+  } else if (registrarEditarBuscar === "editar"){
     inputProductos = document.getElementById('productos_seleccionados_editar');
   }
   // Obtener el valor actual del input
@@ -675,28 +725,24 @@ function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProduc
     nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
 
     //Eliminar el valor correspondiente del input
-    eliminarValorProductoDelInput(idProducto, precioProducto, total, registrar_editar_buscar, unidades_asignar, inputRango, maxSpan);
+    eliminarValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar);
   });
   nuevoProducto.appendChild(botonEliminarProducto);
 
   // Agregar el producto al contenedor de productos
   contenedor.appendChild(nuevoProducto);
   // Asignar el nuevo valor al input
-  if (inputRango != null) {
-    inputRango.max = parseInt(inputRango.max) - parseInt(unidades_asignar);
-    maxSpan.textContent = inputRango.max;
-  }
   inputProductos.value = valorActual;
   total.value = parseInt(total.value) + (parseInt(precioProducto)*parseInt(unidades_asignar));
   }
 }
 
-function eliminarValorProductoDelInput(idProducto, precioProducto, total, registrar_editar_buscar, unidades_asignar, inputRango, maxSpan) {
+function eliminarValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar) {
   let inputProductos = null;
   // Obtener el input de productos
-  if (registrar_editar_buscar === "registrar"){
+  if (registrarEditarBuscar === "registrar"){
     inputProductos = document.getElementById('productos_seleccionados');
-  } else if (registrar_editar_buscar === "editar"){
+  } else if (registrarEditarBuscar === "editar"){
     inputProductos = document.getElementById('productos_seleccionados_editar');
   }
   // Obtener el valor actual del input
@@ -706,10 +752,6 @@ function eliminarValorProductoDelInput(idProducto, precioProducto, total, regist
   // Filtrar los IDs para eliminar el ID del producto que se está eliminando
   const nuevosProductos = productos.filter(producto => {
     const [id, unidades] = producto.split(':');
-    if (inputRango != null){
-      inputRango.max = parseInt(inputRango.max) + parseInt(unidades);
-      maxSpan.textContent = inputRango.max;
-    }
     return id != idProducto.toString();
   });
 
