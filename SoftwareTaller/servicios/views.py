@@ -78,17 +78,23 @@ def registrar_servicio(request):
 
 # # BUSCAR servicios
 
-def buscar_productos(request):
+def buscar_servicios(request):
     campo = request.GET['campo']
     buscar = request.GET['buscar']
     filtro = request.GET.get('filtro')
 
-    if filtro == "menor_igual":
-        resultado = Producto.objects.filter(**{f'{campo}__lte': buscar}).order_by('-' + campo)
-    elif filtro == "mayor_igual":
-        resultado = Producto.objects.filter(**{f'{campo}__gte': buscar}).order_by(campo)
+    if campo == "precio" or campo == "unidades_disponibles" or campo == "costo_total" or campo == "fecha":
+        
+        if filtro == "menor_igual":
+            resultado = Servicio.objects.filter(**{f'{campo}__lte': buscar}).order_by('-' + campo)
+        elif filtro == "mayor_igual":
+            resultado = Servicio.objects.filter(**{f'{campo}__gte': buscar}).order_by(campo)
+    elif campo == "cliente":
+        resultado = Servicio.objects.filter(cliente_id = buscar)
+    elif campo == "producto":
+        resultado = Servicio.objects.filter(servicio_productos__producto_id=buscar)
     else:
-        resultado = Producto.objects.filter(**{f'{campo}__icontains': buscar})
+        resultado = Servicio.objects.filter(**{f'{campo}__icontains': buscar})
     if (resultado.count()==0):
         no_coincidencias = True
     else:
