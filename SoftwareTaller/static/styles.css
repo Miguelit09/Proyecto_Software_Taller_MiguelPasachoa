@@ -455,6 +455,7 @@ body::-webkit-scrollbar-thumb:hover {
     overflow-x: auto;
     padding: 8px;
     border: 2px solid black;
+    max-height: 52px;
 }
 
 /* Estilos para la barra de desplazamiento */
@@ -541,6 +542,33 @@ body::-webkit-scrollbar-thumb:hover {
     background-color: var(--gris);
 }
 
+.tabla_registros__contenedor_lista_productos {
+    overflow-y: auto;
+    max-height: 38px;
+}
+
+.tabla_registros__lista_productos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tabla_registros__contenedor_lista_productos::-webkit-scrollbar {
+    height: 3px; /* Ancho de la barra de desplazamiento */
+}
+
+.tabla_registros__contenedor_lista_productos::-webkit-scrollbar-thumb {
+    background-color: var(--gris); /* Color del "pulgón" de la barra de desplazamiento */
+    border-radius: 5px; /* Radio de borde del "pulgón" */
+}
+
+.tabla_registros__contenedor_lista_productos::-webkit-scrollbar-track {
+    background-color: transparent; /* Color de fondo de la pista de la barra de desplazamiento */
+}
+
+.tabla_registros__contenedor_lista_productos::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(63, 63, 63); /* Color del "pulgón" al pasar el ratón sobre él */
+}
 
 /* ESTILOS DE VENTANAS EMERGENTES */
 

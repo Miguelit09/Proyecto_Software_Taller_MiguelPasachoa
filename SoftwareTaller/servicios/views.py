@@ -75,23 +75,25 @@ def registrar_servicio(request):
         )
     return servicios(request, registrado=True)
 
-# ## Vista del formulario con el alert de registro exitoso
-# def formulario_registrar_servicios_registrado(request):
-#     return formulario_registrar_servicios(request, registrado=True)
 
 # # BUSCAR servicios
 
-# def buscar_servicios(request):
-#     campo = request.GET['campo']
-#     buscar = request.GET['buscar']
-#     resultado = Servicio.objects.filter(**{f'{campo}__icontains': buscar})
-#     if (resultado.count()==0):
-#         no_coincidencias = True
-#     else:
-#         no_coincidencias = False
-#     return servicios(request, servicios=resultado, sin_coincidencias=no_coincidencias, campo=campo, buscar=buscar)
+def buscar_productos(request):
+    campo = request.GET['campo']
+    buscar = request.GET['buscar']
+    filtro = request.GET.get('filtro')
 
-
+    if filtro == "menor_igual":
+        resultado = Producto.objects.filter(**{f'{campo}__lte': buscar}).order_by('-' + campo)
+    elif filtro == "mayor_igual":
+        resultado = Producto.objects.filter(**{f'{campo}__gte': buscar}).order_by(campo)
+    else:
+        resultado = Producto.objects.filter(**{f'{campo}__icontains': buscar})
+    if (resultado.count()==0):
+        no_coincidencias = True
+    else:
+        no_coincidencias = False
+    return servicios(request, servicios=resultado, sin_coincidencias=no_coincidencias, campo=campo, buscar=buscar)
 
 # # EDITAR servicios
 

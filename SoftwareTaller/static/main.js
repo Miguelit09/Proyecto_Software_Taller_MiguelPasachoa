@@ -31,7 +31,7 @@ let cancelar = document.getElementById("cancelar_eliminacion")
 
 // BANDERA REGISTRAR O EDITAR
 
-let editar = false;
+let registrar_editar_buscar = "registrar";
 
 // ASIGNAR CLIENTE AL SERVICIO --> ELEMENTOS
 
@@ -72,7 +72,7 @@ let contenedorProductosAsociadosEditar = document.getElementById('contenedor_pro
 
 botonRegistrar.addEventListener("click", function (event) {
   event.preventDefault()
-  editar = false;
+  registrar_editar_buscar = "registrar";
   modalRegistrar.style.display = "block";
 })
 
@@ -85,7 +85,7 @@ closeRegistrar.onclick = function () {
 if (botonesEditar.length != 0) {
   for (let i = 0; i < botonesEditar.length; i++) {
     botonesEditar[i].addEventListener('click', function (event) { //Añadir el escuchar evento a todos los botones de la plantilla
-      editar = true;
+      registrar_editar_buscar = "editar";
       let registroId = this.getAttribute('data-registro-id');
       let appRegistro = this.getAttribute('data-app-registro');
       let url = `${baseURL}${appRegistro}/obtener_registro_${appRegistro}/${registroId}/`;
@@ -151,7 +151,7 @@ if (botonesEditar.length != 0) {
                 inputsCostoTotal[i].value = 0;
                 contenedorProductosAsociadosEditar.innerHTML = '';
                 for (let t = 0; t < datosRegistro.productos_referencias.length; t++){
-                  agregarValorProductoAlInput(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, editar, datosRegistro.cantidad_productos[t]);
+                  agregarValorProductoAlInput(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, registrar_editar_buscar, datosRegistro.cantidad_productos[t]);
                 }
               }
             }
@@ -180,6 +180,7 @@ if (botonesEditar.length != 0) {
 botonBuscar.addEventListener("click", function (event) {
   event.preventDefault()
   modalBuscador.style.display = "block";
+  registrar_editar_buscar = "buscar";
 });
 
 if (campo != null) {
@@ -199,9 +200,14 @@ function generarInput(campo, contenedorBuscar) {
   let campoSeleccionado = campo.value;
   contenedorBuscar.innerHTML = '';
 
-  if (campoSeleccionado === "tipo_producto") {
+  if (campoSeleccionado === "tipo_producto" || campoSeleccionado === "nombre_servicio") {
     let select = document.createElement("select");
-    let opciones = ["Llanta", "Aceite", "Filtro", "Grasa"];
+    let opciones = [];
+    if (campoSeleccionado === "tipo_producto") {
+      opciones = ["Llanta", "Aceite", "Filtro", "Grasa"]; // Opciones de tipo_producto
+    } else {
+      opciones = ["Venta", "Engrase", "Servicio3", "Servicio4"]; // Opciones de nombre_servicio
+    }
     for (let i = 0; i < opciones.length; i++) {
       let opcion = document.createElement("option");
       opcion.textContent = opciones[i]
@@ -213,7 +219,7 @@ function generarInput(campo, contenedorBuscar) {
     }
 
     contenedorBuscar.appendChild(select);
-  } else if (campoSeleccionado === "precio" || campoSeleccionado === "unidades_disponibles") {
+  } else if (campoSeleccionado === "precio" || campoSeleccionado === "unidades_disponibles" || campoSeleccionado === "costo_total" || campoSeleccionado === "fecha") {
     let divMenorIgual = document.createElement("div");
     let divMayorIgual = document.createElement("div");
     let labelMenorIgual = document.createElement("label");
@@ -251,6 +257,31 @@ function generarInput(campo, contenedorBuscar) {
     contenedorBuscar.appendChild(divMenorIgual);
     contenedorBuscar.appendChild(input);
     contenedorBuscar.appendChild(divMayorIgual);
+  } else if (campoSeleccionado === "cliente") {
+    let botonCliente = document.createElement("a");
+    let inputVisualBuscar = document.createElement("input");
+    let inputHiddenBuscar = document.createElement("input");
+    botonCliente.href = "#";
+    botonCliente.id = "boton_cliente";
+    botonCliente.textContent = "Cliente:";
+    inputVisualBuscar.classList.add("card__input_form", "heigth_input_18");
+    inputVisualBuscar.id = "input_cliente_di_visual_buscar";
+    inputVisualBuscar.name = "input_cliente_di_visual_buscar";
+    inputVisualBuscar.type = "text";
+    inputVisualBuscar.disabled = true;
+    inputHiddenBuscar.id = "input_cliente_di_hidden_buscar";
+    inputHiddenBuscar.name = "buscar";
+    inputHiddenBuscar.type = "hidden";
+    contenedorBuscar.appendChild(botonCliente);
+    contenedorBuscar.appendChild(inputVisualBuscar);
+    contenedorBuscar.appendChild(inputHiddenBuscar);
+    if (botonCliente != null) {
+      // Cerrar modal de asignar cliente al clickear la X
+      botonCliente.addEventListener("click", function (event) {
+        event.preventDefault();
+        modalAsignarCliente.style.display = 'block';
+      });
+    }
   } else {
     let input = document.createElement("input")
     input.classList.add("card__input_form", "heigth_input_18");
@@ -342,7 +373,7 @@ if (botonCliente != null) {
   campoBuscarDI.addEventListener('input', function() {
     const valorBuscar = campoBuscarDI.value.trim(); // Obtener el valor del campo y eliminar espacios en blanco al principio y al final
     if (valorBuscar.length >=4) {
-      buscarAsignacionCliente(editar);
+      buscarAsignacionCliente(registrar_editar_buscar);
     }
   });
 }
@@ -354,7 +385,7 @@ if (botonClienteEditar != null) {
   });
 }
 
-function buscarAsignacionCliente(editar=editar) {
+function buscarAsignacionCliente(registrar_editar_buscar=registrar_editar_buscar) {
   const valorBuscar = campoBuscarDI.value;
   const urlBuscarAsignacionCliente = `${baseURL}/servicios/buscar_asignacion_cliente/?buscar=${valorBuscar}`;
   fetch(urlBuscarAsignacionCliente)
@@ -383,12 +414,17 @@ function buscarAsignacionCliente(editar=editar) {
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
                 event.preventDefault();
-                if (editar === false) {
+                if (registrar_editar_buscar === "registrar") {
                   inputClienteIdHidden.value = boton.getAttribute('data-id');
                   inputClienteDiVisual.value = boton.getAttribute('data-numero-di');
-                } else {
+                } else if (registrar_editar_buscar === "editar"){
                   inputClienteIdHiddenEditar.value = boton.getAttribute('data-id');
                   inputClienteDiVisualEditar.value = boton.getAttribute('data-numero-di');
+                } else {
+                  let inputHiddenBuscar = document.getElementById('input_cliente_di_hidden_buscar')
+                  let inputVisualBuscar = document.getElementById('input_cliente_di_visual_buscar')
+                  inputHiddenBuscar.value = boton.getAttribute('data-id');
+                  inputVisualBuscar.value = boton.getAttribute('data-numero-di');
                 }
                 modalAsignarCliente.style.display = 'none';
               })
@@ -443,7 +479,7 @@ if (botonProductos != null) {
   campoBuscarReferencia.addEventListener('input', function() {
     const valorBuscar = campoBuscarReferencia.value.trim();
     if (valorBuscar.length >=3) {
-      buscarAsignacionProductos(editar);
+      buscarAsignacionProductos(registrar_editar_buscar);
     }
   });
 }
@@ -456,7 +492,7 @@ if (botonProductosEditar != null) {
 }
 
 
-function buscarAsignacionProductos(editar=editar) {
+function buscarAsignacionProductos(registrar_editar_buscar=registrar_editar_buscar) {
   const valorBuscar = campoBuscarReferencia.value;
   const urlBuscarAsignacionProductos = `${baseURL}/servicios/buscar_asignacion_productos/?buscar=${valorBuscar}`;
   fetch(urlBuscarAsignacionProductos)
@@ -556,14 +592,16 @@ function buscarAsignacionProductos(editar=editar) {
                 event.preventDefault();
                 let inputRango = document.getElementById("unidades_asignar_id_" + boton.getAttribute('data-id'));
                 let maxSpan = document.getElementById("max_range_" + boton.getAttribute('data-id'));
-                if (editar === false){
+                if (registrar_editar_buscar === "registrar"){
                   contenedor = contenedorProductosAsociados;
                   total = costoTotal;
-                } else {
+                } else if (registrar_editar_buscar === "editar"){
                   contenedor = contenedorProductosAsociadosEditar;
                   total = costoTotalEditar;
+                } else {
+                  contenedor = contenedorProductosAsociadosBuscar;
                 }
-                agregarValorProductoAlInput(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, editar, boton.getAttribute('data-unidades-añadir'), inputRango, maxSpan);
+                agregarValorProductoAlInput(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, registrar_editar_buscar, boton.getAttribute('data-unidades-añadir'), inputRango, maxSpan);
                 modalAsignarProductos.style.display = 'none';
               })
             })
@@ -599,13 +637,13 @@ function buscarAsignacionProductos(editar=editar) {
         .catch(error => console.error('Error al buscar productos:', error));
 }
 
-function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProducto, contenedor, total, editar, unidades_asignar, inputRango, maxSpan) {
+function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProducto, contenedor, total, registrar_editar_buscar, unidades_asignar, inputRango, maxSpan) {
   let inputProductos = null;
 
   // Obtener el input de productos
-  if (editar === false){
+  if (registrar_editar_buscar === "registrar"){
     inputProductos = document.getElementById('productos_seleccionados');
-  } else {
+  } else if (registrar_editar_buscar === "editar"){
     inputProductos = document.getElementById('productos_seleccionados_editar');
   }
   // Obtener el valor actual del input
@@ -637,7 +675,7 @@ function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProduc
     nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
 
     //Eliminar el valor correspondiente del input
-    eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango, maxSpan);
+    eliminarValorProductoDelInput(idProducto, precioProducto, total, registrar_editar_buscar, unidades_asignar, inputRango, maxSpan);
   });
   nuevoProducto.appendChild(botonEliminarProducto);
 
@@ -653,12 +691,12 @@ function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProduc
   }
 }
 
-function eliminarValorProductoDelInput(idProducto, precioProducto, total, editar, unidades_asignar, inputRango, maxSpan) {
+function eliminarValorProductoDelInput(idProducto, precioProducto, total, registrar_editar_buscar, unidades_asignar, inputRango, maxSpan) {
   let inputProductos = null;
   // Obtener el input de productos
-  if (editar === false){
+  if (registrar_editar_buscar === "registrar"){
     inputProductos = document.getElementById('productos_seleccionados');
-  } else {
+  } else if (registrar_editar_buscar === "editar"){
     inputProductos = document.getElementById('productos_seleccionados_editar');
   }
   // Obtener el valor actual del input
