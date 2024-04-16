@@ -587,6 +587,10 @@ body::-webkit-scrollbar-thumb:hover {
     display: block;
 }
 
+.mensaje_cantidad_no_valida {
+    display: none;
+}
+
 .modal-content {
     display: flex;
     flex-direction: column;
@@ -868,6 +872,8 @@ body::-webkit-scrollbar-thumb:hover {
 .modal-content::-webkit-scrollbar-thumb:hover {
     background-color: rgb(63, 63, 63); /* Color del "pulgón" al pasar el ratón sobre él */
 }
+
+
 
 
 .modal__div_buscador_clientes, .modal__div_buscador_productos {

@@ -66,6 +66,18 @@ let closeModalRegistrarProductosDesdeServicios = document.getElementById('close_
 let botonProductosEditar = document.getElementById('boton_productos_editar');
 let costoTotalEditar = document.getElementById('costo_total_editar');
 let contenedorProductosAsociadosEditar = document.getElementById('contenedor_productos_asociados_editar');
+// Modal cantidad no valida
+
+let mensajeCantidadNoValida = document.getElementById('mensaje_cantidad_no_valida');
+
+let botonAceptarCantidadNoValida = document.getElementById('boton_aceptar_cantidad_no_valida');
+
+if (botonAceptarCantidadNoValida != null){
+  botonAceptarCantidadNoValida.addEventListener("click", function (event) {
+    event.preventDefault()
+    mensajeCantidadNoValida.style.display = "none";
+  })
+}
 
 
 // REGISTRAR --> FUNCIONES
@@ -700,40 +712,51 @@ function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProduc
   let valorActual = inputProductos.value.trim();
   const productos = valorActual.split(',');
   const idsProductos = productos.map(producto => producto.split(':')[0]);
-  if (idsProductos.includes(idProducto)) {
-    // El idProducto ya está presente, puedes manejar esta situación aquí
-    alert('Lo sentimos. El producto ya está agregado.');
-  } else if(unidades_asignar == 0){
-    alert('Lo sentimos. No se están agregando unidades.')
+  if (unidades_asignar == 0) {
+    mensajeCantidadNoValida.style.display = 'block';
+  } else if (idsProductos.includes(idProducto)){
+    for (let i = 0; i<productos.length; i++){
+      const [id, unidades] = productos[i].split(':');
+      if (id == idProducto) {
+        const nuevasUnidades = parseInt(unidades_asignar);
+        const referenciaElemento = document.getElementById(`referencia_elemento_id_${idProducto}`);
+        productos[i] = `${idProducto}:${nuevasUnidades}`;
+        valorActual = productos.join(',');
+        inputProductos.value = valorActual;
+        referenciaElemento.textContent = referenciaProducto + " (" + unidades_asignar + ")";
+        total.value = parseInt(total.value) + (nuevasUnidades - parseInt(unidades)) * parseInt(precioProducto);
+      }
+    }
   } else {
       // Agregar el ID del producto al valor del input, separado por comas
-  valorActual += (valorActual ? ',' : '') + idProducto + ':' + unidades_asignar;
-  const nuevoProducto = document.createElement('div');
-  nuevoProducto.classList.add('producto');
+    valorActual += (valorActual ? ',' : '') + idProducto + ':' + unidades_asignar;
+    const nuevoProducto = document.createElement('div');
+    nuevoProducto.classList.add('producto');
 
-  // Crear un elemento para mostrar la referencia del producto
-  const referenciaElemento = document.createElement('span');
-  referenciaElemento.textContent = referenciaProducto + " (" + unidades_asignar + ")";
-  nuevoProducto.appendChild(referenciaElemento);
+    // Crear un elemento para mostrar la referencia del producto
+    const referenciaElemento = document.createElement('span');
+    referenciaElemento.textContent = referenciaProducto + " (" + unidades_asignar + ")";
+    referenciaElemento.id = `referencia_elemento_id_${idProducto}`;
+    nuevoProducto.appendChild(referenciaElemento);
 
   // Crear un botón de eliminación
-  const botonEliminarProducto = document.createElement('a');
+    const botonEliminarProducto = document.createElement('a');
 
-  botonEliminarProducto.textContent = 'X';
-  botonEliminarProducto.classList.add('botonEliminarProducto');
-  botonEliminarProducto.addEventListener('click', function() {
-    nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
+    botonEliminarProducto.textContent = 'X';
+    botonEliminarProducto.classList.add('botonEliminarProducto');
+    botonEliminarProducto.addEventListener('click', function() {
+      nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
 
     //Eliminar el valor correspondiente del input
-    eliminarValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar);
-  });
-  nuevoProducto.appendChild(botonEliminarProducto);
+      eliminarValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar);
+    });
+    nuevoProducto.appendChild(botonEliminarProducto);
 
-  // Agregar el producto al contenedor de productos
-  contenedor.appendChild(nuevoProducto);
-  // Asignar el nuevo valor al input
-  inputProductos.value = valorActual;
-  total.value = parseInt(total.value) + (parseInt(precioProducto)*parseInt(unidades_asignar));
+    // Agregar el producto al contenedor de productos
+    contenedor.appendChild(nuevoProducto);
+    // Asignar el nuevo valor al input
+    inputProductos.value = valorActual;
+    total.value = parseInt(total.value) + (parseInt(precioProducto)*parseInt(unidades_asignar));
   }
 }
 
@@ -762,3 +785,29 @@ function eliminarValorProductoDelInput(idProducto, precioProducto, total, regist
 
   total.value = parseInt(total.value) - (parseInt(precioProducto)*parseInt(unidades_asignar));
 }
+
+// function sobreescribirValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar) {
+//   let inputProductos = null;
+//   // Obtener el input de productos
+//   if (registrarEditarBuscar === "registrar"){
+//     inputProductos = document.getElementById('productos_seleccionados');
+//   } else if (registrarEditarBuscar === "editar"){
+//     inputProductos = document.getElementById('productos_seleccionados_editar');
+//   }
+//   // Obtener el valor actual del input
+//   let valorActual = inputProductos.value.trim();
+//   // Separar los IDs de productos en un arreglo
+//   const productos = valorActual.split(',');
+//   // Filtrar los IDs para eliminar el ID del producto que se está eliminando
+//   const nuevosProductos = productos.filter(producto => {
+//     const [id, unidades] = producto.split(':');
+//     return id != idProducto.toString();
+//   });
+
+//   // Construir nuevamente el valor del input
+//   const nuevoValor = nuevosProductos.join(',');
+//   // Asignar el nuevo valor al input
+//   inputProductos.value = nuevoValor;
+
+//   total.value = parseInt(total.value) + (parseInt(precioProducto)*parseInt(unidades_asignar));
+// }
