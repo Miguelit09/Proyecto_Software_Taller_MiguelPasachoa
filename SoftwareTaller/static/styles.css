@@ -5,6 +5,7 @@
     --gris: rgb(150, 150, 150);
     --negro: rgb(7, 6, 6);
     --rojo-gris: linear-gradient(to bottom, rgb(245, 26, 26), rgb(243, 63, 63), rgb(170, 161, 161), rgb(231, 231, 231));
+    --gris-descendiente: linear-gradient(to bottom,rgb(255, 255, 80), rgb(170, 161, 161), rgb(231, 231, 231));
     --max-width: 1400px;
 
     --header-heigth: 100px;
@@ -19,7 +20,7 @@
 
 
 body {
-    background: var(--rojo-gris);
+    background: var(--gris-descendiente);
     background-repeat: no-repeat;
     min-height: 100vh;
     background-size: cover;
@@ -148,11 +149,11 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .header__volver:hover, .header__buscar:hover {
-    background-color: rgb(247, 247, 134);
+    background-color: rgb(250, 99, 99);
 }
 
 .header__volver:active, .header__buscar:active {
-    background-color: var(--amarillo);
+    background-color: var(--rojo);
 }
 
 .header__registrar:hover {
@@ -160,14 +161,14 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .header__registrar:active {
-    background-color: rgb(160, 255, 18);
+    background-color: rgb(90, 221, 101);
 }
 
-.header__cerrar_sesion:hover {
+.header__cerrar_sesion:hover, .header__buscar:hover {
     background-color: rgb(206, 205, 205);
 }
 
-.header__cerrar_sesion:active {
+.header__cerrar_sesion:active, .header__buscar:active {
     background-color: var(--gris);
 }
 
@@ -290,11 +291,11 @@ body::-webkit-scrollbar-thumb:hover {
 
 .menu_opciones__opcion:hover {
     transform: scale(1.1);
-    background-color: rgb(240, 255, 145);
+    background-color: rgb(250, 99, 99);
 }
 
 .menu_opciones__opcion:active {
-    background-color: var(--amarillo);
+    background-color: var(--rojo);
 }
 
 .menu_opciones__tarjeta {
