@@ -1,4 +1,10 @@
+// Variables funcionales
 let baseURL = "http://127.0.0.1:8000/";
+const reNombreCliente = /^[a-zA-Z\s]{2,50}$/;
+const reCorreo = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+const reDocumentoIdentidad = /^\d{5,20}$/;
+const reTelefono = /^\d{5,15}$/;
+
 // BOTON REGISTRAR --> ELEMENTOS
 
 let botonRegistrar = document.getElementById('boton_registrar');
@@ -79,6 +85,47 @@ if (botonAceptarCantidadNoValida != null){
   })
 }
 
+// FUNCIONES DE VALIDACION
+
+const entradaValida = function (campo) {
+  if (campo.classList.contains("borde_rojo")) {
+    campo.classList.remove("borde_rojo");
+  }
+  campo.classList.add("borde_verde");
+}
+
+const entradaInvalida = function (campo) {
+  if (campo.classList.contains("borde_verde")) {
+    campo.classList.remove("borde_verde");
+  }
+  campo.classList.add("borde_rojo");
+}
+
+const letras = function (e) { // Permite solo escribir LETRAS
+  const key = e.keyCode || e.which;
+  const tecla = String.fromCharCode(key).toLowerCase();
+  const letras = "áéíóúabcdefghijklmnopqrstuvwxyz";
+  const especiales = ['8', '32', '37', '39', '46'];
+  let tecla_especial = false
+  for (const i in especiales) {
+    if (key == especiales[i]) {
+      tecla_especial = true;
+      break;
+    }
+  }
+  if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+    e.preventDefault()
+  }
+}
+
+const numeros = (e) => { // Permite solo escribir NÚMEROS
+  //Validamos que el keyCode corresponda a las teclas de los números
+  if ((e.keyCode < 48 || e.keyCode > 57) && e.keyCode) {
+    e.preventDefault()
+  }
+}
+
+
 
 // REGISTRAR --> FUNCIONES
 
@@ -86,6 +133,51 @@ botonRegistrar.addEventListener("click", function (event) {
   event.preventDefault()
   registrarEditarBuscar = "registrar";
   modalRegistrar.style.display = "block";
+
+  
+
+  let nombreCliente = document.getElementById('nombre_cliente');
+  let documentoIdentidad = document.getElementById('documento_identidad');
+  let correoElectronico = document.getElementById('correo_electronico');
+  let telefono = document.getElementById('telefono');
+  let registrarCliente = document.getElementById('registrar_cliente');
+
+  const validarFormulario = function(e){
+    if (reNombreCliente.test(nombreCliente.value)){
+      entradaValida(nombreCliente);
+      if (reDocumentoIdentidad.test(documentoIdentidad.value)){
+        entradaValida(documentoIdentidad);
+        if (reCorreo.test(correoElectronico.value)){
+          entradaValida(correoElectronico);
+          if (reTelefono.test(telefono.value)) {
+            entradaValida(telefono);
+          } else {
+            entradaInvalida(telefono);
+            e.preventDefault();
+            telefono.focus();
+          }
+        } else {
+          entradaInvalida(correoElectronico);
+          e.preventDefault();
+          correoElectronico.focus();
+        }
+      } else {
+        entradaInvalida(documentoIdentidad);
+        e.preventDefault();
+        documentoIdentidad.focus();
+      }
+    } else {
+      entradaInvalida(nombreCliente);
+      e.preventDefault();
+      nombreCliente.focus();
+    }
+  }
+
+  nombreCliente.addEventListener('keypress', letras);
+  documentoIdentidad.addEventListener('keypress', numeros);
+  telefono.addEventListener('keypress', numeros);
+
+  registrarCliente.addEventListener("click", validarFormulario);
 })
 
 closeRegistrar.onclick = function () {

@@ -41,6 +41,9 @@
         <section class="contenedor seccion_principal">
             {% block titulo_en_cuerpo %}
             {% endblock titulo_en_cuerpo %}
+            {% block navegacion_secciones %}
+            {% include "layouts/partials/navegacion_secciones.html" %}
+            {% endblock navegacion_secciones %}
             {% block cuerpo_seccion %}{% endblock cuerpo_seccion %}
             {% block paginacion %}{% endblock paginacion %}
         </section>

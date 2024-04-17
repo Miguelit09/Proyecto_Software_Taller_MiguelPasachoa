@@ -1,0 +1,33 @@
+{% load static %}
+<nav class="navegacion_secciones">
+    {% if name_url != "clientes" %}
+    <a href="{% url 'clientes' %}" class="navegacion_secciones__opcion letra_negra">
+        <figure class="navegacion_secciones__tarjeta">
+            <img src="{% static "images/logo_cliente.png" %}" alt="clientes" class="navegacion_secciones__logo_cliente">
+            <figcaption>
+                <p>Clientes</p>
+            </figcaption>
+        </figure>
+    </a>
+    {% endif %}
+    {% if name_url != "inventario" %}
+    <a href="{% url 'inventario' %}" class="navegacion_secciones__opcion letra_negra">
+        <figure class="navegacion_secciones__tarjeta">
+            <img src="{% static "images/logo_inventario.png" %}" alt="inventario" class="navegacion_secciones__logo_inventario">
+            <figcaption>
+                <p>Inventario</p>
+            </figcaption>
+        </figure>
+    </a>
+    {% endif %}
+    {% if name_url != "servicios" %}
+    <a href="{% url 'servicios' %}" class="navegacion_secciones__opcion letra_negra">
+        <figure class="navegacion_secciones__tarjeta">
+            <img src="{% static "images/logo_servicios.png" %}" alt="servicios" class="navegacion_secciones__logo_servicios">
+            <figcaption>
+                <p>Servicios</p>
+            </figcaption>
+        </figure>
+    </a>
+    {% endif %}
+</nav>
