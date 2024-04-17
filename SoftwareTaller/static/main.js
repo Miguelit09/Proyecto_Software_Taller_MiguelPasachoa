@@ -1,5 +1,15 @@
 // Variables funcionales
 let baseURL = "http://127.0.0.1:8000/";
+let modalMensajeInputNoValido = document.getElementById('mensaje_input_no_valido');
+let botonAceptarInputNoValido = document.getElementById('boton_aceptar_input_no_valido');
+
+if (botonAceptarInputNoValido != null) {
+  botonAceptarInputNoValido.addEventListener("click", function (event) {
+    event.preventDefault()
+    modalMensajeInputNoValido.style.display = "none";
+  })
+}
+
 const reNombreCliente = /^[a-zA-Z\s]{2,50}$/;
 const reCorreo = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
 const reDocumentoIdentidad = /^\d{5,20}$/;
@@ -87,6 +97,7 @@ if (botonAceptarCantidadNoValida != null){
 
 // FUNCIONES DE VALIDACION
 
+
 const entradaValida = function (campo) {
   if (campo.classList.contains("borde_rojo")) {
     campo.classList.remove("borde_rojo");
@@ -154,21 +165,25 @@ botonRegistrar.addEventListener("click", function (event) {
           } else {
             entradaInvalida(telefono);
             e.preventDefault();
+            modalMensajeInputNoValido.style.display = 'block';
             telefono.focus();
           }
         } else {
           entradaInvalida(correoElectronico);
           e.preventDefault();
+          modalMensajeInputNoValido.style.display = 'block'
           correoElectronico.focus();
         }
       } else {
         entradaInvalida(documentoIdentidad);
         e.preventDefault();
+        modalMensajeInputNoValido.style.display = 'block'
         documentoIdentidad.focus();
       }
     } else {
       entradaInvalida(nombreCliente);
       e.preventDefault();
+      modalMensajeInputNoValido.style.display = 'block'
       nombreCliente.focus();
     }
   }
