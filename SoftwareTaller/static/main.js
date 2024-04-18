@@ -3,7 +3,30 @@ let baseURL = "http://127.0.0.1:8000/";
 let modalMensajeInputNoValido = document.getElementById('mensaje_input_no_valido');
 let botonAceptarInputNoValido = document.getElementById('boton_aceptar_input_no_valido');
 let textoMensajeInputError = document.getElementById('texto_mensaje_input_error');
+const fechaActual = new Date();
+const formatoFecha = fechaActual.toISOString().split('T')[0]; // toISOString() convierte la fecha en una cadena en formato ISO (por ejemplo, "2023-04-10T07:00:00.000Z").
 
+// PATRONES REGEX // 
+
+// Formulario Clientes
+const reNombreCliente = /^[a-zA-Z\s]{2,50}$/;
+const reCorreo = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
+const reDocumentoIdentidad = /^\d{5,20}$/;
+const reTelefono = /^\d{5,15}$/;
+
+// Formulario Productos
+
+const reMarca = /^[a-zA-Z0-9\s.,]{3,60}$/;
+const reReferencia =  /^[a-zA-Z0-9\s.,]{2,40}$/;
+const rePrecio = /^\d{2,10}$/;
+const reUnidadesDisponibles = /^\d{1,10}$/;
+
+// Formulario Servicios
+
+const reDescripcion = /^[a-zA-Z0-9\s.,]{1,200}$/;
+
+
+// Cerrar modal de AceptarInputNoValido
 if (botonAceptarInputNoValido != null) {
   botonAceptarInputNoValido.addEventListener("click", function (event) {
     event.preventDefault()
@@ -11,10 +34,7 @@ if (botonAceptarInputNoValido != null) {
   })
 }
 
-const reNombreCliente = /^[a-zA-Z\s]{2,50}$/;
-const reCorreo = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
-const reDocumentoIdentidad = /^\d{5,20}$/;
-const reTelefono = /^\d{5,15}$/;
+
 
 // BOTON REGISTRAR --> ELEMENTOS
 
@@ -154,7 +174,7 @@ const validarFormularioClientes = function(nombreCliente, documentoIdentidad, co
         } else {
           entradaInvalida(telefono);
           modalMensajeInputNoValido.style.display = 'block';
-          textoMensajeInputError.textContent = "Teléfono no válido. Solo números. Extensión entre 5 y 15 caracteres."
+          textoMensajeInputError.textContent = "Teléfono no válido. Solo números. Extensión entre 5 y 15 dígitos."
           telefono.focus();
           return false;
         }
@@ -168,7 +188,7 @@ const validarFormularioClientes = function(nombreCliente, documentoIdentidad, co
     } else {
       entradaInvalida(documentoIdentidad);
       modalMensajeInputNoValido.style.display = 'block'
-      textoMensajeInputError.textContent = "Documento Identidad no válido. Solo números. Extensión entre 5 y 20 caracteres."
+      textoMensajeInputError.textContent = "Documento Identidad no válido. Solo números. Extensión entre 5 y 20 dígitos."
       documentoIdentidad.focus();
       return false;
     }
@@ -181,13 +201,112 @@ const validarFormularioClientes = function(nombreCliente, documentoIdentidad, co
   }
 }
 
+const validarFormularioProductos = function(marca, referencia, tipoProducto, precio, unidadesDisponibles){
+  if (reMarca.test(marca.value)){
+    entradaValida(marca);
+    if (reReferencia.test(referencia.value)){
+      entradaValida(referencia);
+      if ((tipoProducto.value) != ''){
+        entradaValida(tipoProducto);
+        if (rePrecio.test(precio.value)) {
+          entradaValida(precio);
+          if (reUnidadesDisponibles.test(unidadesDisponibles.value)){
+            entradaValida(unidadesDisponibles);
+            return true;
+          } else {
+            entradaInvalida(unidadesDisponibles);
+            modalMensajeInputNoValido.style.display = 'block';
+            textoMensajeInputError.textContent = "Unidades Disponibles no válido. Solo números. Extensión entre 1 y 10 dígitos."
+            unidadesDisponibles.focus();
+            return false;
+          }
+        } else {
+          entradaInvalida(precio);
+          modalMensajeInputNoValido.style.display = 'block';
+          textoMensajeInputError.textContent = "Precio no válido. Solo números. Extensión entre 2 y 10 dígitos."
+          precio.focus();
+          return false;
+        }
+      } else {
+        entradaInvalida(tipoProducto);
+        modalMensajeInputNoValido.style.display = 'block'
+        textoMensajeInputError.textContent = "Tipo Producto no válido. No se ha seleccionado un tipo."
+        tipoProducto.focus();
+        return false;
+      }
+    } else {
+      entradaInvalida(referencia);
+      modalMensajeInputNoValido.style.display = 'block'
+      textoMensajeInputError.textContent = "Referencia no válida. Extensión entre 2 y 40 caracteres."
+      referencia.focus();
+      return false;
+    }
+  } else {
+    entradaInvalida(marca);
+    modalMensajeInputNoValido.style.display = 'block'
+    textoMensajeInputError.textContent = "Marca no válida. Extensión entre 3 y 60 caracteres."
+    marca.focus();
+    return false;
+  }
+}
+
+const validarFormularioServicios = function(nombreServicio, descripcion, fecha, clienteVisual, clienteHidden, productosVisual, productosHidden){
+  if ((nombreServicio.value) != ''){
+    entradaValida(nombreServicio);
+    if (reDescripcion.test(descripcion.value)){
+      entradaValida(descripcion);
+      if ((fecha.value) <= formatoFecha){
+        entradaValida(fecha);
+        if ((clienteHidden.value) != '') {
+          entradaValida(clienteVisual);
+          if ((productosHidden.value) != ''){
+            entradaValida(productosVisual);
+            return true;
+          } else {
+            entradaInvalida(productosVisual);
+            modalMensajeInputNoValido.style.display = 'block';
+            textoMensajeInputError.textContent = "Productos no válido. No se ha asignado ningún producto."
+            productosVisual.focus();
+            return false;
+          }
+        } else {
+          entradaInvalida(clienteVisual);
+          modalMensajeInputNoValido.style.display = 'block';
+          textoMensajeInputError.textContent = "Cliente no válido. No se ha asignado ningún cliente."
+          clienteVisual.focus();
+          return false;
+        }
+      } else {
+        entradaInvalida(fecha);
+        modalMensajeInputNoValido.style.display = 'block'
+        textoMensajeInputError.textContent = "Fecha no válida. No se puede seleccionar una fecha futura."
+        fecha.focus();
+        return false;
+      }
+    } else {
+      entradaInvalida(descripcion);
+      modalMensajeInputNoValido.style.display = 'block'
+      textoMensajeInputError.textContent = "Descripción no válida. Extensión entre 1 y 200 caracteres."
+      descripcion.focus();
+      return false;
+    }
+  } else {
+    entradaInvalida(nombreServicio);
+    modalMensajeInputNoValido.style.display = 'block'
+    textoMensajeInputError.textContent = "Servicio no válido. No se ha seleccionado ningún nombre de servicio."
+    nombreServicio.focus();
+    return false;
+  }
+}
+
 botonRegistrar.addEventListener("click", function (event) {
   event.preventDefault()
   registrarEditarBuscar = "registrar";
   modalRegistrar.style.display = "block";
 
 
-
+  // Validaciones Formularios
+  // Formulario registrar cliente
   let nombreCliente = document.getElementById('nombre_cliente');
   if (nombreCliente !=null) {
     let documentoIdentidad = document.getElementById('documento_identidad');
@@ -202,6 +321,43 @@ botonRegistrar.addEventListener("click", function (event) {
   
     registrarCliente.addEventListener("click", function(e) {
       if (!validarFormularioClientes(nombreCliente, documentoIdentidad, correoElectronico, telefono)){
+        e.preventDefault();
+      }
+    });
+  }
+  // Formulario registrar producto
+  let marca = document.getElementById('marca');
+  if (marca !=null) {
+    let referencia = document.getElementById('referencia');
+    let tipoProducto = document.getElementById('tipo_producto');
+    let precio = document.getElementById('precio');
+    let unidadesDisponibles = document.getElementById('unidades_disponibles');
+    let registrarProducto = document.getElementById('registrar_producto');
+
+    precio.addEventListener('keypress', numeros);
+    unidadesDisponibles.addEventListener('keypress', numeros);
+
+    registrarProducto.addEventListener("click", function(e) {
+      if (!validarFormularioProductos(marca, referencia, tipoProducto, precio, unidadesDisponibles)){
+        e.preventDefault();
+      }
+    });
+  }
+
+  // Formulario registrar servicio
+  let nombreServicio = document.getElementById('nombre_servicio');
+  if (nombreServicio !=null) {
+    let descripcion = document.getElementById('descripcion');
+    let fecha = document.getElementById('fecha');
+    let clienteVisual = document.getElementById('input_cliente_di_visual');
+    let clienteHidden = document.getElementById('input_cliente_id_hidden');
+    let productosVisual = document.getElementById('contenedor_productos_asociados');
+    let productosHidden = document.getElementById('productos_seleccionados');
+    let registrarServicio = document.getElementById('registrar_servicio');
+    fecha.value = formatoFecha; // Asigna al input de fecha por defecto la fecha actual
+
+    registrarServicio.addEventListener("click", function(e) {
+      if (!validarFormularioServicios(nombreServicio, descripcion, fecha, clienteVisual, clienteHidden, productosVisual, productosHidden)){
         e.preventDefault();
       }
     });
@@ -295,24 +451,59 @@ if (botonesEditar.length != 0) {
         .catch(error => console.error('Error al obtener detalles del servicio:', error));
 
         // Validaciones de la edición
+        // Formulario editar clientes
         let nombreCliente = document.getElementById('nombre_cliente_editar');
         if (nombreCliente !=null) {
-        let documentoIdentidad = document.getElementById('documento_identidad_editar');
-        let correoElectronico = document.getElementById('correo_electronico_editar');
-        let telefono = document.getElementById('telefono_editar');
-        let actualizarCliente = document.getElementById('actualizar_cliente');
+          let documentoIdentidad = document.getElementById('documento_identidad_editar');
+          let correoElectronico = document.getElementById('correo_electronico_editar');
+          let telefono = document.getElementById('telefono_editar');
+          let actualizarCliente = document.getElementById('actualizar_cliente');
 
-        nombreCliente.addEventListener('keypress', letras);
-        documentoIdentidad.addEventListener('keypress', numeros);
-        telefono.addEventListener('keypress', numeros);
+            nombreCliente.addEventListener('keypress', letras);
+            documentoIdentidad.addEventListener('keypress', numeros);
+            telefono.addEventListener('keypress', numeros);
 
-        actualizarCliente.addEventListener("click", function(e) {
-          if (!validarFormularioClientes(nombreCliente, documentoIdentidad, correoElectronico, telefono)){
+          actualizarCliente.addEventListener("click", function(e) {
+            if (!validarFormularioClientes(nombreCliente, documentoIdentidad, correoElectronico, telefono)){
+              e.preventDefault();
+            }
+          });
+        }
+      // Formulario editar productos
+        let marca = document.getElementById('marca_editar');
+        if (marca !=null) {
+          let referencia = document.getElementById('referencia_editar');
+          let tipoProducto = document.getElementById('tipo_producto_editar');
+          let precio = document.getElementById('precio_editar');
+          let unidadesDisponibles = document.getElementById('unidades_disponibles_editar');
+          let actualizarProducto = document.getElementById('actualizar_producto');
+
+          precio.addEventListener('keypress', numeros);
+          unidadesDisponibles.addEventListener('keypress', numeros);
+
+          actualizarProducto.addEventListener("click", function(e) {
+            if (!validarFormularioProductos(marca, referencia, tipoProducto, precio, unidadesDisponibles)){
+              e.preventDefault();
+            }
+          });
+        }
+      // Formulario editar servicios
+      let nombreServicio = document.getElementById('nombre_servicio_editar');
+      if (nombreServicio !=null) {
+        let descripcion = document.getElementById('descripcion_editar');
+        let fecha = document.getElementById('fecha_editar');
+        let clienteVisual = document.getElementById('input_cliente_di_visual_editar');
+        let clienteHidden = document.getElementById('input_cliente_id_hidden_editar');
+        let productosVisual = document.getElementById('contenedor_productos_asociados_editar');
+        let productosHidden = document.getElementById('productos_seleccionados_editar');
+        let actualizarServicio = document.getElementById('actualizar_servicio');
+
+        actualizarServicio.addEventListener("click", function(e) {
+          if (!validarFormularioServicios(nombreServicio, descripcion, fecha, clienteVisual, clienteHidden, productosVisual, productosHidden)){
             e.preventDefault();
           }
         });
       }
-
     })
   }
 

@@ -8,14 +8,18 @@
 {% block header %}
 {% endblock header %}
 
-{% block titulo_en_encabezado %}{% endblock titulo_en_encabezado %}
 
-{% block titulo_en_cuerpo %}
-{% include "layouts/partials/titulo.html" %}
-{% endblock titulo_en_cuerpo %}
-{% block navegacion_secciones %}{% endblock navegacion_secciones %}
-{% block cuerpo_seccion %}
-    {% include "forms/form_ingreso.html" %}
-{% endblock cuerpo_seccion %}
+    {% block titulo_en_encabezado %}{% endblock titulo_en_encabezado %}
+
+    {% block titulo_en_cuerpo %}
+    {% include "layouts/partials/titulo.html" %}
+    {% endblock titulo_en_cuerpo %}
+    {% block navegacion_secciones %}{% endblock navegacion_secciones %}
+    {% block cuerpo_seccion %}
+    <body class="body_ingreso">
+        {% include "forms/form_ingreso.html" %}
+    </body>
+    {% endblock cuerpo_seccion %}
+
 
 

@@ -119,6 +119,10 @@ body::-webkit-scrollbar-thumb:hover {
     gap: 4rem;
 }
 
+.header__logo {
+    width: 120px;
+}
+
 .header__menu {
     list-style: none;
     display: flex;
@@ -175,6 +179,8 @@ body::-webkit-scrollbar-thumb:hover {
     width: 28px;
 }
 
+
+
 .seccion_principal {
     display: flex;
     flex-direction: column;
@@ -184,6 +190,10 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 /* estilos ingreso */
+
+.body_ingreso .seccion_principal {
+    height: 100%;
+}
 
 .card {
     margin-top: 36px;
@@ -208,7 +218,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 
 .card__image {
-    width: 80px;
+    width: 200px;
 }
 
 .bi-lock-fill, .bi-person-circle {
