@@ -435,7 +435,7 @@ body::-webkit-scrollbar-thumb:hover {
 .tabla_registros__tabla {
     border: 2px solid var(--negro);
     table-layout: fixed;
-    margin-top: 36px;
+    margin-top: 16px;
     width: 1200px;
 }
 
@@ -998,6 +998,6 @@ body::-webkit-scrollbar-thumb:hover {
     border: 2px solid rgb(37, 241, 37);
 }
 
-.borde_rojo {
+.borde_azul {
     border: 2px solid rgb(37, 208, 238);
 }

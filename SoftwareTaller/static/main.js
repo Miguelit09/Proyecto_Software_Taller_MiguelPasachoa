@@ -2,6 +2,7 @@
 let baseURL = "http://127.0.0.1:8000/";
 let modalMensajeInputNoValido = document.getElementById('mensaje_input_no_valido');
 let botonAceptarInputNoValido = document.getElementById('boton_aceptar_input_no_valido');
+let textoMensajeInputError = document.getElementById('texto_mensaje_input_error');
 
 if (botonAceptarInputNoValido != null) {
   botonAceptarInputNoValido.addEventListener("click", function (event) {
@@ -99,8 +100,8 @@ if (botonAceptarCantidadNoValida != null){
 
 
 const entradaValida = function (campo) {
-  if (campo.classList.contains("borde_rojo")) {
-    campo.classList.remove("borde_rojo");
+  if (campo.classList.contains("borde_azul")) {
+    campo.classList.remove("borde_azul");
   }
   campo.classList.add("borde_verde");
 }
@@ -109,7 +110,7 @@ const entradaInvalida = function (campo) {
   if (campo.classList.contains("borde_verde")) {
     campo.classList.remove("borde_verde");
   }
-  campo.classList.add("borde_rojo");
+  campo.classList.add("borde_azul");
 }
 
 const letras = function (e) { // Permite solo escribir LETRAS
@@ -140,59 +141,71 @@ const numeros = (e) => { // Permite solo escribir NÚMEROS
 
 // REGISTRAR --> FUNCIONES
 
+const validarFormularioClientes = function(nombreCliente, documentoIdentidad, correoElectronico, telefono){
+  if (reNombreCliente.test(nombreCliente.value)){
+    entradaValida(nombreCliente);
+    if (reDocumentoIdentidad.test(documentoIdentidad.value)){
+      entradaValida(documentoIdentidad);
+      if (reCorreo.test(correoElectronico.value)){
+        entradaValida(correoElectronico);
+        if (reTelefono.test(telefono.value)) {
+          entradaValida(telefono);
+          return true;
+        } else {
+          entradaInvalida(telefono);
+          modalMensajeInputNoValido.style.display = 'block';
+          textoMensajeInputError.textContent = "Teléfono no válido. Solo números. Extensión entre 5 y 15 caracteres."
+          telefono.focus();
+          return false;
+        }
+      } else {
+        entradaInvalida(correoElectronico);
+        modalMensajeInputNoValido.style.display = 'block'
+        textoMensajeInputError.textContent = "Correo Electrónico no válido. No se cumple el formato de un correo electrónico."
+        correoElectronico.focus();
+        return false;
+      }
+    } else {
+      entradaInvalida(documentoIdentidad);
+      modalMensajeInputNoValido.style.display = 'block'
+      textoMensajeInputError.textContent = "Documento Identidad no válido. Solo números. Extensión entre 5 y 20 caracteres."
+      documentoIdentidad.focus();
+      return false;
+    }
+  } else {
+    entradaInvalida(nombreCliente);
+    modalMensajeInputNoValido.style.display = 'block'
+    textoMensajeInputError.textContent = "Nombre Cliente no válido. Solo letras y espacios en blanco. Extensión entre 2 y 50 caracteres."
+    nombreCliente.focus();
+    return false;
+  }
+}
+
 botonRegistrar.addEventListener("click", function (event) {
   event.preventDefault()
   registrarEditarBuscar = "registrar";
   modalRegistrar.style.display = "block";
 
-  
+
 
   let nombreCliente = document.getElementById('nombre_cliente');
-  let documentoIdentidad = document.getElementById('documento_identidad');
-  let correoElectronico = document.getElementById('correo_electronico');
-  let telefono = document.getElementById('telefono');
-  let registrarCliente = document.getElementById('registrar_cliente');
-
-  const validarFormulario = function(e){
-    if (reNombreCliente.test(nombreCliente.value)){
-      entradaValida(nombreCliente);
-      if (reDocumentoIdentidad.test(documentoIdentidad.value)){
-        entradaValida(documentoIdentidad);
-        if (reCorreo.test(correoElectronico.value)){
-          entradaValida(correoElectronico);
-          if (reTelefono.test(telefono.value)) {
-            entradaValida(telefono);
-          } else {
-            entradaInvalida(telefono);
-            e.preventDefault();
-            modalMensajeInputNoValido.style.display = 'block';
-            telefono.focus();
-          }
-        } else {
-          entradaInvalida(correoElectronico);
-          e.preventDefault();
-          modalMensajeInputNoValido.style.display = 'block'
-          correoElectronico.focus();
-        }
-      } else {
-        entradaInvalida(documentoIdentidad);
+  if (nombreCliente !=null) {
+    let documentoIdentidad = document.getElementById('documento_identidad');
+    let correoElectronico = document.getElementById('correo_electronico');
+    let telefono = document.getElementById('telefono');
+    let registrarCliente = document.getElementById('registrar_cliente');
+  
+  
+    nombreCliente.addEventListener('keypress', letras);
+    documentoIdentidad.addEventListener('keypress', numeros);
+    telefono.addEventListener('keypress', numeros);
+  
+    registrarCliente.addEventListener("click", function(e) {
+      if (!validarFormularioClientes(nombreCliente, documentoIdentidad, correoElectronico, telefono)){
         e.preventDefault();
-        modalMensajeInputNoValido.style.display = 'block'
-        documentoIdentidad.focus();
       }
-    } else {
-      entradaInvalida(nombreCliente);
-      e.preventDefault();
-      modalMensajeInputNoValido.style.display = 'block'
-      nombreCliente.focus();
-    }
+    });
   }
-
-  nombreCliente.addEventListener('keypress', letras);
-  documentoIdentidad.addEventListener('keypress', numeros);
-  telefono.addEventListener('keypress', numeros);
-
-  registrarCliente.addEventListener("click", validarFormulario);
 })
 
 closeRegistrar.onclick = function () {
@@ -280,6 +293,25 @@ if (botonesEditar.length != 0) {
           modalEditar.style.display = 'block';
         })
         .catch(error => console.error('Error al obtener detalles del servicio:', error));
+
+        // Validaciones de la edición
+        let nombreCliente = document.getElementById('nombre_cliente_editar');
+        if (nombreCliente !=null) {
+        let documentoIdentidad = document.getElementById('documento_identidad_editar');
+        let correoElectronico = document.getElementById('correo_electronico_editar');
+        let telefono = document.getElementById('telefono_editar');
+        let actualizarCliente = document.getElementById('actualizar_cliente');
+
+        nombreCliente.addEventListener('keypress', letras);
+        documentoIdentidad.addEventListener('keypress', numeros);
+        telefono.addEventListener('keypress', numeros);
+
+        actualizarCliente.addEventListener("click", function(e) {
+          if (!validarFormularioClientes(nombreCliente, documentoIdentidad, correoElectronico, telefono)){
+            e.preventDefault();
+          }
+        });
+      }
 
     })
   }
