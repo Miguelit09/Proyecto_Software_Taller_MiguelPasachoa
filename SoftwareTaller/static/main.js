@@ -570,7 +570,12 @@ function generarInput(campo, contenedorBuscar) {
     }
     for (let i = 0; i < opciones.length; i++) {
       let opcion = document.createElement("option");
-      opcion.textContent = opciones[i]
+      opcion.value = opciones[i].id
+      if (campoSeleccionado === "tipo_producto"){
+        opcion.textContent = opciones[i].tipo
+      } else {
+        opcion.textContent = opciones[i].nombre_servicio
+      }
       select.classList.add("card__input_form", "heigth_input_18");
       select.id = "buscar";
       select.name = "buscar";
@@ -624,6 +629,7 @@ function generarInput(campo, contenedorBuscar) {
     botonCliente.href = "#";
     botonCliente.id = "boton_cliente";
     botonCliente.textContent = "Cliente:";
+    botonCliente.classList.add('texto_clickeable');
     inputVisualBuscar.classList.add("card__input_form", "heigth_input_18");
     inputVisualBuscar.id = "input_cliente_di_visual_buscar";
     inputVisualBuscar.name = "input_cliente_di_visual_buscar";
@@ -649,6 +655,7 @@ function generarInput(campo, contenedorBuscar) {
     botonProducto.href = "#";
     botonProducto.id = "boton_productos";
     botonProducto.textContent = "Producto:";
+    botonProducto.classList.add('texto_clickeable');
     inputVisualBuscar.classList.add("card__input_form", "heigth_input_18");
     inputVisualBuscar.id = "input_producto_visual_buscar";
     inputVisualBuscar.name = "input_producto_visual_buscar";

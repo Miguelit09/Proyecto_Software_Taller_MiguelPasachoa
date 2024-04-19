@@ -27,7 +27,9 @@ def servicios(request, servicios=None, registrado=False, eliminado=False, actual
         # Si la página está fuera de rango (página vacía), mostrar la última página
         pagina = paginator.page(paginator.num_pages)
     nombres_servicios = NombreServicio.objects.all()
+    tipos_productos = TipoProducto.objects.all()
     lista_nombres_servicios = list(NombreServicio.objects.values())
+
     return render(request, 'servicios.html', {
         "registrado": registrado,
         "eliminado": eliminado,
@@ -41,6 +43,7 @@ def servicios(request, servicios=None, registrado=False, eliminado=False, actual
         "name_url": name_url,
         'nombres_servicios': nombres_servicios,
         'lista_nombres_servicios': lista_nombres_servicios,
+        'tipos_productos': tipos_productos,
     })
 
 # REGISTRAR servicios
@@ -55,7 +58,7 @@ def buscar_asignacion_cliente(request):
 def buscar_asignacion_productos(request):
     valor_buscar = request.GET.get('buscar', '')
     productos = Producto.objects.filter(referencia__icontains=valor_buscar)
-    data = [{'id':producto.id, 'referencia':producto.referencia, 'tipo_producto':producto.tipo_producto.id, 'precio': producto.precio, 'unidades_disponibles': producto.unidades_disponibles} for producto in productos]
+    data = [{'id':producto.id, 'referencia':producto.referencia, 'tipo_producto':producto.tipo_producto.tipo, 'precio': producto.precio, 'unidades_disponibles': producto.unidades_disponibles} for producto in productos]
     return JsonResponse(data, safe=False)
 
 
@@ -81,6 +84,8 @@ def registrar_servicio(request):
             producto=producto,
             cantidad=cantidad
         )
+        producto.unidades_disponibles -= cantidad
+        producto.save()
     return servicios(request, registrado=True)
 
 
@@ -91,12 +96,13 @@ def buscar_servicios(request):
     buscar = request.GET['buscar']
     filtro = request.GET.get('filtro')
 
-    if campo == "precio" or campo == "unidades_disponibles" or campo == "costo_total" or campo == "fecha":
-        
+    if campo == "costo_total" or campo == "fecha":
         if filtro == "menor_igual":
             resultado = Servicio.objects.filter(**{f'{campo}__lte': buscar}).order_by('-' + campo)
         elif filtro == "mayor_igual":
             resultado = Servicio.objects.filter(**{f'{campo}__gte': buscar}).order_by(campo)
+    elif campo == "nombre_servicio":
+        resultado = Servicio.objects.filter(nombre_servicio = buscar)
     elif campo == "cliente":
         resultado = Servicio.objects.filter(cliente_id = buscar)
     elif campo == "producto":

@@ -71,7 +71,10 @@ def buscar_productos(request):
     elif filtro == "mayor_igual":
         resultado = Producto.objects.filter(**{f'{campo}__gte': buscar}).order_by(campo)
     else:
-        resultado = Producto.objects.filter(**{f'{campo}__icontains': buscar})
+        if campo == "tipo_producto":
+            resultado = Producto.objects.filter(tipo_producto = buscar)
+        else:
+            resultado = Producto.objects.filter(**{f'{campo}__icontains': buscar})
     if (resultado.count()==0):
         no_coincidencias = True
     else:

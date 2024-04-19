@@ -86,13 +86,13 @@
                 <div class="tabla_registros__contenedor_lista_productos">
                     <ul class="tabla_registros__lista_productos">
                         {% for registro in servicio.servicio_productos_set.all %}
-                        <li>{{ registro.producto.referencia }} ( {{ registro.cantidad }})</li>
+                        <li>{{ registro.producto.referencia }} ({{ registro.cantidad }})</li>
                         {% endfor %}
                     </ul>
                 </div>
             </td>
             <td class="celda tabla_registros__celda_editar"><a href="#" data-registro-id={{ servicio.id }} data-app-registro="servicios" class="tabla_registros__boton boton_editar"><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>
-            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-url= {% url "eliminar_servicio" servicio.id %} data-mensaje= "Servicio  {{ servicio.nombre_servicio }} con ID {{ servicio.id }} realizado al cliente {{ servicio.cliente.nombre_cliente }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
+            <td class="celda tabla_registros__celda_eliminar"><a href="#" data-url= {% url "eliminar_servicio" servicio.id %} data-mensaje= "Servicio  {{ servicio.nombre_servicio.nombre_servicio }} con ID {{ servicio.id }} realizado al cliente {{ servicio.cliente.nombre_cliente }}" class="tabla_registros__boton boton_eliminar"><img src="{% static "images/logo_eliminar.png" %}" alt="eliminar" class="tabla_registros__logo_boton tabla_registros__eliminar"></a></td>
         </tr>
         {% endfor %}
     </table>
