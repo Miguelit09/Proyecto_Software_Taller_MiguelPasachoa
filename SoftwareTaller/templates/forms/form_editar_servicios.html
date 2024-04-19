@@ -3,7 +3,7 @@
 <div class="contenedor">
     <article class="card card_editar">
         <figure>
-            <img src="{% static "images/logo_servicios.png" %}" alt="logo" class="card__image_editar">
+            <img src="{% static "images/logo_servicios_editar.png" %}" alt="logo" class="card__image_editar">
         </figure>
         <div>
             <form action="" class="card__form_editar">
@@ -12,8 +12,8 @@
                     <select name="nombre_servicio" disabled class="card__input_form card_input_form_disabled heigth_input_16 nombre_servicio">
                         <option value="Venta">Venta</option>
                         <option value="Engrase">Engrase</option>
-                        <option value="Servicio3">Servicio 3</option>
-                        <option value="Servicio4">Servicio 4</option>
+                        <option value="Cambio aceite">Cambio de aceite</option>
+                        <option value="Montaje llantas">Montaje de llantas</option>
                     </select>
                 </div>
                 <div class="card__form-div">
@@ -95,12 +95,12 @@
                     <input type="date" name="fecha" id="fecha_editar" class="card__input_form heigth_input_16 fecha">
                 </div>
                 <div class="card__form-div">
-                    <a href="#" id="boton_cliente_editar">Cliente</a>
+                    <a href="#" id="boton_cliente_editar" class="card__boton_asignacion">Cliente</a>
                     <input type="text" id="input_cliente_di_visual_editar" name="input_cliente_di_visual_editar" disabled class="card__input_form heigth_input_16 cliente_di">
                     <input type="hidden" id="input_cliente_id_hidden_editar" name="input_cliente_id_hidden_editar">
                 </div>
                 <div class="card__form-div">
-                    <a href="#" id="boton_productos_editar">Productos</a>
+                    <a href="#" id="boton_productos_editar" class="card__boton_asignacion">Productos</a>
                     <div id="contenedor_productos_asociados_editar" class= "card__input_form heigth_input_16 productos"></div>
                     <input type="hidden" id="productos_seleccionados_editar" name="productos_seleccionados_editar">
                 </div>

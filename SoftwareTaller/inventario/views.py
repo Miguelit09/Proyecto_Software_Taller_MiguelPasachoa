@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import Producto
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 # MENÚ INVENTARIO
+@login_required
 def inventario(request, productos=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="inventario"):
     if productos is None:
         productos = Producto.objects.all()

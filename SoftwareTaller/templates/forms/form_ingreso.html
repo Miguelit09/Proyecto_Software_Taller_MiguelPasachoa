@@ -6,9 +6,17 @@
             <img src="{% static "images/logo_lubricentro.png" %}" alt="logo" class="card__image">
         </figure>
         <div>
-            <form action={% url "ingreso" %} method="post" class="card__form_ingreso">
+            <form action="{% url "ingreso" %}" method="post" class="card__form_ingreso">
                 {% csrf_token %}
-                {{ form.as_p }}
+                <div>
+                    <label for="nombre_usuario"><i class="bi bi-person-circle"></i></label>
+                    {{ form.username }}
+                </div>
+                <div>
+                    <label for="contraseña"><i class="bi bi-lock-fill"></i></label>
+                    {{ form.password }}
+                </div>
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
                 <button type="submit" class="boton letra_roja">Ingresar</button>
                 <p><a href="#" class="card__form_olvido">Olvidé la contraseña</a></p>
             </form>

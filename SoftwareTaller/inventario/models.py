@@ -14,3 +14,6 @@ class Producto(models.Model):
     tipo_producto = models.CharField(max_length=40, choices=OPCIONES_TIPO, null=False, blank=False)
     precio = models.IntegerField(null=False, blank=False)
     unidades_disponibles = models.IntegerField(null=False, blank=False)
+
+# class TipoProducto(models.Model):
+#     tipo = 

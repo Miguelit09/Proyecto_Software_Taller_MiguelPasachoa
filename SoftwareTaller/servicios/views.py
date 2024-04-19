@@ -2,9 +2,11 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Cliente, Servicio, Producto, Servicio_Productos
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 # MENÚ SERVICIOS
+@login_required
 def servicios(request, servicios=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, error=False, mensaje_error=None, name_url="servicios"):
     if servicios is None:
         servicios = Servicio.objects.all()

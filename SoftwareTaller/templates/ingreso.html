@@ -16,6 +16,9 @@
     {% endblock titulo_en_cuerpo %}
     {% block navegacion_secciones %}{% endblock navegacion_secciones %}
     {% block cuerpo_seccion %}
+    {% if credenciales_equivocadas %}
+        {% include "layouts/modals/mensajes/mensaje_credenciales_equivocadas.html" %}
+    {% endif %}
     <body class="body_ingreso">
         {% include "forms/form_ingreso.html" %}
     </body>

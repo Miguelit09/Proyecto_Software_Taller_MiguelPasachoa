@@ -4,7 +4,7 @@
 <div class="contenedor">
     <article class="card card_registrar">
         <figure>
-            <img src="{% static "images/logo_servicios.png" %}" alt="logo" class="card__image_registrar">
+            <img src="{% static "images/logo_servicios_registrar.png" %}" alt="logo" class="card__image_registrar">
         </figure>
         <div>
             <form action="{% url "registrar_servicio" %}" method="post" class="card__form_registrar">
@@ -33,12 +33,12 @@
                     <input type="date" id="fecha" name="fecha" class="card__input_form heigth_input_16">
                 </div>
                 <div class="card__form-div">
-                    <a href="#" id="boton_cliente">Cliente</a>
+                    <a href="#" id="boton_cliente" class="card__boton_asignacion">Cliente</a>
                     <input type="text" id="input_cliente_di_visual" name="input_cliente_di_visual" disabled class="card__input_form heigth_input_16">
                     <input type="hidden" id="input_cliente_id_hidden" name="input_cliente_id_hidden">
                 </div>
                 <div class="card__form-div">
-                    <a href="#" id="boton_productos">Productos</a>
+                    <a href="#" id="boton_productos" class="card__boton_asignacion">Productos</a>
                     <div id="contenedor_productos_asociados" class= "card__input_form heigth_input_16"></div>
                     <input type="hidden" id="productos_seleccionados" name="productos_seleccionados">
                 </div>

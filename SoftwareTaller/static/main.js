@@ -817,6 +817,7 @@ function buscarAsignacionCliente(registrarEditarBuscar=registrarEditarBuscar) {
             const enlaceAgregarCliente = document.createElement('a');
             enlaceAgregarCliente.href = '#'; // Agrega aquí la URL a la que quieres que el enlace redirija
             enlaceAgregarCliente.textContent = 'Click aquí para registrar cliente.'; // Texto del enlace
+            enlaceAgregarCliente.classList.add('texto_clickeable');
             celdaMensaje.appendChild(enlaceAgregarCliente); // Agrega el enlace al párrafo
             // Agrega la celda al fila
             filaMensaje.appendChild(celdaMensaje);
@@ -1011,6 +1012,7 @@ function buscarAsignacionProductos(registrarEditarBuscar=registrarEditarBuscar) 
             const enlaceAgregarProducto = document.createElement('a');
             enlaceAgregarProducto.href = '#'; // Agrega aquí la URL a la que quieres que el enlace redirija
             enlaceAgregarProducto.textContent = 'Click aquí para registrar producto.'; // Texto del enlace
+            enlaceAgregarProducto.classList.add('texto_clickeable');
             celdaMensaje.appendChild(enlaceAgregarProducto); // Agrega el enlace al párrafo
             // Agrega la celda al fila
             filaMensaje.appendChild(celdaMensaje);

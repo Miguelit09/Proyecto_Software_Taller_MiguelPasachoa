@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import Cliente
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 # MENÚ CLIENTES
+@login_required
 def clientes(request, clientes=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="clientes"):
     if clientes is None:
         clientes = Cliente.objects.all()

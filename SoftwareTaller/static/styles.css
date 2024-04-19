@@ -238,7 +238,15 @@ body::-webkit-scrollbar-thumb:hover {
     font-size: 32px;
 }
 
+.card__boton_asignacion, .texto_clickeable {
+    text-decoration: underline;
+    color: var(--negro);
+}
 
+.card__boton_asignacion:hover, .texto_clickeable:hover {
+    text-decoration: underline;
+    color: rgb(44, 168, 32);
+}
 
 .boton {
     width: 40%;
@@ -407,14 +415,18 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 
+
 .heigth_input_16 {
     font-size: 16px;
 }
 
 
+
 .boton_guardar_registro {
     width: 100%;
 }
+
+
 
 /* estilos tabla de datos */
 
@@ -422,6 +434,7 @@ body::-webkit-scrollbar-thumb:hover {
     display: flex;
     justify-content: center;
     overflow-x: auto;
+    overflow-y: auto;
     border: 5px ridge var(--negro);
 }
 
@@ -779,6 +792,7 @@ body::-webkit-scrollbar-thumb:hover {
     border: none;
     width: 100%;
     box-sizing: border-box;
+    gap: 1rem;
 }
 
 .card__form_buscar{
@@ -787,6 +801,10 @@ body::-webkit-scrollbar-thumb:hover {
     gap: 2rem;
 }
 
+.card__image_buscar {
+    width: 200px;
+    height: auto;
+}
 
 .heigth_input_18 {
     max-width: 160px;
@@ -800,7 +818,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 .modal__buscador {
     width: 700px;
-    margin: 5% auto;
+    margin: 3% auto;
 }
 
 .contenedor_buscar {
@@ -851,9 +869,11 @@ body::-webkit-scrollbar-thumb:hover {
 
 
 .modal__asignar_cliente, .modal__asignar_productos {
+    max-width: 80%;
     width: 80%;
     margin: 5% auto;
     padding: 0;
+    max-height: 80%;
 }
 
 .tabla_registros__tabla_modal {
