@@ -60,6 +60,8 @@
 {% endif %}
 
 
+<div id="nombres_servicios" style="display: none;">{{ lista_nombres_servicios | json_script:"nombresServicios" }}</div>
+
 <div class="contenedor tabla_registros">
     <table class="tabla_registros__tabla">
         <tr class="celdas_encabezado">
@@ -75,7 +77,7 @@
         {% for servicio in pagina.object_list %}
         <tr class="celdas_datos">
             <td class="celda tabla_registros__celda_id">{{ servicio.id }}</td>
-            <td class="celda tabla_registros__celda_servicio">{{ servicio.nombre_servicio }}</td>
+            <td class="celda tabla_registros__celda_servicio">{{ servicio.nombre_servicio.nombre_servicio }}</td>
             <td class="celda tabla_registros__celda_descripcion">{{ servicio.descripcion }}</td>
             <td class="celda tabla_registros__celda_costo_total">{{ servicio.costo_total }}</td>
             <td class="celda tabla_registros__celda_fecha">{{ servicio.fecha }}</td>

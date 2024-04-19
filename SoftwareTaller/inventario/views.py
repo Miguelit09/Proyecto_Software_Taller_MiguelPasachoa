@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from .models import Producto
+from django.http import JsonResponse, HttpResponse
+from .models import Producto, TipoProducto
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 # MENÚ INVENTARIO
+
+
+
 @login_required
 def inventario(request, productos=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="inventario"):
     if productos is None:
@@ -24,6 +27,8 @@ def inventario(request, productos=None, registrado=False, eliminado=False, actua
         # Si la página está fuera de rango (página vacía), mostrar la última página
         pagina = paginator.page(paginator.num_pages)
 
+    tipos_productos = TipoProducto.objects.all()
+    lista_tipos_productos = list(TipoProducto.objects.values())
     return render(request, 'inventario.html', {
         "registrado": registrado,
         "eliminado": eliminado,
@@ -33,6 +38,8 @@ def inventario(request, productos=None, registrado=False, eliminado=False, actua
         "campo": campo,
         "pagina": pagina,
         "name_url": name_url,
+        "tipos_productos": tipos_productos,
+        "lista_tipos_productos": lista_tipos_productos,
     })
 
 # REGISTRAR PRODUCTOS
@@ -45,8 +52,8 @@ def registrar_producto(request):
     tipo_producto = request.POST['tipo_producto']
     precio = request.POST['precio']
     unidades_disponibles = request.POST['unidades_disponibles']
-
-    Producto.objects.create(marca=marca, referencia=referencia, tipo_producto=tipo_producto, precio=precio, unidades_disponibles=unidades_disponibles)
+    seleccion_tipo_producto = TipoProducto.objects.get(id=tipo_producto)
+    Producto.objects.create(marca=marca, referencia=referencia, tipo_producto=seleccion_tipo_producto, precio=precio, unidades_disponibles=unidades_disponibles)
 
     return inventario(request, registrado=True)
 
@@ -83,7 +90,7 @@ def obtener_registro_inventario(request, producto_id):
         'id': producto.id,
         'marca': producto.marca,
         'referencia': producto.referencia,
-        'tipo_producto': producto.tipo_producto,
+        'tipo_producto': producto.tipo_producto.id,
         'precio': producto.precio,
         'unidades_disponibles': producto.unidades_disponibles,
     }
@@ -97,10 +104,12 @@ def editar_producto(request):
     precio = request.POST['precio']
     unidades_disponibles = request.POST['unidades_disponibles']
 
+    seleccion_tipo_producto = TipoProducto.objects.get(id=tipo_producto)
+
     producto = Producto.objects.get(id=id)
     producto.marca = marca
     producto.referencia = referencia
-    producto.tipo_producto = tipo_producto
+    producto.tipo_producto = seleccion_tipo_producto
     producto.precio = precio
     producto.unidades_disponibles = unidades_disponibles
 

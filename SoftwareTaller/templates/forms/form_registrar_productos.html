@@ -20,10 +20,13 @@
                     <label for="tipo_producto">Tipo de producto</label>
                     <select name="tipo_producto" id="tipo_producto" class="card__input_form heigth_input_16">
                         <option value="" disabled selected hidden>Seleccione un tipo:</option>
-                        <option value="Llanta">Llanta</option>
+                        {% for tipo_producto in tipos_productos %}
+                            <option value="{{ tipo_producto.id }}">{{ tipo_producto.tipo }}</option>
+                        {% endfor %}
+                        {% comment %} <option value="Llanta">Llanta</option>
                         <option value="Aceite">Aceite</option>
                         <option value="Filtro">Filtro</option>
-                        <option value="Grasa">Grasa</option>
+                        <option value="Grasa">Grasa</option> {% endcomment %}
                     </select>
                 </div>
                 <div class="card__form-div">

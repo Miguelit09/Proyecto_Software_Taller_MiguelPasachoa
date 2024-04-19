@@ -18,10 +18,9 @@
                 <div class="card__form-div">
                     <label for="tipo_producto">Tipo de producto</label>
                     <select name="tipo_producto" disabled class="card__input_form card_input_form_disabled heigth_input_16 tipo_producto">
-                        <option value="Llanta">Llanta</option>
-                        <option value="Aceite">Aceite</option>
-                        <option value="Filtro">Filtro</option>
-                        <option value="Grasa">Grasa</option>
+                    {% for tipo_producto in tipos_productos %}
+                        <option value="{{ tipo_producto.id }}">{{ tipo_producto.tipo }}</option>
+                    {% endfor %}
                     </select>
                 </div>
                 <div class="card__form-div">
@@ -74,10 +73,9 @@
                 <div class="card__form-div">
                     <label for="tipo_producto">Tipo de producto</label>
                     <select name="tipo_producto" id="tipo_producto_editar" class="card__input_form heigth_input_16 tipo_producto">
-                        <option value="Llanta">Llanta</option>
-                        <option value="Aceite">Aceite</option>
-                        <option value="Filtro">Filtro</option>
-                        <option value="Grasa">Grasa</option>
+                        {% for tipo_producto in tipos_productos %}
+                            <option value="{{ tipo_producto.id }}">{{ tipo_producto.tipo }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="card__form-div">

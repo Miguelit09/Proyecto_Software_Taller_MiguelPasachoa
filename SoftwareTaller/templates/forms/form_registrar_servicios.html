@@ -13,10 +13,9 @@
                     <label for="nombre_servicio">Servicio</label>
                     <select name="nombre_servicio" id="nombre_servicio" class="card__input_form heigth_input_16">
                         <option value="" disabled selected hidden>Seleccione un servicio:</option>
-                        <option value="Venta">Venta</option>
-                        <option value="Engrase">Engrase</option>
-                        <option value="Cambio aceite">Cambio de aceite</option>
-                        <option value="Montaje llantas">Montaje de llantas</option>
+                        {% for nombre_servicio in nombres_servicios %}
+                        <option value="{{ nombre_servicio.id }}">{{ nombre_servicio.nombre_servicio }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="card__form-div">

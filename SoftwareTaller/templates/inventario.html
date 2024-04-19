@@ -53,6 +53,7 @@
     {% include "layouts/modals/mensajes/mensaje_sin_coincidencias.html" %}
 {% endif %}
 
+<div id="tipos_productos" style="display: none;">{{ lista_tipos_productos | json_script:"tiposProductos" }}</div>
 
 <div class="contenedor tabla_registros">
     <table class="tabla_registros__tabla">
@@ -70,7 +71,7 @@
             <td class="celda tabla_registros__celda_id">{{ producto.id }}</td>
             <td class="celda tabla_registros__celda_marca">{{ producto.marca }}</td>
             <td class="celda tabla_registros__celda_referencia">{{ producto.referencia }}</td>
-            <td class="celda tabla_registros__celda_tipo">{{ producto.tipo_producto }}</td>
+            <td class="celda tabla_registros__celda_tipo">{{ producto.tipo_producto.tipo }}</td>
             <td class="celda tabla_registros__celda_precio">{{ producto.precio }}</td>
             <td class="celda tabla_registros__celda_unidades_disponibles">{{ producto.unidades_disponibles }}</td>
             <td class="celda tabla_registros__celda_editar"><a href="#" data-registro-id={{ producto.id }} data-app-registro="inventario" class="tabla_registros__boton boton_editar"><img src="{% static "images/logo_editar.png" %}" alt="editar" class="tabla_registros__logo_boton tabla_registros__editar"></a></td>

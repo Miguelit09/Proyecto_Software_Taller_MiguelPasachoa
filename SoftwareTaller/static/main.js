@@ -6,6 +6,7 @@ let textoMensajeInputError = document.getElementById('texto_mensaje_input_error'
 const fechaActual = new Date();
 const formatoFecha = fechaActual.toISOString().split('T')[0]; // toISOString() convierte la fecha en una cadena en formato ISO (por ejemplo, "2023-04-10T07:00:00.000Z").
 
+
 // PATRONES REGEX // 
 
 // Formulario Clientes
@@ -48,6 +49,18 @@ let modalBuscador = document.getElementById('modal_buscador');
 let closeBuscador = document.getElementById('close_buscador');
 let campo = document.getElementById('campo');
 let contenedorBuscar = document.getElementById('contenedor_buscar');
+
+let tiposProductos = null
+let existeTiposProductos = document.getElementById('tipos_productos')
+if (existeTiposProductos != null){
+  tiposProductos = JSON.parse(document.getElementById('tipos_productos').textContent);
+}
+let nombresServicios = null
+let existeNombresServicios = document.getElementById('nombres_servicios')
+if (existeNombresServicios != null){
+  nombresServicios = JSON.parse(document.getElementById('nombres_servicios').textContent);
+}
+
 
 // BOTON EDITAR --> ELEMENTOS
 
@@ -550,9 +563,10 @@ function generarInput(campo, contenedorBuscar) {
     let select = document.createElement("select");
     let opciones = [];
     if (campoSeleccionado === "tipo_producto") {
-      opciones = ["Llanta", "Aceite", "Filtro", "Grasa"]; // Opciones de tipo_producto
+      opciones = tiposProductos; // Opciones de tipo_producto
     } else {
-      opciones = ["Venta", "Engrase", "Servicio3", "Servicio4"]; // Opciones de nombre_servicio
+      opciones = nombresServicios;
+      console.log(nombresServicios) // Opciones de nombre_servicio
     }
     for (let i = 0; i < opciones.length; i++) {
       let opcion = document.createElement("option");

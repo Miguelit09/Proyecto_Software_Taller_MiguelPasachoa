@@ -1,11 +1,14 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from .models import Cliente, Servicio, Producto, Servicio_Productos
+from django.http import JsonResponse, HttpResponse
+from .models import Cliente, Servicio, Producto, Servicio_Productos, NombreServicio
+from inventario.models import TipoProducto
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 # MENÚ SERVICIOS
+
+
 @login_required
 def servicios(request, servicios=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, error=False, mensaje_error=None, name_url="servicios"):
     if servicios is None:
@@ -23,7 +26,8 @@ def servicios(request, servicios=None, registrado=False, eliminado=False, actual
     except EmptyPage:
         # Si la página está fuera de rango (página vacía), mostrar la última página
         pagina = paginator.page(paginator.num_pages)
-
+    nombres_servicios = NombreServicio.objects.all()
+    lista_nombres_servicios = list(NombreServicio.objects.values())
     return render(request, 'servicios.html', {
         "registrado": registrado,
         "eliminado": eliminado,
@@ -35,6 +39,8 @@ def servicios(request, servicios=None, registrado=False, eliminado=False, actual
         "error": error,
         "mensaje_error": mensaje_error,
         "name_url": name_url,
+        'nombres_servicios': nombres_servicios,
+        'lista_nombres_servicios': lista_nombres_servicios,
     })
 
 # REGISTRAR servicios
@@ -49,7 +55,7 @@ def buscar_asignacion_cliente(request):
 def buscar_asignacion_productos(request):
     valor_buscar = request.GET.get('buscar', '')
     productos = Producto.objects.filter(referencia__icontains=valor_buscar)
-    data = [{'id':producto.id, 'referencia':producto.referencia, 'tipo_producto':producto.tipo_producto, 'precio': producto.precio, 'unidades_disponibles': producto.unidades_disponibles} for producto in productos]
+    data = [{'id':producto.id, 'referencia':producto.referencia, 'tipo_producto':producto.tipo_producto.id, 'precio': producto.precio, 'unidades_disponibles': producto.unidades_disponibles} for producto in productos]
     return JsonResponse(data, safe=False)
 
 
@@ -63,8 +69,8 @@ def registrar_servicio(request):
     cliente = Cliente.objects.get(id=request.POST['input_cliente_id_hidden'])
     productos_seleccionados = request.POST.get('productos_seleccionados', '')
     productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
-
-    nuevo_servicio = Servicio.objects.create(nombre_servicio=nombre_servicio, descripcion=descripcion, costo_total=costo_total, fecha=fecha, cliente=cliente)
+    nombre_servicio_seleccionado = NombreServicio.objects.get(id=nombre_servicio)
+    nuevo_servicio = Servicio.objects.create(nombre_servicio=nombre_servicio_seleccionado, descripcion=descripcion, costo_total=costo_total, fecha=fecha, cliente=cliente)
 
     for producto_item in productos_lista:
         producto_id, cantidad = producto_item.split(':')
@@ -124,7 +130,7 @@ def obtener_registro_servicios(request, servicio_id):
 
     datos_servicio = {
         'id': servicio.id,
-        'nombre_servicio': servicio.nombre_servicio,
+        'nombre_servicio': servicio.nombre_servicio.id,
         'descripcion': servicio.descripcion,
         'costo_total': servicio.costo_total,
         'fecha': servicio.fecha,
@@ -146,11 +152,13 @@ def editar_servicio(request):
     fecha = request.POST.get('fecha', None)
     id_cliente_editar = request.POST.get('input_cliente_id_hidden_editar', None)
     productos_seleccionados = request.POST.get('productos_seleccionados_editar', '')
-    
+    nombre_servicio_seleccionado = NombreServicio.objects.get(id=nombre_servicio)
+
+
     if id and nombre_servicio and descripcion and costo_total and fecha and id_cliente_editar is not None:
         try:
             servicio = Servicio.objects.get(id=id)
-            servicio.nombre_servicio = nombre_servicio
+            servicio.nombre_servicio = nombre_servicio_seleccionado
             servicio.descripcion = descripcion
             servicio.costo_total = costo_total
             servicio.fecha = fecha
