@@ -132,3 +132,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/'
 
 AUTH_USER_MODEL = 'autenticacion.Administrador'
+
+DEFAULT_FROM_EMAIL = 'lubricentromorrorico@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = DEFAULT_FROM_EMAIL
+EMAIL_HOST_PASSWORD = 'smav hoyg cayv unbe'

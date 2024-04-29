@@ -4,6 +4,7 @@ from .models import Cliente, Servicio, Producto, Servicio_Productos, NombreServi
 from inventario.models import TipoProducto
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 # Create your views here.
 
 # MENÚ SERVICIOS
@@ -86,6 +87,22 @@ def registrar_servicio(request):
         )
         producto.unidades_disponibles -= cantidad
         producto.save()
+
+    cliente_email = cliente.correo_electronico
+    informacion_servicio = nuevo_servicio.descripcion
+    lista_servicio_producto_asociados = Servicio_Productos.objects.filter(servicio=nuevo_servicio)
+    for registro in lista_servicio_producto_asociados:
+        informacion_servicio += f'\n{registro.producto.tipo_producto.tipo} marca {registro.producto.marca} (Unidades: {registro.cantidad}) =  ${registro.producto.precio * registro.cantidad}'
+    informacion_servicio += f'\nCosto total: ${nuevo_servicio.costo_total}'
+
+    send_mail(
+        f'Factura Servicio {nuevo_servicio.nombre_servicio.nombre_servicio} Lubricentro Morrorico',
+        informacion_servicio,
+        'lubricentromorrorico@gmail.com', #Remitente
+        [cliente_email],
+        fail_silently=False,
+    )
+
     return servicios(request, registrado=True)
 
 
