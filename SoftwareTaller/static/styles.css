@@ -845,6 +845,22 @@ body::-webkit-scrollbar-thumb:hover {
     min-width: 40px;
 }
 
+.div_precio_adicional_inputs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 8px;
+}
+
+.div_radio_inputs_precio_adicional {
+    width: 40px;
+}
+
+.input_precio_adicional {
+    display: none;
+}
+
+
 /* Estilos de Paginación */
 
 .paginacion {

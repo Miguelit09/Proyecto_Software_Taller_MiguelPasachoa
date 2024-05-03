@@ -23,6 +23,20 @@
                     <input type="text" id="descripcion" name="descripcion" required class="card__input_form heigth_input_16">
                 </div>
                 <div class="card__form-div">
+                    <label>Precio adicional</label>
+                    <div class="div_precio_adicional_inputs">
+                        <div class="div_radio_inputs_precio_adicional">
+                            <input type="radio" name="precio_adicional_radio" id="si_precio_adicional_radio" class="card__input_form heigth_input_18 input_oculto">
+                            <label for="si_precio_adicional_radio" class="card__input_form heigth_input_18">Sí</label>
+                        </div>
+                        <div class="div_radio_inputs_precio_adicional">
+                            <input type="radio" name="precio_adicional_radio" id="no_precio_adicional_radio" class="card__input_form heigth_input_18 input_oculto" checked>
+                            <label for="no_precio_adicional_radio" class="card__input_form heigth_input_18">No</label>
+                        </div>
+                    </div>
+                    <input type="text" id="input_precio_adicional" name="input_precio_adicional" value=0 class="card__input_form heigth_input_16 input_precio_adicional ">
+                </div>
+                <div class="card__form-div">
                     <label for="costo_total">Costo total</label>
                     <input type="text" id="costo_total" name="costo_total" readonly class="card__input_form heigth_input_16">
                 </div>
@@ -41,6 +55,7 @@
                     <div id="contenedor_productos_asociados" class= "card__input_form heigth_input_16"></div>
                     <input type="hidden" id="productos_seleccionados" name="productos_seleccionados">
                 </div>
+                <input type="text" id="input_precio_productos" value=0 name="input_precio_productos" readonly class="card__input_form heigth_input_16 input_precio_adicional">
                 <button type="submit" id="registrar_servicio" class="boton boton_guardar_registro letra_roja">Registrar</button>
             </form>
         </div>

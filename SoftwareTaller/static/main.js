@@ -61,6 +61,9 @@ if (existeNombresServicios != null){
   nombresServicios = JSON.parse(document.getElementById('nombres_servicios').textContent);
 }
 
+let inputPrecioProductosRegistrar = document.getElementById('input_precio_productos');
+let inputPrecioAdicionalRegistrar = document.getElementById('input_precio_adicional');
+
 
 // BOTON EDITAR --> ELEMENTOS
 
@@ -102,8 +105,8 @@ let botonClienteEditar = document.getElementById('boton_cliente_editar');
 
 // ASIGNAR PRODUCTOS AL SERVICIO --> ELEMENTOS
 let costoTotal = document.getElementById('costo_total');
-if (costoTotal != null){ 
-  costoTotal.value = 0
+if (costoTotal != null){
+  costoTotal.value = 0;
 }
 let botonProductos = document.getElementById('boton_productos');
 let contenedorProductosAsociados = document.getElementById('contenedor_productos_asociados');
@@ -173,6 +176,7 @@ const numeros = (e) => { // Permite solo escribir NÚMEROS
 
 
 // REGISTRAR --> FUNCIONES
+
 
 const validarFormularioClientes = function(nombreCliente, documentoIdentidad, correoElectronico, telefono){
   if (reNombreCliente.test(nombreCliente.value)){
@@ -312,6 +316,7 @@ const validarFormularioServicios = function(nombreServicio, descripcion, fecha, 
   }
 }
 
+
 botonRegistrar.addEventListener("click", function (event) {
   event.preventDefault()
   registrarEditarBuscar = "registrar";
@@ -359,14 +364,17 @@ botonRegistrar.addEventListener("click", function (event) {
 
   // Formulario registrar servicio
   let nombreServicio = document.getElementById('nombre_servicio');
+
+  let registrarServicio = document.getElementById('registrar_servicio');
   if (nombreServicio !=null) {
     let descripcion = document.getElementById('descripcion');
+    let noPrecioAdicionalRadio = document.getElementById('no_precio_adicional_radio');
+    let siPrecioAdicionalRadio = document.getElementById('si_precio_adicional_radio');
     let fecha = document.getElementById('fecha');
     let clienteVisual = document.getElementById('input_cliente_di_visual');
     let clienteHidden = document.getElementById('input_cliente_id_hidden');
     let productosVisual = document.getElementById('contenedor_productos_asociados');
     let productosHidden = document.getElementById('productos_seleccionados');
-    let registrarServicio = document.getElementById('registrar_servicio');
     fecha.value = formatoFecha; // Asigna al input de fecha por defecto la fecha actual
 
     registrarServicio.addEventListener("click", function(e) {
@@ -374,13 +382,35 @@ botonRegistrar.addEventListener("click", function (event) {
         e.preventDefault();
       }
     });
+    inputPrecioAdicionalRegistrar.addEventListener('keypress', numeros);
+    noPrecioAdicionalRadio.addEventListener('click', function() {
+      inputPrecioAdicionalRegistrar.style.display = 'none';
+      costoTotal.value = parseInt(inputPrecioProductos.value);
+      inputPrecioAdicional.value = 0;
+    })
+    siPrecioAdicionalRadio.addEventListener('click', function() {
+      inputPrecioAdicionalRegistrar.style.display = 'block';
+    })
+    inputPrecioAdicionalRegistrar.addEventListener('change', function(){
+      if (inputPrecioAdicionalRegistrar.value == ''){
+        costoTotal.value = parseInt(inputPrecioProductosRegistrar.value);
+      } else {
+        costoTotal.value = parseInt(inputPrecioProductosRegistrar.value) + parseInt(inputPrecioAdicionalRegistrar.value);
+      }
+    });
   }
 })
+
+
+
+
 
 closeRegistrar.onclick = function () {
   modalRegistrar.style.display = 'none';
   location.reload();
 }
+
+
 
 // EDITAR --> FUNCIONES
 
@@ -888,7 +918,7 @@ if (botonProductosEditar != null) {
 }
 
 
-function buscarAsignacionProductos(registrarEditarBuscar=registrarEditarBuscar) {
+function buscarAsignacionProductos(registrarEditarBuscar) {
   const valorBuscar = campoBuscarReferencia.value;
   const urlBuscarAsignacionProductos = `${baseURL}/servicios/buscar_asignacion_productos/?buscar=${valorBuscar}`;
   fetch(urlBuscarAsignacionProductos)
@@ -1004,6 +1034,8 @@ function buscarAsignacionProductos(registrarEditarBuscar=registrarEditarBuscar) 
                 if (registrarEditarBuscar === "registrar"){
                   contenedor = contenedorProductosAsociados;
                   total = costoTotal;
+                  inputPrecioProductos = inputPrecioProductosRegistrar
+                  inputPrecioAdicional = inputPrecioAdicionalRegistrar
                 } else if (registrarEditarBuscar === "editar"){
                   contenedor = contenedorProductosAsociadosEditar;
                   total = costoTotalEditar;
@@ -1014,7 +1046,7 @@ function buscarAsignacionProductos(registrarEditarBuscar=registrarEditarBuscar) 
                   inputVisualBuscar.value = boton.getAttribute('data-referencia');
                 }
                 if (registrarEditarBuscar != "buscar"){
-                  agregarValorProductoAlInput(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, registrarEditarBuscar, boton.getAttribute('data-unidades-añadir'));
+                  agregarValorProductoAlInput(boton.getAttribute('data-id'), boton.getAttribute('data-referencia'), boton.getAttribute('data-precio'), contenedor, total, registrarEditarBuscar, boton.getAttribute('data-unidades-añadir'), inputPrecioProductos, inputPrecioAdicional);
                 }
                 modalAsignarProductos.style.display = 'none';
               })
@@ -1052,7 +1084,7 @@ function buscarAsignacionProductos(registrarEditarBuscar=registrarEditarBuscar) 
         .catch(error => console.error('Error al buscar productos:', error));
 }
 
-function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProducto, contenedor, total, registrarEditarBuscar, unidades_asignar) {
+function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProducto, contenedor, total, registrarEditarBuscar, unidades_asignar, inputPrecioProductos, inputPrecioAdicional) {
   let inputProductos = null;
 
   // Obtener el input de productos
@@ -1077,7 +1109,8 @@ function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProduc
         valorActual = productos.join(',');
         inputProductos.value = valorActual;
         referenciaElemento.textContent = referenciaProducto + " (" + unidades_asignar + ")";
-        total.value = parseInt(total.value) + (nuevasUnidades - parseInt(unidades)) * parseInt(precioProducto);
+        inputPrecioProductos.value = parseInt(inputPrecioProductos.value) + (nuevasUnidades - parseInt(unidades)) * parseInt(precioProducto);
+        total.value = parseInt(inputPrecioProductos.value) + parseInt(inputPrecioAdicional.value);
       }
     }
   } else {
@@ -1101,7 +1134,7 @@ function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProduc
       nuevoProducto.remove(); // Eliminar el producto al hacer clic en el botón
 
     //Eliminar el valor correspondiente del input
-      eliminarValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar);
+      eliminarValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar, inputPrecioProductos, inputPrecioAdicional);
     });
     nuevoProducto.appendChild(botonEliminarProducto);
 
@@ -1109,11 +1142,12 @@ function agregarValorProductoAlInput(idProducto,referenciaProducto, precioProduc
     contenedor.appendChild(nuevoProducto);
     // Asignar el nuevo valor al input
     inputProductos.value = valorActual;
-    total.value = parseInt(total.value) + (parseInt(precioProducto)*parseInt(unidades_asignar));
+    inputPrecioProductos.value = parseInt(inputPrecioProductos.value) + (parseInt(precioProducto)*parseInt(unidades_asignar));
+    total.value = parseInt(inputPrecioProductos.value) + parseInt(inputPrecioAdicional.value);
   }
 }
 
-function eliminarValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar) {
+function eliminarValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar, inputPrecioProductos, inputPrecioAdicional) {
   let inputProductos = null;
   // Obtener el input de productos
   if (registrarEditarBuscar === "registrar"){
@@ -1135,8 +1169,8 @@ function eliminarValorProductoDelInput(idProducto, precioProducto, total, regist
   const nuevoValor = nuevosProductos.join(',');
   // Asignar el nuevo valor al input
   inputProductos.value = nuevoValor;
-
-  total.value = parseInt(total.value) - (parseInt(precioProducto)*parseInt(unidades_asignar));
+  inputPrecioProductos.value = parseInt(inputPrecioProductos.value) - (parseInt(precioProducto)*parseInt(unidades_asignar));
+  total.value = parseInt(inputPrecioProductos.value) + parseInt(inputPrecioAdicional.value);
 }
 
 // function sobreescribirValorProductoDelInput(idProducto, precioProducto, total, registrarEditarBuscar, unidades_asignar) {

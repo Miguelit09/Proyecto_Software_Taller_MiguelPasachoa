@@ -10,6 +10,7 @@ class NombreServicio(models.Model):
 class Servicio(models.Model):
     nombre_servicio = models.ForeignKey(NombreServicio, on_delete=models.PROTECT)
     descripcion = models.CharField(max_length=200, null=True, blank=True)
+    precio_adicional = models.IntegerField(default=0)
     costo_total = models.IntegerField(null=False, blank=False)
     fecha = models.DateField(default=timezone.now)
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
