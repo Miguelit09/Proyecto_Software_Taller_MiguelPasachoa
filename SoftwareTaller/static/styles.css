@@ -761,6 +761,10 @@ body::-webkit-scrollbar-thumb:hover {
     margin-top: -60px;
 }
 
+.card__contenedor_flechas_servicios {
+    gap: 2.7rem;
+}
+
 .card__contenedor_flechas_productos {
     gap: 2.3rem;
 }

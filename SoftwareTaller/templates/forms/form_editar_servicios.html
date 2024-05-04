@@ -9,7 +9,7 @@
             <form action="" class="card__form_editar">
                 <div class="card__form-div">
                     <label for="nombre_servicio">Servicio</label>
-                    <select name="nombre_servicio" disabled class="card__input_form card_input_form_disabled heigth_input_16 nombre_servicio">
+                    <select disabled class="card__input_form card_input_form_disabled heigth_input_16 nombre_servicio">
                         {% for nombre_servicio in nombres_servicios %}
                         <option value="{{ nombre_servicio.id }}">{{ nombre_servicio.nombre_servicio }}</option>
                         {% endfor %}
@@ -17,20 +17,34 @@
                 </div>
                 <div class="card__form-div">
                     <label for="descripcion">Descripción</label></i>
-                    <input type="text" name="descripcion" disabled class="card__input_form card_input_form_disabled heigth_input_16 descripcion">
+                    <input type="text" disabled class="card__input_form card_input_form_disabled heigth_input_16 descripcion">
+                </div>
+                <div class="card__form-div">
+                    <label>Precio adicional</label>
+                    <div class="div_precio_adicional_inputs">
+                        <div class="div_radio_inputs_precio_adicional">
+                            <input type="radio" name="precio_adicional_radio" disabled class="card__input_form heigth_input_18 input_oculto">
+                            <label for="si_precio_adicional_radio" class="card__input_form heigth_input_18 card_input_form_disabled">Sí</label>
+                        </div>
+                        <div class="div_radio_inputs_precio_adicional">
+                            <input type="radio" name="precio_adicional_radio" disabled class="card__input_form heigth_input_18 input_oculto">
+                            <label for="no_precio_adicional_radio" class="card__input_form heigth_input_18 card_input_form_disabled" >No</label>
+                        </div>
+                    </div>
+                    <input type="text" id="input_precio_adicional" disabled  class="card__input_form heigth_input_16 card_input_form_disabled precio_adicional">
                 </div>
                 <div class="card__form-div">
                     <label for="costo_total">Costo total</label>
-                    <input type="text" maxlength="20" disabled name="costo_total" readonly class="card__input_form card_input_form_disabled heigth_input_16 costo_total">
+                    <input type="text" maxlength="20" disabled readonly class="card__input_form card_input_form_disabled heigth_input_16 costo_total">
                 </div>
 
                 <div class="card__form-div">
                     <label for="fecha">Fecha</label>
-                    <input type="date" name="fecha" disabled class="card__input_form card_input_form_disabled heigth_input_16 fecha">
+                    <input type="date" disabled class="card__input_form card_input_form_disabled heigth_input_16 fecha">
                 </div>
                 <div class="card__form-div">
                     <a>Cliente</a>
-                    <input type="text" name="input_cliente_di_visual" disabled class="card__input_form card_input_form_disabled heigth_input_16 cliente_di">
+                    <input type="text" disabled class="card__input_form card_input_form_disabled heigth_input_16 cliente_di">
                 </div>
                 <div class="card__form-div">
                     <a>Productos</a>
@@ -41,7 +55,11 @@
                 </div>
             </form>
         </div>
-        <div class="card__contenedor_flechas">
+        <div class="card__contenedor_flechas card__contenedor_flechas_servicios">
+            <div class="card__flechas">
+                <i class="bi bi-caret-right-fill"></i>
+                <i class="bi bi-caret-right-fill"></i>
+            </div>
             <div class="card__flechas">
                 <i class="bi bi-caret-right-fill"></i>
                 <i class="bi bi-caret-right-fill"></i>
@@ -84,6 +102,20 @@
                     <input type="text" name="descripcion" id="descripcion_editar" required class="card__input_form heigth_input_16 descripcion">
                 </div>
                 <div class="card__form-div">
+                    <label>Precio adicional</label>
+                    <div class="div_precio_adicional_inputs">
+                        <div class="div_radio_inputs_precio_adicional">
+                            <input type="radio" name="precio_adicional_radio_editar" id="si_precio_adicional_radio_editar" class="card__input_form heigth_input_18 input_oculto" checked>
+                            <label for="si_precio_adicional_radio_editar" class="card__input_form heigth_input_18">Sí</label>
+                        </div>
+                        <div class="div_radio_inputs_precio_adicional">
+                            <input type="radio" name="precio_adicional_radio_editar" id="no_precio_adicional_radio_editar" class="card__input_form heigth_input_18 input_oculto">
+                            <label for="no_precio_adicional_radio_editar" class="card__input_form heigth_input_18">No</label>
+                        </div>
+                    </div>
+                    <input type="text" id="input_precio_adicional_editar" name="input_precio_adicional" class="card__input_form heigth_input_16 precio_adicional">
+                </div>
+                <div class="card__form-div">
                     <label for="costo_total">Costo total</label>
                     <input type="text" id="costo_total_editar" name="costo_total" readonly class="card__input_form heigth_input_16 costo_total">
                 </div>
@@ -102,6 +134,7 @@
                     <div id="contenedor_productos_asociados_editar" class= "card__input_form heigth_input_16 productos"></div>
                     <input type="hidden" id="productos_seleccionados_editar" name="productos_seleccionados_editar">
                 </div>
+                <input type="text" id="input_precio_productos_editar" name="input_precio_productos_editar" readonly class="card__input_form heigth_input_16 input_precio_adicional">
                 <button type="submit" id="actualizar_servicio" class="boton boton_guardar_registro letra_roja">Actualizar</button>
             </form>
         </div>

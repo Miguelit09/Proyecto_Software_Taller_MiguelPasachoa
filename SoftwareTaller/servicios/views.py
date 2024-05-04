@@ -68,13 +68,14 @@ def buscar_asignacion_productos(request):
 def registrar_servicio(request):
     nombre_servicio = request.POST['nombre_servicio']
     descripcion = request.POST['descripcion']
+    precio_adicional = request.POST['input_precio_adicional']
     costo_total = request.POST['costo_total']
     fecha = request.POST['fecha']
     cliente = Cliente.objects.get(id=request.POST['input_cliente_id_hidden'])
     productos_seleccionados = request.POST.get('productos_seleccionados', '')
     productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
     nombre_servicio_seleccionado = NombreServicio.objects.get(id=nombre_servicio)
-    nuevo_servicio = Servicio.objects.create(nombre_servicio=nombre_servicio_seleccionado, descripcion=descripcion, costo_total=costo_total, fecha=fecha, cliente=cliente)
+    nuevo_servicio = Servicio.objects.create(nombre_servicio=nombre_servicio_seleccionado, descripcion=descripcion, precio_adicional=precio_adicional, costo_total=costo_total, fecha=fecha, cliente=cliente)
 
     for producto_item in productos_lista:
         producto_id, cantidad = producto_item.split(':')
@@ -155,6 +156,7 @@ def obtener_registro_servicios(request, servicio_id):
         'id': servicio.id,
         'nombre_servicio': servicio.nombre_servicio.id,
         'descripcion': servicio.descripcion,
+        'precio_adicional': servicio.precio_adicional,
         'costo_total': servicio.costo_total,
         'fecha': servicio.fecha,
         'cliente_id': servicio.cliente.id,
@@ -170,6 +172,7 @@ def obtener_registro_servicios(request, servicio_id):
 def editar_servicio(request):
     id = request.POST.get('registro_id', None)
     nombre_servicio = request.POST.get('nombre_servicio', None)
+    precio_adicional = request.POST.get('input_precio_adicional', None)
     descripcion = request.POST.get('descripcion', None)
     costo_total = request.POST.get('costo_total', None)
     fecha = request.POST.get('fecha', None)
@@ -183,6 +186,7 @@ def editar_servicio(request):
             servicio = Servicio.objects.get(id=id)
             servicio.nombre_servicio = nombre_servicio_seleccionado
             servicio.descripcion = descripcion
+            servicio.precio_adicional = precio_adicional
             servicio.costo_total = costo_total
             servicio.fecha = fecha
             cliente = Cliente.objects.get(id=id_cliente_editar)

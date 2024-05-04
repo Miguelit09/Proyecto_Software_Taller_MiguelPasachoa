@@ -64,6 +64,10 @@ if (existeNombresServicios != null){
 let inputPrecioProductosRegistrar = document.getElementById('input_precio_productos');
 let inputPrecioAdicionalRegistrar = document.getElementById('input_precio_adicional');
 
+let inputPrecioProductosEditar = document.getElementById('input_precio_productos_editar');
+let inputPrecioAdicionalEditar = document.getElementById('input_precio_adicional_editar');
+
+
 
 // BOTON EDITAR --> ELEMENTOS
 
@@ -385,14 +389,15 @@ botonRegistrar.addEventListener("click", function (event) {
     inputPrecioAdicionalRegistrar.addEventListener('keypress', numeros);
     noPrecioAdicionalRadio.addEventListener('click', function() {
       inputPrecioAdicionalRegistrar.style.display = 'none';
-      costoTotal.value = parseInt(inputPrecioProductos.value);
-      inputPrecioAdicional.value = 0;
+      costoTotal.value = parseInt(inputPrecioProductosRegistrar.value);
+      inputPrecioAdicionalRegistrar.value = 0;
     })
     siPrecioAdicionalRadio.addEventListener('click', function() {
       inputPrecioAdicionalRegistrar.style.display = 'block';
     })
     inputPrecioAdicionalRegistrar.addEventListener('change', function(){
       if (inputPrecioAdicionalRegistrar.value == ''){
+        inputPrecioAdicionalRegistrar.value = 0;
         costoTotal.value = parseInt(inputPrecioProductosRegistrar.value);
       } else {
         costoTotal.value = parseInt(inputPrecioProductosRegistrar.value) + parseInt(inputPrecioAdicionalRegistrar.value);
@@ -453,19 +458,24 @@ if (botonesEditar.length != 0) {
           } else if (appRegistro == "servicios") {
             let inputsNombreServicio = document.getElementsByClassName('nombre_servicio');
             let inputsDescripcion = document.getElementsByClassName('descripcion');
+            let inputsPrecioAdicional = document.getElementsByClassName('precio_adicional');
             let inputsCostoTotal = document.getElementsByClassName('costo_total');
             let inputsFecha = document.getElementsByClassName('fecha');
             let inputsClienteDi = document.getElementsByClassName('cliente_di');
             let inputsProductos = document.getElementsByClassName('productos');
             let inputClienteIdHiddenEditar = document.getElementById('input_cliente_id_hidden_editar');
+            let inputPrecioProductosEditar = document.getElementById('input_precio_productos_editar');
+            let noPrecioAdicionalRadioEditar = document.getElementById('no_precio_adicional_radio_editar');
+            let siPrecioAdicionalRadioEditar = document.getElementById('si_precio_adicional_radio_editar');
 
             inputClienteIdHiddenEditar.value = datosRegistro.cliente_id;
-
+            inputPrecioProductosEditar.value = 0;
             for (let i = 0; i < inputsNombreServicio.length; i++) {
               inputsNombreServicio[i].value = datosRegistro.nombre_servicio;
               inputsDescripcion[i].value = datosRegistro.descripcion;
               inputsFecha[i].value = datosRegistro.fecha;
               inputsClienteDi[i].value = datosRegistro.cliente_documento_identidad;
+              inputsPrecioAdicional[i].value = datosRegistro.precio_adicional;
               if (i=== 0){
                 inputsCostoTotal[i].value = datosRegistro.costo_total;
                 inputsProductos[i].innerHTML = '';
@@ -483,8 +493,27 @@ if (botonesEditar.length != 0) {
                 inputsCostoTotal[i].value = 0;
                 contenedorProductosAsociadosEditar.innerHTML = '';
                 for (let t = 0; t < datosRegistro.productos_referencias.length; t++){
-                  agregarValorProductoAlInput(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, registrarEditarBuscar, datosRegistro.cantidad_productos[t]);
+                  agregarValorProductoAlInput(datosRegistro.productos_ids[t], datosRegistro.productos_referencias[t], datosRegistro.productos_precios[t], contenedorProductosAsociadosEditar, costoTotalEditar, registrarEditarBuscar, datosRegistro.cantidad_productos[t], inputPrecioProductosEditar, inputPrecioAdicionalEditar);
                 }
+                inputsPrecioAdicional[i].addEventListener('keypress', numeros);
+                noPrecioAdicionalRadioEditar.addEventListener('click', function() {
+                  inputsPrecioAdicional[i].readOnly = true;
+                  inputsPrecioAdicional[i].classList.add('card_input_form_disabled')
+                  inputsCostoTotal[i].value = parseInt(inputPrecioProductosEditar.value);
+                  inputsPrecioAdicional[i].value = 0;
+                })
+                siPrecioAdicionalRadioEditar.addEventListener('click', function() {
+                  inputsPrecioAdicional[i].readOnly = false;
+                  inputsPrecioAdicional[i].classList.remove('card_input_form_disabled')
+                })
+                inputsPrecioAdicional[i].addEventListener('change', function(){
+                  if (inputsPrecioAdicional[i].value == ''){
+                    inputsPrecioAdicional[i].value = 0;
+                    inputsCostoTotal[i].value = parseInt(inputPrecioProductosEditar.value);
+                  } else {
+                    inputsCostoTotal[i].value = parseInt(inputPrecioProductosEditar.value) + parseInt(inputsPrecioAdicional[i].value);
+                  }
+                });
               }
             }
           }
@@ -1027,6 +1056,8 @@ function buscarAsignacionProductos(registrarEditarBuscar) {
                   })
                 }
             });
+            let inputPrecioProductos = null
+            let inputPrecioAdicional = null
             const botonesAsignar = document.querySelectorAll('.boton_asignar');
             botonesAsignar.forEach(boton => {
               boton.addEventListener('click', function(event){
@@ -1038,6 +1069,8 @@ function buscarAsignacionProductos(registrarEditarBuscar) {
                   inputPrecioAdicional = inputPrecioAdicionalRegistrar
                 } else if (registrarEditarBuscar === "editar"){
                   contenedor = contenedorProductosAsociadosEditar;
+                  inputPrecioProductos = inputPrecioProductosEditar
+                  inputPrecioAdicional = inputPrecioAdicionalEditar
                   total = costoTotalEditar;
                 } else {
                   let inputHiddenBuscar = document.getElementById('input_producto_hidden_buscar')
