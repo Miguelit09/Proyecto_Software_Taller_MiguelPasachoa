@@ -66,45 +66,48 @@ def buscar_asignacion_productos(request):
 
 ## Recepción de formulario y creacion de registro
 def registrar_servicio(request):
-    nombre_servicio = request.POST['nombre_servicio']
-    descripcion = request.POST['descripcion']
-    precio_adicional = request.POST['input_precio_adicional']
-    costo_total = request.POST['costo_total']
-    fecha = request.POST['fecha']
-    cliente = Cliente.objects.get(id=request.POST['input_cliente_id_hidden'])
-    productos_seleccionados = request.POST.get('productos_seleccionados', '')
-    productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
-    nombre_servicio_seleccionado = NombreServicio.objects.get(id=nombre_servicio)
-    nuevo_servicio = Servicio.objects.create(nombre_servicio=nombre_servicio_seleccionado, descripcion=descripcion, precio_adicional=precio_adicional, costo_total=costo_total, fecha=fecha, cliente=cliente)
+    try:
+        nombre_servicio = request.POST['nombre_servicio']
+        descripcion = request.POST['descripcion']
+        precio_adicional = request.POST['input_precio_adicional']
+        costo_total = request.POST['costo_total']
+        fecha = request.POST['fecha']
+        cliente = Cliente.objects.get(id=request.POST['input_cliente_id_hidden'])
+        productos_seleccionados = request.POST.get('productos_seleccionados', '')
+        productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
+        nombre_servicio_seleccionado = NombreServicio.objects.get(id=nombre_servicio)
+        nuevo_servicio = Servicio.objects.create(nombre_servicio=nombre_servicio_seleccionado, descripcion=descripcion, precio_adicional=precio_adicional, costo_total=costo_total, fecha=fecha, cliente=cliente)
 
-    for producto_item in productos_lista:
-        producto_id, cantidad = producto_item.split(':')
-        producto = Producto.objects.get(id=producto_id)
-        cantidad = int(cantidad)
-        nuevo_servicio_producto = Servicio_Productos.objects.create(
-            servicio=nuevo_servicio,
-            producto=producto,
-            cantidad=cantidad
+        for producto_item in productos_lista:
+            producto_id, cantidad = producto_item.split(':')
+            producto = Producto.objects.get(id=producto_id)
+            cantidad = int(cantidad)
+            nuevo_servicio_producto = Servicio_Productos.objects.create(
+                servicio=nuevo_servicio,
+                producto=producto,
+                cantidad=cantidad
+            )
+            producto.unidades_disponibles -= cantidad
+            producto.save()
+
+        cliente_email = cliente.correo_electronico
+        informacion_servicio = nuevo_servicio.descripcion
+        lista_servicio_producto_asociados = Servicio_Productos.objects.filter(servicio=nuevo_servicio)
+        for registro in lista_servicio_producto_asociados:
+            informacion_servicio += f'\n{registro.producto.tipo_producto.tipo} marca {registro.producto.marca} (Unidades: {registro.cantidad}) =  ${registro.producto.precio * registro.cantidad}'
+        informacion_servicio += f'\nCosto total: ${nuevo_servicio.costo_total}'
+
+        send_mail(
+            f'Factura Servicio {nuevo_servicio.nombre_servicio.nombre_servicio} Lubricentro Morrorico',
+            informacion_servicio,
+            'lubricentromorrorico@gmail.com', #Remitente
+            [cliente_email],
+            fail_silently=False,
         )
-        producto.unidades_disponibles -= cantidad
-        producto.save()
 
-    cliente_email = cliente.correo_electronico
-    informacion_servicio = nuevo_servicio.descripcion
-    lista_servicio_producto_asociados = Servicio_Productos.objects.filter(servicio=nuevo_servicio)
-    for registro in lista_servicio_producto_asociados:
-        informacion_servicio += f'\n{registro.producto.tipo_producto.tipo} marca {registro.producto.marca} (Unidades: {registro.cantidad}) =  ${registro.producto.precio * registro.cantidad}'
-    informacion_servicio += f'\nCosto total: ${nuevo_servicio.costo_total}'
-
-    send_mail(
-        f'Factura Servicio {nuevo_servicio.nombre_servicio.nombre_servicio} Lubricentro Morrorico',
-        informacion_servicio,
-        'lubricentromorrorico@gmail.com', #Remitente
-        [cliente_email],
-        fail_silently=False,
-    )
-
-    return servicios(request, registrado=True)
+        return servicios(request, registrado=True)
+    except:
+            return servicios(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")
 
 
 # # BUSCAR servicios
@@ -178,50 +181,46 @@ def editar_servicio(request):
     fecha = request.POST.get('fecha', None)
     id_cliente_editar = request.POST.get('input_cliente_id_hidden_editar', None)
     productos_seleccionados = request.POST.get('productos_seleccionados_editar', '')
-    nombre_servicio_seleccionado = NombreServicio.objects.get(id=nombre_servicio)
+    try:
+        nombre_servicio_seleccionado = NombreServicio.objects.get(id=nombre_servicio)
 
+        servicio = Servicio.objects.get(id=id)
+        servicio.nombre_servicio = nombre_servicio_seleccionado
+        servicio.descripcion = descripcion
+        servicio.precio_adicional = precio_adicional
+        servicio.costo_total = costo_total
+        servicio.fecha = fecha
+        cliente = Cliente.objects.get(id=id_cliente_editar)
+        servicio.cliente = cliente
 
-    if id and nombre_servicio and descripcion and costo_total and fecha and id_cliente_editar is not None:
-        try:
-            servicio = Servicio.objects.get(id=id)
-            servicio.nombre_servicio = nombre_servicio_seleccionado
-            servicio.descripcion = descripcion
-            servicio.precio_adicional = precio_adicional
-            servicio.costo_total = costo_total
-            servicio.fecha = fecha
-            cliente = Cliente.objects.get(id=id_cliente_editar)
-            servicio.cliente = cliente
+        # Eliminar todos los productos asociados al servicio
+        consulta_productos_en_eliminacion = Servicio_Productos.objects.filter(servicio=servicio)
+        for producto_en_eliminacion in consulta_productos_en_eliminacion:
+            item = producto_en_eliminacion.producto
+            item.unidades_disponibles += producto_en_eliminacion.cantidad
+            item.save()
+        consulta_productos_en_eliminacion.delete()
 
-            # Eliminar todos los productos asociados al servicio
-            consulta_productos_en_eliminacion = Servicio_Productos.objects.filter(servicio=servicio)
-            for producto_en_eliminacion in consulta_productos_en_eliminacion:
-                item = producto_en_eliminacion.producto
-                item.unidades_disponibles += producto_en_eliminacion.cantidad
-                item.save()
-            consulta_productos_en_eliminacion.delete()
-
-            productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
-            for producto_item in productos_lista:
-                producto_id, cantidad = producto_item.split(':')
-                producto = Producto.objects.get(id=producto_id)
-                cantidad = int(cantidad)
-                Servicio_Productos.objects.create(
-                    servicio = servicio,
-                    producto=producto,
-                    cantidad=cantidad,
-                )
-                producto.unidades_disponibles -= cantidad
-                producto.save()
-            servicio.save()
-            return servicios(request, actualizado=True)
-        except Servicio.DoesNotExist:
-            return servicios(request, error=True, mensaje_error="El servicio especificado no existe.")
-        except Producto.DoesNotExist:
-            return servicios(request, error=True, mensaje_error="Uno o más productos seleccionados no existen.")
-        except Exception as e:
-            return servicios(request, error=True, mensaje_error=str(e))
-    else:
-        return servicios(request, error=True, mensaje_error="Faltan campos requeridos para editar el servicio.")
+        productos_lista = productos_seleccionados.split(',') if productos_seleccionados else []  # Convertir la cadena de texto en una lista de IDs de productos
+        for producto_item in productos_lista:
+            producto_id, cantidad = producto_item.split(':')
+            producto = Producto.objects.get(id=producto_id)
+            cantidad = int(cantidad)
+            Servicio_Productos.objects.create(
+                servicio = servicio,
+                producto=producto,
+                cantidad=cantidad,
+            )
+            producto.unidades_disponibles -= cantidad
+            producto.save()
+        servicio.save()
+        return servicios(request, actualizado=True)
+    except Servicio.DoesNotExist:
+        return servicios(request, error=True, mensaje_error="El servicio especificado no existe.")
+    except Producto.DoesNotExist:
+        return servicios(request, error=True, mensaje_error="Uno o más productos seleccionados no existen.")
+    except Exception as e:
+        return servicios(request, error=True, mensaje_error="No se está accediendo adecuadamente a esta funcionalidad.")
 
 
 
@@ -231,7 +230,10 @@ def editar_servicio(request):
 
 ## Vista que recibe el id y elimina el servicio de la base de datos
 def eliminar_servicio(request, id):
-    servicio = Servicio.objects.get(id=id)
+    try:
+        servicio = Servicio.objects.get(id=id)
 
-    servicio.delete()
-    return servicios(request, eliminado=True)
+        servicio.delete()
+        return servicios(request, eliminado=True)
+    except:
+        return servicios(request, error=True, mensaje_error="No se está accediendo adecuadamente a esta funcionalidad.")

@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required
-def inventario(request, productos=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="inventario"):
+def inventario(request, productos=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, error=False, mensaje_error=None, name_url="inventario"):
     if productos is None:
         productos = Producto.objects.all()
     paginator = Paginator(productos, 20)
@@ -37,6 +37,8 @@ def inventario(request, productos=None, registrado=False, eliminado=False, actua
         "buscar": buscar,
         "campo": campo,
         "pagina": pagina,
+        "error": error,
+        "mensaje_error": mensaje_error,
         "name_url": name_url,
         "tipos_productos": tipos_productos,
         "lista_tipos_productos": lista_tipos_productos,
@@ -47,15 +49,19 @@ def inventario(request, productos=None, registrado=False, eliminado=False, actua
 
 ## Recepción de formulario y creacion de registro
 def registrar_producto(request):
-    marca = request.POST['marca']
-    referencia = request.POST['referencia']
-    tipo_producto = request.POST['tipo_producto']
-    precio = request.POST['precio']
-    unidades_disponibles = request.POST['unidades_disponibles']
-    seleccion_tipo_producto = TipoProducto.objects.get(id=tipo_producto)
-    Producto.objects.create(marca=marca, referencia=referencia, tipo_producto=seleccion_tipo_producto, precio=precio, unidades_disponibles=unidades_disponibles)
+    try:
+        marca = request.POST['marca']
+        referencia = request.POST['referencia']
+        tipo_producto = request.POST['tipo_producto']
+        precio = request.POST['precio']
+        unidades_disponibles = request.POST['unidades_disponibles']
+        seleccion_tipo_producto = TipoProducto.objects.get(id=tipo_producto)
+        Producto.objects.create(marca=marca, referencia=referencia, tipo_producto=seleccion_tipo_producto, precio=precio, unidades_disponibles=unidades_disponibles)
 
-    return inventario(request, registrado=True)
+        return inventario(request, registrado=True)
+    except:
+        return inventario(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")
+
 
 
 
@@ -100,25 +106,29 @@ def obtener_registro_inventario(request, producto_id):
     return JsonResponse(datos_producto)
 
 def editar_producto(request):
-    id = request.POST['registro_id']
-    marca = request.POST['marca']
-    referencia = request.POST['referencia']
-    tipo_producto = request.POST['tipo_producto']
-    precio = request.POST['precio']
-    unidades_disponibles = request.POST['unidades_disponibles']
+    try:
 
-    seleccion_tipo_producto = TipoProducto.objects.get(id=tipo_producto)
+        id = request.POST['registro_id']
+        marca = request.POST['marca']
+        referencia = request.POST['referencia']
+        tipo_producto = request.POST['tipo_producto']
+        precio = request.POST['precio']
+        unidades_disponibles = request.POST['unidades_disponibles']
 
-    producto = Producto.objects.get(id=id)
-    producto.marca = marca
-    producto.referencia = referencia
-    producto.tipo_producto = seleccion_tipo_producto
-    producto.precio = precio
-    producto.unidades_disponibles = unidades_disponibles
+        seleccion_tipo_producto = TipoProducto.objects.get(id=tipo_producto)
 
-    producto.save()
+        producto = Producto.objects.get(id=id)
+        producto.marca = marca
+        producto.referencia = referencia
+        producto.tipo_producto = seleccion_tipo_producto
+        producto.precio = precio
+        producto.unidades_disponibles = unidades_disponibles
 
-    return inventario(request, actualizado=True)
+        producto.save()
+
+        return inventario(request, actualizado=True)
+    except:
+        return inventario(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")
 
 
 
@@ -127,7 +137,9 @@ def editar_producto(request):
 
 ## Vista que recibe el id y elimina el producto de la base de datos
 def eliminar_producto(request, id):
-    producto = Producto.objects.get(id=id)
-
-    producto.delete()
-    return inventario(request, eliminado=True)
+    try:
+        producto = Producto.objects.get(id=id)
+        producto.delete()
+        return inventario(request, eliminado=True)
+    except:
+        return inventario(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")

@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 # MENÚ CLIENTES
 @login_required
-def clientes(request, clientes=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, name_url="clientes"):
+def clientes(request, clientes=None, registrado=False, eliminado=False, actualizado=False, sin_coincidencias=False, campo=None, buscar=None, error=False, mensaje_error=None, name_url="clientes"):
     if clientes is None:
         clientes = Cliente.objects.all()
     paginator = Paginator(clientes, 20)
@@ -32,6 +32,8 @@ def clientes(request, clientes=None, registrado=False, eliminado=False, actualiz
         "buscar": buscar,
         "campo": campo,
         "pagina": pagina,
+        "error": error,
+        "mensaje_error": mensaje_error,
         "name_url": name_url,
     })
 
@@ -40,14 +42,18 @@ def clientes(request, clientes=None, registrado=False, eliminado=False, actualiz
 
 ## Recepción de formulario y creacion de registro
 def registrar_cliente(request):
-    nombre_cliente = request.POST['nombre_cliente']
-    documento_identidad = request.POST['documento_identidad']
-    correo_electronico = request.POST['correo_electronico']
-    telefono = request.POST['telefono']
+    try:
+        nombre_cliente = request.POST['nombre_cliente']
+        documento_identidad = request.POST['documento_identidad']
+        correo_electronico = request.POST['correo_electronico']
+        telefono = request.POST['telefono']
 
-    Cliente.objects.create(nombre_cliente=nombre_cliente, documento_identidad=documento_identidad, correo_electronico=correo_electronico, telefono=telefono)
+        Cliente.objects.create(nombre_cliente=nombre_cliente, documento_identidad=documento_identidad, correo_electronico=correo_electronico, telefono=telefono)
 
-    return clientes(request, registrado=True)
+        return clientes(request, registrado=True)
+    except:
+        return clientes(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")
+
 
 
 # BUSCAR CLIENTES
@@ -79,28 +85,34 @@ def obtener_registro_clientes(request, cliente_id):
     return JsonResponse(datos_cliente)
 
 def editar_cliente(request):
-    id = request.POST['registro_id']
-    nombre_cliente = request.POST['nombre_cliente']
-    documento_identidad = request.POST['documento_identidad']
-    correo_electronico = request.POST['correo_electronico']
-    telefono = request.POST['telefono']
+    try:
+        id = request.POST['registro_id']
+        nombre_cliente = request.POST['nombre_cliente']
+        documento_identidad = request.POST['documento_identidad']
+        correo_electronico = request.POST['correo_electronico']
+        telefono = request.POST['telefono']
 
-    cliente = Cliente.objects.get(id=id)
-    cliente.nombre_cliente = nombre_cliente
-    cliente.documento_identidad = documento_identidad
-    cliente.correo_electronico = correo_electronico
-    cliente.telefono = telefono
+        cliente = Cliente.objects.get(id=id)
+        cliente.nombre_cliente = nombre_cliente
+        cliente.documento_identidad = documento_identidad
+        cliente.correo_electronico = correo_electronico
+        cliente.telefono = telefono
 
-    cliente.save()
+        cliente.save()
 
-    return clientes(request, actualizado=True)
+        return clientes(request, actualizado=True)
+    except:
+        return clientes(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")
 
 
 # ELIMINAR CLIENTES
 
 ## Vista que recibe el id y elimina el cliente de la base de datos
 def eliminar_cliente(request, id):
-    cliente = Cliente.objects.get(id=id)
+    try:
+        cliente = Cliente.objects.get(id=id)
 
-    cliente.delete()
-    return clientes(request, eliminado=True)
+        cliente.delete()
+        return clientes(request, eliminado=True)
+    except:
+        return clientes(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")

@@ -52,6 +52,9 @@
 {% if sin_coincidencias %}
     {% include "layouts/modals/mensajes/mensaje_sin_coincidencias.html" %}
 {% endif %}
+{% if error %}
+    {% include "layouts/modals/mensajes/mensaje_error.html" %}
+{% endif %}
 
 <div id="tipos_productos" style="display: none;">{{ lista_tipos_productos | json_script:"tiposProductos" }}</div>
 
