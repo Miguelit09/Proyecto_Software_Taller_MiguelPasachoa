@@ -48,9 +48,13 @@ def registrar_cliente(request):
         correo_electronico = request.POST['correo_electronico']
         telefono = request.POST['telefono']
 
-        Cliente.objects.create(nombre_cliente=nombre_cliente, documento_identidad=documento_identidad, correo_electronico=correo_electronico, telefono=telefono)
+        if Cliente.objects.filter(documento_identidad=documento_identidad).exists():
+            return clientes(request, error=True, mensaje_error="El número de DI que se desea registrar ya existe.")
 
-        return clientes(request, registrado=True)
+        else:
+            Cliente.objects.create(nombre_cliente=nombre_cliente, documento_identidad=documento_identidad, correo_electronico=correo_electronico, telefono=telefono)
+
+            return clientes(request, registrado=True)
     except:
         return clientes(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")
 
@@ -93,14 +97,18 @@ def editar_cliente(request):
         telefono = request.POST['telefono']
 
         cliente = Cliente.objects.get(id=id)
-        cliente.nombre_cliente = nombre_cliente
-        cliente.documento_identidad = documento_identidad
-        cliente.correo_electronico = correo_electronico
-        cliente.telefono = telefono
+        if (Cliente.objects.filter(documento_identidad=documento_identidad).exists()) and documento_identidad!=cliente.documento_identidad:
+            return clientes(request, error=True, mensaje_error="El número de DI que se desea registrar ya existe en un registro diferente.")
+        else:
+            cliente.nombre_cliente = nombre_cliente
+            cliente.documento_identidad = documento_identidad
+            cliente.correo_electronico = correo_electronico
+            cliente.telefono = telefono
 
-        cliente.save()
+            cliente.save()
 
-        return clientes(request, actualizado=True)
+            return clientes(request, actualizado=True)
+
     except:
         return clientes(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")
 
