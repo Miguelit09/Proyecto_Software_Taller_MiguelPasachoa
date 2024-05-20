@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from .models import Producto, TipoProducto
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
+from django.db.models.deletion import ProtectedError
 # Create your views here.
 
 # MENÚ INVENTARIO
@@ -141,5 +142,7 @@ def eliminar_producto(request, id):
         producto = Producto.objects.get(id=id)
         producto.delete()
         return inventario(request, eliminado=True)
+    except ProtectedError:
+        return inventario(request, error=True, mensaje_error="El producto está asociado a algún servicio y no puede ser eliminado.")
     except:
         return inventario(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")

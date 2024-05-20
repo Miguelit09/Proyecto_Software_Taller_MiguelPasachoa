@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from .models import Cliente
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
+from django.db.models.deletion import ProtectedError
 # Create your views here.
 
 # MENÚ CLIENTES
@@ -122,5 +123,7 @@ def eliminar_cliente(request, id):
 
         cliente.delete()
         return clientes(request, eliminado=True)
+    except ProtectedError:
+        return clientes(request, error=True, mensaje_error="El cliente tiene servicios asociados y no puede ser eliminado.")
     except:
         return clientes(request, error=True, mensaje_error="No se está accediendo adecuadamente a la funcionalidad.")
