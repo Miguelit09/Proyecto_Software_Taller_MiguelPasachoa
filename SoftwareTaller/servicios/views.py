@@ -95,7 +95,7 @@ def registrar_servicio(request):
         lista_servicio_producto_asociados = Servicio_Productos.objects.filter(servicio=nuevo_servicio)
         for registro in lista_servicio_producto_asociados:
             informacion_servicio += f'\n{registro.producto.tipo_producto.tipo} marca {registro.producto.marca} (Unidades: {registro.cantidad}) =  ${registro.producto.precio * registro.cantidad}'
-        informacion_servicio += f'\nCosto total: ${nuevo_servicio.costo_total}'
+        informacion_servicio += f'\nPrecio adicional: ${nuevo_servicio.precio_adicional}\nCosto total: ${nuevo_servicio.costo_total}'
 
         send_mail(
             f'Factura Servicio {nuevo_servicio.nombre_servicio.nombre_servicio} Lubricentro Morrorico',
